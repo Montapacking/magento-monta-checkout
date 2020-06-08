@@ -1,8 +1,6 @@
 # Montapacking Checkout for Magento 2
 Magento plugin to integrate the Montapacking shipping options
 
-## Installation using Composer
-<pre>composer require montapacking/montacheckout-magento2</pre>
 
 ## Installation without using Composer
 _Clone or download_ the contents of this repository into `app/code/Montapacking/MontaCheckout`.
