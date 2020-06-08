@@ -1,0 +1,21 @@
+{{#location}}
+
+<li data-markerid="{{markerid}}" data-listid="{{listid}}" class="marker-{{code}}">
+    <div class="list-label"><img src="{{image}}" width="30"> </div>
+    <div class="list-details">
+        <div class="list-content">
+            <div class="loc-name">{{name}}</div>
+            <div class="loc-addr"><i>{{description}}</i></div>
+            <div class="loc-addr2">{{street}} {{houseNumber}}</div>
+            <div class="loc-addr3">{{postal}} {{city}} ({{country}})</div>
+
+        </div>
+    </div>
+    <div class="list-price">
+        <div class="list-content">
+            <strong>&euro; {{priceformatted}}</strong>
+        </div>
+    </div>
+</li>
+
+{{/location}}

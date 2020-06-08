@@ -1,0 +1,422 @@
+/* SHIPPING METHODS TABLE */
+
+.marginright {
+    margin-right: 4px;
+}
+
+@media screen and (max-width: 412px) {
+    #montapacking-plugin {
+        font-size: 12px !important;
+    }
+
+    p {
+        margin-bottom: 0.6rem !important;
+    }
+
+    .montapacking-container-content .italic {
+        font-size: 11px !important;
+    }
+
+}
+
+/*
+#label_method_montapacking_montapacking:before {
+    float: left;
+    width: 30px;
+    height: 25px;
+    content: ' ';
+    background-image: url(../images/Montapacking.png) !important;
+    background-position: 0 2px;
+    background-repeat: no-repeat;
+    background-size: auto 20px;
+    margin-top: -4px;
+}
+*/
+/* GLOBAL CONTAINER CSS */
+
+.montapacking-parent {
+    display: inline-block;
+    width: 100%;
+    max-width: 500px
+}
+
+.montapacking-parent * {
+    box-sizing: border-box;
+}
+
+.montapacking-parent .container {
+    padding: 10px 15px;
+    border: 1px solid #D4D9E3;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: white;
+    position: relative;
+    display: block;
+    color: #27324C;
+    float: left;
+    width: 100%;
+    clear: both;
+}
+
+.montapacking-parent label {
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 30px;
+    position: relative;
+
+}
+
+.montapacking-parent label:hover {
+    text-decoration: none !important;
+}
+
+.montapacking-hidden {
+    display:none;
+}
+
+.montapacking-bold {
+    font-weight: 700;
+}
+
+.checkout-index-index .methods-shipping .actions-toolbar {
+    clear: both;
+}
+
+/* OVERALL DELIVERY BLOCKS CSS */
+
+.montapacking-services .delivery-services {
+    display: block;
+   /* display: none; /*for testing pickup*/
+}
+
+.montapacking-services .delivery-information {
+    display: block;
+}
+
+.montapacking-services .delivery-option {
+    display: none;
+}
+
+/* OVERALL PICKUP BLOCKS CSS */
+
+.montapacking-services .pickup-services {
+    display: none;
+}
+
+.montapacking-services .pickup-information {
+    display: none;
+}
+
+.montapacking-services .pickup-option {
+    display: none;
+}
+
+.montapacking-services .overruleshow {
+    display: block !important;
+}
+
+@media screen and (max-width: 600px) {
+    .monta-more-pickup-points {
+        display:none !important;
+    }
+    .monta-shipment-pickup.active {
+        margin-top: 0px; !important;
+    }
+}
+
+
+
+/* MENU TABS */
+
+.montapacking-parent .montapacking-tab {
+    float: left;
+    width: 50%;
+    cursor: pointer;
+    padding: 20px;
+    color: #27324C;
+    border: 1px solid #D4D9E3;
+    margin-bottom: 10px;
+    background: white;
+    text-align: center;
+}
+
+.montapacking-parent .montapacking-tab:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.montapacking-parent .montapacking-tab:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.montapacking-parent .montapacking-tab:not(.active):hover {
+    background: #F0F3FF;
+}
+
+.montapacking-parent .montapacking-tab.active {
+    font-weight: 700;
+    color: #fff;
+    background: #01B5E2;
+    border: 1px solid #0393DB;
+}
+
+.montapacking-parent .montapacking-tab strong {
+    display: none;
+}
+
+.montapacking-parent .montapacking-tab.active strong {
+    color: #FBC000;
+    display: inline-block;
+}
+
+
+@media screen and (max-width: 380px) {
+    .montapacking-parent .montapacking-tab {
+        width: 100%;
+    }
+
+    .montapacking-parent .montapacking-tab:nth-child(1) {
+        border-radius: 5px 5px 0 0;
+        margin-bottom: 0;
+    }
+
+    .montapacking-parent .montapacking-tab:nth-child(2) {
+        border-radius: 0 0 5px 5px;
+    }
+}
+
+/* CONTAINER LOGOS */
+
+.montapacking-container-logo {
+    width: 50px;
+    height: 50px;
+
+    float: left;
+    content: ' ';
+
+    background-position: 0 0px;
+    background-repeat: no-repeat;
+    background-size: auto 50px;
+    margin-right: 15px;;
+
+}
+
+.montapacking-container-logo.DHLservicepunt,
+.montapacking-container-logo.SELSELBuspakje {
+    background-image: url(../images/DHL.png) !important;
+}
+
+.montapacking-container-logo.DPD {
+    background-image: url(../images/DPD.png) !important;
+}
+
+.montapacking-container-logo.PAK,
+.montapacking-container-logo.PostNL {
+    background-image: url(../images/PostNL.png) !important;
+}
+
+.montapacking-container-logo.RED {
+    background-image: url(../images/RED.png) !important;
+}
+
+.montapacking-container-logo.TBQ {
+    background-image: url(../images/Montapacking.png) !important;
+}
+
+.montapacking-container-logo.UPS {
+    background-image: url(../images/UPS.png) !important;
+}
+
+/* CONTAINER CONTENT */
+
+.montapacking-container-content {
+    position: relative;
+    float: left;
+    width: calc(100% - 120px);
+}
+
+.montapacking-container-content  p {
+    font-weight: 700;
+}
+
+.montapacking-container-content  .italic {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.montapacking-container-content  .normal {
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* CONTAINER PRICE */
+
+.montapacking-container-price {
+    float: left;
+    width: 55px;
+    text-align: right;
+}
+
+
+/* CONTAINER DELIVERY OPTIONS */
+
+.montapacking-container-delivery-options {
+    margin-left: 65px;
+}
+
+.montapacking-parent .montapacking-container-delivery-options label {
+    font-weight: 400;
+}
+
+.montapacking-parent .montapacking-container-delivery-options label:hover {
+    text-decoration: underline;
+}
+
+/* CONTAINER SELECT OPTION */
+
+
+.montapacking-container-select-option {
+    margin-left: 65px;
+    margin-top: 10px;
+}
+
+
+/* RADIO BUTTON STYLING */
+
+.montapacking-styled-radiobutton input {
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: -9999px;
+}
+
+.montapacking-styled-radiobutton input + label {
+    margin: 0;
+    padding: 3px 6px 3px 6px;
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    border: solid 1px #0393DB;
+    font-weight: 700;
+    text-align: center;
+    background-color: #01B5E2;
+    color: #FFF;
+}
+
+.montapacking-styled-radiobutton input + label {
+    border-radius: 5px;
+}
+
+.montapacking-styled-radiobutton input:hover + label {
+    border-color: #01B5E2;
+    background-color: #0393DB;
+    color: #FFF;
+
+}
+
+.montapacking-styled-radiobutton input:checked + label {
+    background-color: #0393DB;
+    color: #FFF;
+    border-color: #0393DB;
+    z-index: 1;
+}
+
+/* BUSINESS HOURS PICKUP SHOP */
+
+.montapacking-pickup-service .table-container {
+    float: left;
+    width: 100%;
+    display: none;
+    background: #fff;
+    position: relative;
+    border: 1px solid #d4d9e3;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.montapacking-pickup-service .table-container .table {
+    display: table;
+    width: 100%;
+}
+
+.montapacking-pickup-service .table-container .table .row {
+    display: table-row;
+    line-height: 23px;
+}
+
+.montapacking-pickup-service .table-container .table .row .cell {
+    display: table-cell;
+}
+
+.montapacking-pickup-service .table-container .table .row .cell:first-child {
+   width: 150px;
+}
+
+.montapacking-pickup-service .open-business-hours {
+    padding-left: 25px;
+    margin-top: 5px;
+    cursor: pointer;
+    color: #0393DB;
+    float: left;
+    width: 100%;
+
+    background-position: 0 0px;
+    background-repeat: no-repeat;
+    background-size: auto 16px;
+    background-image: url(../images/Openingtimes.png) !important;
+}
+
+
+.montapacking-pickup-service .open-business-hours:hover {
+    color: #0393DB;
+}
+
+.montapacking-pickup-service .close {
+    color: #01B5E2;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.montapacking-pickup-service .close:after {
+    content: '';
+    background: url(../images/close.svg);
+    padding: 4px 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.montapacking-pickup-service .close:hover {
+    color: #0393DB;
+    text-decoration: none;
+}
+
+.montapacking-pickup-service .close:hover:after {
+    background: url(../images/close_hover.svg);
+    padding: 4px 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+@media screen and (max-width: 440px) {
+    .montapacking-pickup-service .close {
+        position: relative;
+        float: right;
+        margin-bottom: 10px;
+        right: unset;
+        top: unset;
+        margin-right: -5px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .montapacking-pickup-service .table-container .table .row .cell:nth-child(2) {
+        text-align: right;
+    }
+}
