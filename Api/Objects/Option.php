@@ -1,14 +1,39 @@
 <?php
 namespace Montapacking\MontaCheckout\Api\Objects;
 
+/**
+ * Class Option
+ *
+ * @package Montapacking\MontaCheckout\Api\Objects
+ */
 class Option
 {
 
+    /**
+     * @var
+     */
     public $code;
+    /**
+     * @var
+     */
     public $name;
+    /**
+     * @var
+     */
     public $price;
+    /**
+     * @var
+     */
     public $currency;
 
+    /**
+     * Option constructor.
+     *
+     * @param $code
+     * @param $name
+     * @param $price
+     * @param $currency
+     */
     public function __construct($code, $name, $price, $currency)
     {
 
@@ -19,6 +44,11 @@ class Option
 
     }
 
+    /**
+     * @param $name
+     *
+     * @return $this
+     */
     public function setName($name)
     {
 
@@ -27,24 +57,42 @@ class Option
         return $this;
     }
 
+    /**
+     * @param $code
+     *
+     * @return $this
+     */
     public function setCode($code)
     {
         $this->code = $code;
         return $this;
     }
 
+    /**
+     * @param $price
+     *
+     * @return $this
+     */
     public function setPrice($price)
     {
         $this->price = $price;
         return $this;
     }
 
+    /**
+     * @param $currency
+     *
+     * @return $this
+     */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
 

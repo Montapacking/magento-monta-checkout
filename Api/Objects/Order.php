@@ -1,12 +1,29 @@
 <?php
 namespace Montapacking\MontaCheckout\Api\Objects;
 
+/**
+ * Class Order
+ *
+ * @package Montapacking\MontaCheckout\Api\Objects
+ */
 class Order
 {
 
+    /**
+     * @var
+     */
     public $total_incl;
+    /**
+     * @var
+     */
     public $total_excl;
 
+    /**
+     * Order constructor.
+     *
+     * @param $incl
+     * @param $excl
+     */
     public function __construct($incl, $excl)
     {
 
@@ -15,18 +32,31 @@ class Order
 
     }
 
+    /**
+     * @param $incl
+     *
+     * @return $this
+     */
     public function setIncl($incl)
     {
         $this->total_incl = $incl;
         return $this;
     }
 
+    /**
+     * @param $excl
+     *
+     * @return $this
+     */
     public function setExcl($excl)
     {
         $this->total_excl = $excl;
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
 

@@ -23,7 +23,7 @@ class InstallSchema implements InstallSchemaInterface
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table ::TYPE_TEXT,
                     'nullable' => true,
-                    'default' => NULL,
+                    'default' => null,
                     'comment' => 'Montapacking Data',
                     'after' => 'free_shipping'
                 ]
@@ -35,7 +35,7 @@ class InstallSchema implements InstallSchemaInterface
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table ::TYPE_TEXT,
                     'nullable' => true,
-                    'default' => NULL,
+                    'default' => null,
                     'comment' => 'Montapacking Data',
                     'after' => 'delivery_date'
                 ]

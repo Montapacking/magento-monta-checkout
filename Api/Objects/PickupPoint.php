@@ -1,16 +1,44 @@
 <?php
 namespace Montapacking\MontaCheckout\Api\Objects;
-//require_once("ShippingOption.php");
 
+/**
+ * Class PickupPoint
+ *
+ * @package Montapacking\MontaCheckout\Api\Objects
+ */
 class PickupPoint
 {
 
+    /**
+     * @var
+     */
     public $from;
+    /**
+     * @var
+     */
     public $to;
+    /**
+     * @var
+     */
     public $code;
+    /**
+     * @var array
+     */
     public $details = [];
+    /**
+     * @var array
+     */
     public $options = [];
 
+    /**
+     * PickupPoint constructor.
+     *
+     * @param $from
+     * @param $to
+     * @param $code
+     * @param $details
+     * @param $options
+     */
     public function __construct($from, $to, $code, $details, $options)
     {
 
@@ -22,24 +50,44 @@ class PickupPoint
 
     }
 
+    /**
+     * @param $from
+     *
+     * @return $this
+     */
     public function setFrom($from)
     {
         $this->from = $from;
         return $this;
     }
 
+    /**
+     * @param $to
+     *
+     * @return $this
+     */
     public function setTo($to)
     {
         $this->to = $to;
         return $this;
     }
 
+    /**
+     * @param $code
+     *
+     * @return $this
+     */
     public function setCode($code)
     {
         $this->code = $code;
         return $this;
     }
 
+    /**
+     * @param $details
+     *
+     * @return $this
+     */
     public function setDetails($details)
     {
 
@@ -86,6 +134,11 @@ class PickupPoint
         return $this;
     }
 
+    /**
+     * @param $options
+     *
+     * @return $this
+     */
     public function setOptions($options)
     {
 
@@ -119,6 +172,9 @@ class PickupPoint
 
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
 

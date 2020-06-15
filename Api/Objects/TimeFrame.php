@@ -4,15 +4,44 @@ namespace Montapacking\MontaCheckout\Api\Objects;
 
 use Montapacking\MontaCheckout\Api\Objects\ShippingOption as MontaCheckout_ShippingOption;
 
+/**
+ * Class TimeFrame
+ *
+ * @package Montapacking\MontaCheckout\Api\Objects
+ */
 class TimeFrame
 {
 
+    /**
+     * @var
+     */
     public $from;
+    /**
+     * @var
+     */
     public $to;
+    /**
+     * @var
+     */
     public $code;
+    /**
+     * @var
+     */
     public $description;
+    /**
+     * @var array
+     */
     public $options = [];
 
+    /**
+     * TimeFrame constructor.
+     *
+     * @param $from
+     * @param $to
+     * @param $code
+     * @param $description
+     * @param $options
+     */
     public function __construct($from, $to, $code, $description, $options)
     {
 
@@ -24,30 +53,55 @@ class TimeFrame
 
     }
 
+    /**
+     * @param $from
+     *
+     * @return $this
+     */
     public function setFrom($from)
     {
         $this->from = $from;
         return $this;
     }
 
+    /**
+     * @param $to
+     *
+     * @return $this
+     */
     public function setTo($to)
     {
         $this->to = $to;
         return $this;
     }
 
+    /**
+     * @param $code
+     *
+     * @return $this
+     */
     public function setCode($code)
     {
         $this->code = $code;
         return $this;
     }
 
+    /**
+     * @param $description
+     *
+     * @return $this
+     */
     public function setDescription($description)
     {
         $this->description = $description;
         return $this;
     }
 
+    /**
+     * @param $options
+     *
+     * @return $this
+     */
     public function setOptions($options)
     {
 
@@ -81,6 +135,9 @@ class TimeFrame
 
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
 

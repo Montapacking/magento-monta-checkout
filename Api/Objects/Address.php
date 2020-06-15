@@ -1,20 +1,67 @@
 <?php
 namespace Montapacking\MontaCheckout\Api\Objects;
 
+/**
+ * Class Address
+ *
+ * @package Montapacking\MontaCheckout\Api\Objects
+ */
 class Address
 {
 
+    /**
+     * @var
+     */
     public $street;
+    /**
+     * @var
+     */
     public $housenumber;
+    /**
+     * @var
+     */
     public $housenumberaddition;
+    /**
+     * @var
+     */
     public $postalcode;
+    /**
+     * @var
+     */
     public $city;
+    /**
+     * @var
+     */
     public $state;
+    /**
+     * @var
+     */
     public $countrycode;
+    /**
+     * @var
+     */
     public $googleapikey;
+    /**
+     * @var
+     */
     public $longitude;
+    /**
+     * @var
+     */
     public $latitude;
 
+    /**
+     * Address constructor.
+     *
+     * @param $street
+     * @param $housenumber
+     * @param $housenumberaddition
+     * @param $postalcode
+     * @param $city
+     * @param $state
+     * @param $countrycode
+     * @param $googleapikey
+     */
     public function __construct($street, $housenumber, $housenumberaddition, $postalcode, $city, $state, $countrycode, $googleapikey)
     {
 
@@ -30,6 +77,9 @@ class Address
 
     }
 
+    /**
+     *
+     */
     public function setLongLat()
     {
         // Get lat and long by address
@@ -53,6 +103,11 @@ class Address
         $this->latitude = $latitude;
     }
 
+    /**
+     * @param $street
+     *
+     * @return $this
+     */
     public function setStreet($street)
     {
         $this->street = $street;
@@ -60,6 +115,11 @@ class Address
         return $this;
     }
 
+    /**
+     * @param $housenumber
+     *
+     * @return $this
+     */
     public function setHousenumber($housenumber)
     {
         $this->housenumber = $housenumber;
@@ -67,6 +127,11 @@ class Address
         return $this;
     }
 
+    /**
+     * @param $housenumberaddition
+     *
+     * @return $this
+     */
     public function setHousenumberAddition($housenumberaddition)
     {
         $this->housenumberaddition = $housenumberaddition;
@@ -74,6 +139,11 @@ class Address
         return $this;
     }
 
+    /**
+     * @param $postalcode
+     *
+     * @return $this
+     */
     public function setPostalcode($postalcode)
     {
         $this->postalcode = $postalcode;
@@ -81,6 +151,11 @@ class Address
         return $this;
     }
 
+    /**
+     * @param $city
+     *
+     * @return $this
+     */
     public function setCity($city)
     {
         $this->city = $city;
@@ -88,6 +163,11 @@ class Address
         return $this;
     }
 
+    /**
+     * @param $state
+     *
+     * @return $this
+     */
     public function setState($state)
     {
         $this->state = $state;
@@ -95,6 +175,11 @@ class Address
         return $this;
     }
 
+    /**
+     * @param $country
+     *
+     * @return $this
+     */
     public function setCountry($country)
     {
         $this->countrycode = $country;
@@ -102,6 +187,11 @@ class Address
         return $this;
     }
 
+    /**
+     * @param $googleapikey
+     *
+     * @return $this
+     */
     public function setGoogleApiKey($googleapikey)
     {
         $this->googleapikey = $googleapikey;
@@ -109,6 +199,9 @@ class Address
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
 

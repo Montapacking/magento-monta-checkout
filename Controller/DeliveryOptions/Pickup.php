@@ -19,6 +19,8 @@ class Pickup extends AbstractDeliveryOptions
     /** @var LocaleResolver $scopeConfig */
     private $localeResolver;
 
+    protected $_logger;
+
     /**
      * Services constructor.
      *
@@ -30,10 +32,13 @@ class Pickup extends AbstractDeliveryOptions
         Context $context,
         Session $checkoutSession,
         LocaleResolver $localeResolver,
-        CarrierConfig $carrierConfig
+        CarrierConfig $carrierConfig,
+        \Montapacking\MontaCheckout\Logger\Logger $logger
+
     )
     {
 
+        $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
@@ -54,7 +59,7 @@ class Pickup extends AbstractDeliveryOptions
         $request = $this->getRequest();
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-        $oApi = $this->generateApi($request, $language);
+        $oApi = $this->generateApi($request, $language, $this->_logger);
 
         if ($language != 'NL' && $language != 'BE') {
             $language = 'EN';

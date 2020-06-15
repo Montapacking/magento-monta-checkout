@@ -55,7 +55,7 @@ abstract class AbstractDeliveryOptions extends Action
         );
     }
 
-    public function generateApi($request, $language) {
+    public function generateApi($request, $language, $logger = null) {
 
         $street  = $request->getParam('street') ? trim(implode(" ", $request->getParam('street'))) : "";
         $postcode = $request->getParam('postcode') ? trim($request->getParam('postcode')) : "";
@@ -102,6 +102,7 @@ abstract class AbstractDeliveryOptions extends Action
         $cart = $objectManager->get('\Magento\Checkout\Model\Cart');
 
         $oApi = new MontpackingApi($webshop,$username,$password,$googleapikey, $language);
+        $oApi->setLogger($logger);
         $oApi->setAddress($street, $housenumber, $housenumberaddition, $postcode, $city, $state, $country);
         $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal() , $cart->getQuote()->getSubtotal());
 

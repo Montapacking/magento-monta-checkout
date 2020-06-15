@@ -19,6 +19,8 @@ class LongLat extends AbstractDeliveryOptions
     /** @var LocaleResolver $scopeConfig */
     private $localeResolver;
 
+    protected $_logger;
+
     /**
      * Services constructor.
      *
@@ -30,10 +32,11 @@ class LongLat extends AbstractDeliveryOptions
         Context $context,
         Session $checkoutSession,
         LocaleResolver $localeResolver,
-        CarrierConfig $carrierConfig
+        CarrierConfig $carrierConfig,
+        \Montapacking\MontaCheckout\Logger\Logger $logger
     )
     {
-
+        $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
@@ -57,7 +60,7 @@ class LongLat extends AbstractDeliveryOptions
         if ($language != 'NL' && $language != 'BE') {
             $language = 'EN';
         }
-        $oApi = $this->generateApi($request, $language);
+        $oApi = $this->generateApi($request, $language, $this->_logger);
         $has_connection = $oApi->checkConnection();
 
         $arr = array();

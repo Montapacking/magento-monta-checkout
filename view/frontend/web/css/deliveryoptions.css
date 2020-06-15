@@ -203,7 +203,8 @@
 }
 
 .montapacking-container-logo.DHLservicepunt,
-.montapacking-container-logo.SELSELBuspakje {
+.montapacking-container-logo.SELSELBuspakje,
+.montapacking-container-logo.SEL {
     background-image: url(../images/DHL.png) !important;
 }
 
@@ -226,6 +227,10 @@
 
 .montapacking-container-logo.UPS {
     background-image: url(../images/UPS.png) !important;
+}
+
+.montapacking-container-logo.Trunkrs {
+    background-image: url(../images/Trunkrs.png) !important;
 }
 
 /* CONTAINER CONTENT */

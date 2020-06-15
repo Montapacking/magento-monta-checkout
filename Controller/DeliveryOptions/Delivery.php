@@ -19,6 +19,8 @@ class Delivery extends AbstractDeliveryOptions
     /** @var LocaleResolver $scopeConfig */
     private $localeResolver;
 
+    protected $_logger;
+
     /**
      * Services constructor.
      *
@@ -30,10 +32,11 @@ class Delivery extends AbstractDeliveryOptions
         Context $context,
         Session $checkoutSession,
         LocaleResolver $localeResolver,
-        CarrierConfig $carrierConfig
+        CarrierConfig $carrierConfig,
+        \Montapacking\MontaCheckout\Logger\Logger $logger
     )
     {
-
+        $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
@@ -58,7 +61,7 @@ class Delivery extends AbstractDeliveryOptions
             $language = 'EN';
         }
 
-        $oApi = $this->generateApi($request, $language);
+        $oApi = $this->generateApi($request, $language, $this->_logger);
 
         $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
 
