@@ -72,6 +72,8 @@ class MontapackingShipping
 
     private $_logger = null;
 
+    private $_carrierConfig;
+
     /**
      * MontapackingShipping constructor.
      *
@@ -89,7 +91,6 @@ class MontapackingShipping
         $this->_pass = $pass;
         $this->_googlekey = $googlekey;
         $this->modus = ($test) ? 'api-test' : 'api';
-
         $this->_url = $this->modus . '.montapacking.nl/rest/v5/';
 
         $this->_basic = [
@@ -103,6 +104,11 @@ class MontapackingShipping
     public function setLogger($logger)
     {
         $this->_logger = $logger;
+    }
+
+    public function setCarrierConfig($config)
+    {
+        $this->_carrierConfig = $config;
     }
 
     /**
@@ -293,6 +299,14 @@ class MontapackingShipping
     public function getPickupOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false)
     {
 
+        if ($this->_carrierConfig->getLeadingStockMontapacking()) {
+            $onstock = true;
+        }
+
+        if ($this->_carrierConfig->getDisablePickupPoints()) {
+           return array();
+        }
+
         $pickups = array();
 
         $this->_basic = array_merge(
@@ -343,6 +357,9 @@ class MontapackingShipping
      */
     public function getShippingOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false)
     {
+        if ($this->_carrierConfig->getLeadingStockMontapacking()) {
+            $onstock = true;
+        }
 
         // Basis gegevens uitbreiden met shipping option specifieke data
         $this->_basic = array_merge(
@@ -449,7 +466,6 @@ class MontapackingShipping
 
         $result = json_decode($result);
 
-
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;
             $context = array('source' => 'Montapacking Checkout');
@@ -457,48 +473,53 @@ class MontapackingShipping
         }
 
 
-        if (null !== $this->_logger && $result->Warnings) {
-
-            foreach ($result->Warnings as $warning) {
-
-                $logger = $this->_logger;
-                $context = array('source' => 'Montapacking Checkout');
-
-                if (null !== $warning->ShipperCode) {
-                    $logger->notice($warning->ShipperCode . " - " . $warning->Message, $context);
-                } else {
-                    $logger->notice($warning->Message, $context);
-                }
+        if ($this->_carrierConfig->getLogErrors()) {
 
 
-            }
-        }
+            if (null !== $this->_logger && $result->Warnings) {
 
-        if (null !== $this->_logger && $result->Notices) {
-
-            foreach ($result->Notices as $notice) {
-                $logger = $this->_logger;
-                $context = array('source' => 'Montapacking Checkout');
-
-                if (null !== $notice->ShipperCode) {
-                    $logger->notice($notice->ShipperCode . " - " . $notice->Message, $context);
-                } else {
-                    $logger->notice($notice->Message, $context);
-                }
-
-
-            }
-        }
-
-        if (null !== $this->_logger && $result->ImpossibleShipperOptions) {
-
-            foreach ($result->ImpossibleShipperOptions as $impossibleoption) {
-                foreach ($impossibleoption->Reasons as $reason) {
+                foreach ($result->Warnings as $warning) {
 
                     $logger = $this->_logger;
                     $context = array('source' => 'Montapacking Checkout');
-                    $logger->notice($impossibleoption->ShipperCode . " - " . $reason->Code . " | " . $reason->Reason, $context);
+
+                    if (null !== $warning->ShipperCode) {
+                        $logger->notice($warning->ShipperCode . " - " . $warning->Message, $context);
+                    } else {
+                        $logger->notice($warning->Message, $context);
+                    }
+
+
                 }
+            }
+
+            if (null !== $this->_logger && $result->Notices) {
+
+                foreach ($result->Notices as $notice) {
+                    $logger = $this->_logger;
+                    $context = array('source' => 'Montapacking Checkout');
+
+                    if (null !== $notice->ShipperCode) {
+                        $logger->notice($notice->ShipperCode . " - " . $notice->Message, $context);
+                    } else {
+                        $logger->notice($notice->Message, $context);
+                    }
+
+
+                }
+            }
+
+            if (null !== $this->_logger && $result->ImpossibleShipperOptions) {
+
+                foreach ($result->ImpossibleShipperOptions as $impossibleoption) {
+                    foreach ($impossibleoption->Reasons as $reason) {
+
+                        $logger = $this->_logger;
+                        $context = array('source' => 'Montapacking Checkout');
+                        $logger->notice($impossibleoption->ShipperCode . " - " . $reason->Code . " | " . $reason->Reason, $context);
+                    }
+                }
+
             }
 
         }

@@ -37,7 +37,7 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true,
                     'default' => null,
                     'comment' => 'Montapacking Data',
-                    'after' => 'delivery_date'
+                    'after' => 'base_shipping_incl_tax'
                 ]
             );
 

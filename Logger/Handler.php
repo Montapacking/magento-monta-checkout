@@ -18,5 +18,5 @@ class Handler extends \Magento\Framework\Logger\Handler\Base
      *
      * @var string
      */
-    protected $fileName = '/var/log/my_custom_log.log';
+    protected $fileName = '/var/log/montapacking_checkout.log';
 }

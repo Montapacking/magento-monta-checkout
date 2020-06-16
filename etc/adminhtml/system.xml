@@ -19,8 +19,6 @@
             <group id="montapacking" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Montapacking</label>
 
-
-
                 <field id="active" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -37,15 +35,19 @@
                 <field id="webshop" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
                     <label>Montapacking - Webshop</label>
                     <validate>required-entry</validate>
+                    <comment><![CDATA[The name of the webshop in Monta Portal. Name can be found <a target="_new" href="https://montaportal.nl/Home/CustomerSettings#CheckoutOptions">here</a>.]]></comment>
                 </field>
                 <field id="username" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
                     <label>Montapacking - Username</label>
                     <validate>required-entry</validate>
+                    <comment><![CDATA[The username of Monta REST API provided by Montapacking.]]></comment>
+
                 </field>
 
                 <field id="password" translate="label" type="password" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
                     <label>Montapacking - Password</label>
                     <validate>required-entry</validate>
+                    <comment><![CDATA[The password of Monta REST API provided by Montapacking.]]></comment>
                 </field>
 
                 <field id="googleapikey" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
@@ -60,8 +62,27 @@
                     <comment><![CDATA[The base shipping costs used when there is no API connection.]]></comment>
                 </field>
 
+                <field id="logerrors" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
+                    <label>Log errors</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Turn on logs which are shown <a href="/admin/logviewer/grid/index">here</a>]]></comment>
+                </field>
 
-                <field id="sort_order" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="disablepickuppoints" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
+                    <label>Disable pickup points</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[When disabled no pickup points are shown]]></comment>
+                </field>
+
+
+                <field id="leadingstockmontapacking" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
+                    <label>Does have Montapacking have Leading stock </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[When selecting 'Yes' Montapacking will calculate the current stock, when selecting 'No' the Magento stock is leading]]></comment>
+                </field>
+
+
+                <field id="sort_order" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                 </field>
 

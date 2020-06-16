@@ -103,6 +103,7 @@ abstract class AbstractDeliveryOptions extends Action
 
         $oApi = new MontpackingApi($webshop,$username,$password,$googleapikey, $language);
         $oApi->setLogger($logger);
+        $oApi->setCarrierConfig($this->getCarrierConfig());
         $oApi->setAddress($street, $housenumber, $housenumberaddition, $postcode, $city, $state, $country);
         $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal() , $cart->getQuote()->getSubtotal());
 
