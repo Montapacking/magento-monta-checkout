@@ -33,6 +33,8 @@ class TimeFrame
      */
     public $options = [];
 
+    public $type;
+
     /**
      * TimeFrame constructor.
      *
@@ -42,7 +44,7 @@ class TimeFrame
      * @param $description
      * @param $options
      */
-    public function __construct($from, $to, $code, $description, $options)
+    public function __construct($from, $to, $code, $description, $options, $type)
     {
 
         $this->setFrom($from);
@@ -50,7 +52,14 @@ class TimeFrame
         $this->setCode($code);
         $this->setDescription($description);
         $this->setOptions($options);
+        $this->setType($type);
 
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
     }
 
     /**

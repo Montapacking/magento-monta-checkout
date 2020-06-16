@@ -389,7 +389,8 @@ class MontapackingShipping
                         $timeframe->To,
                         $timeframe->TypeCode,
                         $timeframe->TypeDescription,
-                        $timeframe->ShippingOptions
+                        $timeframe->ShippingOptions,
+                        $timeframe->FromToTypeCode,
                     );
 
                 }
