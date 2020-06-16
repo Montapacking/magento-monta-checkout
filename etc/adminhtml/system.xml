@@ -65,7 +65,7 @@
                 <field id="logerrors" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
                     <label>Log errors</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[Turn on logs which are shown <a href="/admin/logviewer/grid/index">here</a>]]></comment>
+                    <comment><![CDATA[Turn on logs which are shown in 'System -> Log Viewer -> View Logs']]></comment>
                 </field>
 
                 <field id="disablepickuppoints" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
