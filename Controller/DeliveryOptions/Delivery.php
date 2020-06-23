@@ -11,6 +11,11 @@ use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 
 use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
 
+/**
+ * Class Delivery
+ *
+ * @package Montapacking\MontaCheckout\Controller\DeliveryOptions
+ */
 class Delivery extends AbstractDeliveryOptions
 {
     /** @var Session $checkoutSession */
@@ -19,13 +24,21 @@ class Delivery extends AbstractDeliveryOptions
     /** @var LocaleResolver $scopeConfig */
     private $localeResolver;
 
+    /**
+     * @var \Montapacking\MontaCheckout\Logger\Logger
+     */
     protected $_logger;
+
+    /**
+     * @var \Magento\Checkout\Model\Cart
+     */
+    private $cart;
 
     /**
      * Services constructor.
      *
-     * @param Context $context
-     * @param Session $checkoutSession
+     * @param Context       $context
+     * @param Session       $checkoutSession
      * @param CarrierConfig $carrierConfig
      */
     public function __construct(
@@ -33,17 +46,20 @@ class Delivery extends AbstractDeliveryOptions
         Session $checkoutSession,
         LocaleResolver $localeResolver,
         CarrierConfig $carrierConfig,
-        \Montapacking\MontaCheckout\Logger\Logger $logger
+        \Montapacking\MontaCheckout\Logger\Logger $logger,
+        \Magento\Checkout\Model\Cart $cart
     )
     {
         $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
+        $this->cart = $cart;
 
         parent::__construct(
             $context,
-            $carrierConfig
+            $carrierConfig,
+            $cart
         );
 
     }
@@ -61,40 +77,54 @@ class Delivery extends AbstractDeliveryOptions
             $language = 'EN';
         }
 
-        $oApi = $this->generateApi($request, $language, $this->_logger);
+        try {
+            $oApi = $this->generateApi($request, $language, $this->_logger);
 
-        $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
+            $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
 
-        $shippingoptions_formatted = $this->formatShippingOptions($shippingoptions, $language);
+            $shippingoptions_formatted = $this->formatShippingOptions($shippingoptions);
 
 
-        if (isset($_GET['log'])) {
-            echo "<pre>";
-            $json_encode = json_encode($shippingoptions_formatted);
-            var_dump(json_decode($json_encode, true));
-            echo "</pre>";
+            /* turned off
+            if (isset($_GET['log'])) {
 
-            exit;
+                print $language."<br>";
+                echo "<pre>";
+                $json_encode = json_encode($shippingoptions_formatted);
+                var_dump(json_decode($json_encode, true));
+                echo "</pre>";
+                exit;
+            }
+            */
+
+            return $this->jsonResponse($shippingoptions_formatted);
+
+        } catch (Exception $e) {
+
+            $context = array('source' => 'Montapacking Checkout');
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
+            return $this->jsonResponse(array());
         }
 
-        return $this->jsonResponse($shippingoptions_formatted);
-        exit;
 
     }
 
-    public function formatShippingOptions($frames, $language)
+    /**
+     * @param $frames
+     *
+     * @return array
+     */
+    public function formatShippingOptions($frames)
     {
         $items = array();
 
-        $hour_string = 'h';
+        $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
         if ($language == 'NL') {
             setlocale(LC_TIME, "nl_NL");
-            $hour_string = " uur";
         }
 
-        ## Currency symbol
+        $hour_string = __("hour");
         $curr = '€';
-
 
         ## Check of er meerdere timeframes zijn, wanneer maar één dan enkel shipper keuze zonder datum/tijd
         if (is_array($frames) || is_object($frames)) {
@@ -152,39 +182,11 @@ class Delivery extends AbstractDeliveryOptions
                             $description[] = date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string;
                         }
 
+
                         if (trim($frame->code) && null !== $frame->code) {
 
-
-                            if ($language == 'NL' || $language == 'BE') {
-                                if ($frame->code == 'SameDayDelivery') {
-                                    $frame->code_desc = 'Zelfde dag levering';
-
-                                }
-                                if ($frame->code == 'SaturdayDelivery') {
-                                    $frame->code_desc = 'Zaterdag levering';
-                                }
-
-                                if ($frame->code == 'EveningDelivery') {
-                                    $frame->code_desc = 'In avond afleveren';
-                                }
-
-                            } else {
-                                if ($frame->code == 'SameDayDelivery') {
-                                    $frame->code_desc = 'Same day delivery';
-
-                                }
-                                if ($frame->code == 'SaturdayDelivery') {
-                                    $frame->code_desc = 'Saturday delivery';
-                                }
-
-                                if ($frame->code == 'EveningDelivery') {
-                                    $frame->code_desc = 'Evening Delivery';
-                                }
-                            }
-
+                            $frame->code_desc = __($frame->code);
                             $description[] = $frame->code_desc;
-
-
                         }
 
                         $description = implode(" | ", $description);

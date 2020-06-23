@@ -11,6 +11,11 @@ use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 
 use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
 
+/**
+ * Class Pickup
+ *
+ * @package Montapacking\MontaCheckout\Controller\DeliveryOptions
+ */
 class Pickup extends AbstractDeliveryOptions
 {
     /** @var Session $checkoutSession */
@@ -19,13 +24,21 @@ class Pickup extends AbstractDeliveryOptions
     /** @var LocaleResolver $scopeConfig */
     private $localeResolver;
 
+    /**
+     * @var \Montapacking\MontaCheckout\Logger\Logger
+     */
     protected $_logger;
+
+    /**
+     * @var \Magento\Checkout\Model\Cart
+     */
+    private $cart;
 
     /**
      * Services constructor.
      *
-     * @param Context $context
-     * @param Session $checkoutSession
+     * @param Context       $context
+     * @param Session       $checkoutSession
      * @param CarrierConfig $carrierConfig
      */
     public function __construct(
@@ -33,7 +46,8 @@ class Pickup extends AbstractDeliveryOptions
         Session $checkoutSession,
         LocaleResolver $localeResolver,
         CarrierConfig $carrierConfig,
-        \Montapacking\MontaCheckout\Logger\Logger $logger
+        \Montapacking\MontaCheckout\Logger\Logger $logger,
+        \Magento\Checkout\Model\Cart $cart
 
     )
     {
@@ -42,10 +56,12 @@ class Pickup extends AbstractDeliveryOptions
 
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
+        $this->cart = $cart;
 
         parent::__construct(
             $context,
-            $carrierConfig
+            $carrierConfig,
+            $cart
         );
 
     }
@@ -59,40 +75,55 @@ class Pickup extends AbstractDeliveryOptions
         $request = $this->getRequest();
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-        $oApi = $this->generateApi($request, $language, $this->_logger);
 
-        if ($language != 'NL' && $language != 'BE') {
-            $language = 'EN';
+        try {
+            $oApi = $this->generateApi($request, $language, $this->_logger);
+
+            if ($language != 'NL' && $language != 'BE') {
+                $language = 'EN';
+            }
+
+            $pickupoptions = $oApi->getPickupOptions();
+
+            $pickupoptions_formatted = $this->formatPickupOptions($pickupoptions);
+
+
+            if (isset($_GET['log'])) {
+                print $language . "<br>";
+                echo "<pre>";
+                $json_encode = json_encode($pickupoptions_formatted);
+                var_dump(json_decode($json_encode, true));
+                echo "</pre>";
+                exit;
+            }
+
+
+            return $this->jsonResponse($pickupoptions_formatted);
+
+        } catch (Exception $e) {
+
+            $context = array('source' => 'Montapacking Checkout');
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
+            return $this->jsonResponse(array());
         }
-
-        $pickupoptions = $oApi->getPickupOptions($oApi->getOnstock());
-
-        $pickupoptions_formatted = $this->formatPickupOptions($pickupoptions, $language);
-
-        if (isset($_GET['log'])) {
-            echo "<pre>";
-            $json_encode = json_encode($pickupoptions_formatted);
-            var_dump(json_decode($json_encode, true));
-            echo "</pre>";
-
-            exit;
-        }
-        return $this->jsonResponse($pickupoptions_formatted);
-        exit;
 
     }
 
-    public function formatPickupOptions($frames, $language)
+    /**
+     * @param $frames
+     *
+     * @return array
+     */
+    public function formatPickupOptions($frames)
     {
         $items = array();
 
-        $hour_string = 'h';
-        $from_string = 'from ';
+        $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
         if ($language == 'NL') {
             setlocale(LC_TIME, "nl_NL");
-            $hour_string = " uur";
-            $from_string = "v.a. ";
         }
+
+        $hour_string = __("hour");
 
         ## Currency symbol
         $curr = '€';
@@ -154,8 +185,8 @@ class Pickup extends AbstractDeliveryOptions
                             'code' => $option->code,
                             'codes' => $option->codes,
                             'image' => $option->codes[0],
-                            'optionCodes' =>  json_encode((array)  $option->optioncodes),
-                            'optionsWithValue' =>  json_encode((array)  $option->optionsWithValue),
+                            'optionCodes' => json_encode((array)$option->optioncodes),
+                            'optionsWithValue' => json_encode((array)$option->optionsWithValue),
                             'name' => $option->description,
                             'description_string' => $description,
                             'description_string_storelocator' => $description_storelocator,
@@ -180,56 +211,23 @@ class Pickup extends AbstractDeliveryOptions
 
                     }
 
+                    $arr = array();
 
-                    if ($language == 'NL' || $language == 'BE') {
-                        $arr = array();
+                    foreach ($frame->description->OpeningTimes as $key => $time) {
 
+                        if (isset($time->Day)) {
+                            $obj = (object)[
+                                'Day' => __($time->Day),
+                                'OpeningTimes' => $time->OpeningTimes,
+                                'TimeNotation' => __("hour")
+                            ];
 
-                        foreach ($frame->description->OpeningTimes as $key => $time) {
-
-                            if (isset($time->Day)) {
-
-                                $days = array();
-                                $days['Monday'] = 'Maandag';
-                                $days['Tuesday'] = 'Dinsdag';
-                                $days['Wednesday'] = 'Woensdag';
-                                $days['Thursday'] = 'Donderdag';
-                                $days['Friday'] = 'Vrijdag';
-                                $days['Saturday'] = 'Zaterdag';
-                                $days['Sunday'] = 'Zondag';
-
-                                $days_to_use = $days[$time->Day];
-
-                                //$arr[$key]->Day =$days_to_use;
-
-                                $obj = (object)[
-                                    'Day' => $days_to_use,
-                                    'OpeningTimes' => $time->OpeningTimes,
-                                    'TimeNotation' => ' uur'
-                                ];
-
-                                $arr[$key] = $obj;
-                            }
-
+                            $arr[$key] = $obj;
                         }
 
-                        $frame->description->OpeningTimes = $arr;
-                    } else {
-                        foreach ($frame->description->OpeningTimes as $key => $time) {
-
-                            if (isset($time->Day)) {
-                                $obj = (object)[
-                                    'Day' => $time->Day,
-                                    'OpeningTimes' => $time->OpeningTimes,
-                                    'TimeNotation' => 'h'
-                                ];
-
-                                $arr[$key] = $obj;
-                            }
-
-                        }
-                        $frame->description->OpeningTimes = $arr;
                     }
+                    $frame->description->OpeningTimes = $arr;
+
 
                     ## Check of er een prijs is
                     if ($options !== null) {
@@ -290,7 +288,8 @@ class Pickup extends AbstractDeliveryOptions
                             'code' => $option->code,
                             'codes' => $option->codes,
                             'image' => $option->codes[0],
-                            'optionCodes' => $option->optioncodes,
+                            'optionCodes' => json_encode((array)$option->optioncodes),
+                            'optionsWithValue' => json_encode((array)$option->optionsWithValue),
                             'name' => $option->description,
                             'description_string' => $description,
                             'description_string_storelocator' => $description_storelocator,

@@ -17,11 +17,6 @@ class MontapackingShipping
 {
 
     /**
-     * @var bool
-     */
-    public $debug = false;
-
-    /**
      * @var string
      */
     private $_user = '';
@@ -29,18 +24,12 @@ class MontapackingShipping
      * @var string
      */
     private $_pass = '';
-    /**
-     * @var string
-     */
-    private $_url = '';
+
     /**
      * @var string
      */
     private $_googlekey = '';
-    /**
-     * @var string
-     */
-    private $_http = 'https://';
+
     /**
      * @var array
      */
@@ -70,8 +59,14 @@ class MontapackingShipping
      */
     public $address = null;
 
+    /**
+     * @var null
+     */
     private $_logger = null;
 
+    /**
+     * @var
+     */
     private $_carrierConfig;
 
     /**
@@ -90,8 +85,6 @@ class MontapackingShipping
         $this->_user = $user;
         $this->_pass = $pass;
         $this->_googlekey = $googlekey;
-        $this->modus = ($test) ? 'api-test' : 'api';
-        $this->_url = $this->modus . '.montapacking.nl/rest/v5/';
 
         $this->_basic = [
             'Origin' => $origin,
@@ -101,11 +94,17 @@ class MontapackingShipping
 
     }
 
+    /**
+     * @param $logger
+     */
     public function setLogger($logger)
     {
         $this->_logger = $logger;
     }
 
+    /**
+     * @param $config
+     */
     public function setCarrierConfig($config)
     {
         $this->_carrierConfig = $config;
@@ -217,7 +216,7 @@ class MontapackingShipping
         $result = $this->call('info', ['_basic']);
         if (isset($result->Origins)) {
 
-            $origins = null;
+            $origins = is_array($result->Origins) ? $result->Origins : [$result->Origins];
 
             // Array goedzetten
             if (is_array($result->Origins)) {
@@ -279,7 +278,7 @@ class MontapackingShipping
         $result = json_decode($result);
 
 
-        if ($result->Message == 'Zero products found with sku ' . $sku) {
+        if (null !== $result && $result->Message == 'Zero products found with sku ' . $sku) {
             return false;
         } else {
             return true;
@@ -299,12 +298,8 @@ class MontapackingShipping
     public function getPickupOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false)
     {
 
-        if ($this->_carrierConfig->getLeadingStockMontapacking()) {
-            $onstock = true;
-        }
-
         if ($this->_carrierConfig->getDisablePickupPoints()) {
-           return array();
+            return array();
         }
 
         $pickups = array();
@@ -321,7 +316,7 @@ class MontapackingShipping
             ]
         );
 
-        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore'];
+        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH'];
 
         // Timeframes omzetten naar bruikbaar object
         $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products', 'allowedshippers']);
@@ -335,7 +330,8 @@ class MontapackingShipping
                     $timeframe->To,
                     $timeframe->TypeCode,
                     $timeframe->PickupPointDetails,
-                    $timeframe->ShippingOptions
+                    $timeframe->ShippingOptions,
+                    $timeframe->FromToTypeCode
                 );
 
             }
@@ -357,28 +353,27 @@ class MontapackingShipping
      */
     public function getShippingOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false)
     {
-        if ($this->_carrierConfig->getLeadingStockMontapacking()) {
-            $onstock = true;
-        }
-
-        // Basis gegevens uitbreiden met shipping option specifieke data
-        $this->_basic = array_merge(
-            $this->_basic, [
-                'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
-                'MaiboxShipperMandatory' => $mailbox,
-                'TrackingMandatory' => $trackingonly,
-                'MaxNumberOfPickupPoints' => 0,
-                'InsuranceRequired' => $insurance,
-                'ShipmentFitsThroughDutchMailbox' => $mailboxfit,
-            ]
-        );
-
         $timeframes = array();
 
-        // Timeframes omzetten naar bruikbaar object
-        $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products']);
-
         if (trim($this->address->postalcode) && (trim($this->address->housenumber) || trim($this->address->street))) {
+
+            // Basis gegevens uitbreiden met shipping option specifieke data
+            $this->_basic = array_merge(
+                $this->_basic, [
+                    'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
+                    'MailboxShipperMandatory' => $mailbox,
+                    'TrackingMandatory' => $trackingonly,
+                    'MaxNumberOfPickupPoints' => 0,
+                    'InsuranceRequired' => $insurance,
+                    'ShipmentFitsThroughDutchMailbox' => $mailboxfit,
+                ]
+            );
+
+
+            // Timeframes omzetten naar bruikbaar object
+            $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products']);
+
+
             if (isset($result->Timeframes)) {
 
                 // Shippers omzetten naar shipper object
@@ -435,13 +430,8 @@ class MontapackingShipping
         }
 
         $method = strtolower($method);
-        //$url = $this->_http . $this->_user . ':' . $this->_pass . '@' . $this->_url . $method;
-        $url = "https://api.montapacking.nl/rest/v5/" . $method;
 
-        if ($this->debug) {
-            echo $url;
-            echo str_replace('&', "$\n", $request);
-        }
+        $url = "https://api.montapacking.nl/rest/v5/" . $method;
 
         $ch = curl_init();
 
@@ -455,29 +445,39 @@ class MontapackingShipping
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 
+
         $result = curl_exec($ch);
 
-        if ($this->debug) {
-            echo '<pre>';
-            print_r(json_decode($result));
-            echo '<pre>';
+        if (curl_errno($ch)) {
+            $error_msg = curl_error($ch);
+            $logger = $this->_logger;
+            $context = array('source' => 'Montapacking Checkout');
+            $logger->critical($error_msg . " (" . $url . ")", $context);
+            $result = null;
         }
 
         curl_close($ch);
 
+
         $result = json_decode($result);
+
+        $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;
 
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;
             $context = array('source' => 'Montapacking Checkout');
-            $logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
+            $logger->critical("Webshop was unable to connect to Montapacking REST api. Please check your username and password. Otherwise please contact Montapacking (" . $url . ")", $context);
+        }else if (null !== $this->_logger) {
+            $logger = $this->_logger;
+            $context = array('source' => 'Montapacking Checkout');
+            $logger->notice("Connection logged (" . $url . ")", $context);
         }
 
 
         if ($this->_carrierConfig->getLogErrors()) {
 
 
-            if (null !== $this->_logger && $result->Warnings) {
+            if (null !== $this->_logger && isset($result->Warnings)) {
 
                 foreach ($result->Warnings as $warning) {
 
@@ -494,7 +494,7 @@ class MontapackingShipping
                 }
             }
 
-            if (null !== $this->_logger && $result->Notices) {
+            if (null !== $this->_logger && isset($result->Notices)) {
 
                 foreach ($result->Notices as $notice) {
                     $logger = $this->_logger;
@@ -510,7 +510,7 @@ class MontapackingShipping
                 }
             }
 
-            if (null !== $this->_logger && $result->ImpossibleShipperOptions) {
+            if (null !== $this->_logger && isset($result->ImpossibleShipperOptions)) {
 
                 foreach ($result->ImpossibleShipperOptions as $impossibleoption) {
                     foreach ($impossibleoption->Reasons as $reason) {

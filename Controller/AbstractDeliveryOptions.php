@@ -1,4 +1,5 @@
 <?php
+
 namespace Montapacking\MontaCheckout\Controller;
 
 use Magento\Framework\App\Action\Context;
@@ -12,6 +13,8 @@ abstract class AbstractDeliveryOptions extends Action
     /** @var $carrierConfig CarrierConfig */
     private $carrierConfig;
 
+    private $cart;
+
     /**
      * AbstractDeliveryOptions constructor.
      *
@@ -19,9 +22,13 @@ abstract class AbstractDeliveryOptions extends Action
      */
     public function __construct(
         Context $context,
-        CarrierConfig $carrierConfig
-    ) {
+        CarrierConfig $carrierConfig,
+        \Magento\Checkout\Model\Cart $cart
+    )
+    {
         $this->carrierConfig = $carrierConfig;
+
+        $this->cart = $cart;
 
         parent::__construct(
             $context
@@ -34,6 +41,11 @@ abstract class AbstractDeliveryOptions extends Action
     public function getCarrierConfig()
     {
         return $this->carrierConfig;
+    }
+
+    public function getCart()
+    {
+        return $this->cart;
     }
 
     /**
@@ -55,12 +67,13 @@ abstract class AbstractDeliveryOptions extends Action
         );
     }
 
-    public function generateApi($request, $language, $logger = null) {
+    public function generateApi($request, $language, $logger = null)
+    {
 
-        $street  = $request->getParam('street') ? trim(implode(" ", $request->getParam('street'))) : "";
+        $street = $request->getParam('street') ? trim(implode(" ", $request->getParam('street'))) : "";
         $postcode = $request->getParam('postcode') ? trim($request->getParam('postcode')) : "";
-        $city =  $request->getParam('city') ? trim($request->getParam('city')) : "";
-        $country  = $request->getParam('country') ? trim($request->getParam('country')) : "";
+        $city = $request->getParam('city') ? trim($request->getParam('city')) : "";
+        $country = $request->getParam('country') ? trim($request->getParam('country')) : "";
 
         $housenumber = '';
         $housenumberaddition = '';
@@ -88,43 +101,53 @@ abstract class AbstractDeliveryOptions extends Action
          */
 
 
-        $webshop  = $this->getCarrierConfig()->getWebshop();
-        $username  = $this->getCarrierConfig()->getUserName();
-        $password  = $this->getCarrierConfig()->getPassword();
-        $googleapikey  = $this->getCarrierConfig()->getGoogleApiKey();
+        $webshop = $this->getCarrierConfig()->getWebshop();
+        $username = $this->getCarrierConfig()->getUserName();
+        $password = $this->getCarrierConfig()->getPassword();
+        $googleapikey = $this->getCarrierConfig()->getGoogleApiKey();
+        $leadingstockmontapacking = $this->getCarrierConfig()->getLeadingStockMontapacking();
 
 
         /**
          * Retrieve Order Information
          */
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $cart = $objectManager->get('\Magento\Checkout\Model\Cart');
+        //$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $cart = $this->getCart();
 
-        $oApi = new MontpackingApi($webshop,$username,$password,$googleapikey, $language);
+
+        $oApi = new MontpackingApi($webshop, $username, $password, $googleapikey, $language);
         $oApi->setLogger($logger);
         $oApi->setCarrierConfig($this->getCarrierConfig());
         $oApi->setAddress($street, $housenumber, $housenumberaddition, $postcode, $city, $state, $country);
-        $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal() , $cart->getQuote()->getSubtotal());
+        $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal(), $cart->getQuote()->getSubtotal());
 
         $items = $cart->getQuote()->getAllVisibleItems();
 
         $bAllProductsAvailable = true;
-        foreach($items as $item) {
+        foreach ($items as $item) {
 
-            $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
+            if ($leadingstockmontapacking) {
+                $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
 
-            if (false === $oApi->checkStock($item->getSku())) {
-                $bAllProductsAvailable = false;
+                if (false === $oApi->checkStock($item->getSku())) {
+                    $bAllProductsAvailable = false;
+                    break;
+                }
+            } else {
+                $stockItem = $item->getProduct()->getExtensionAttributes()->getStockItem();
+                if ($stockItem->getQty() <= 0) {
+                    $bAllProductsAvailable = false;
+                    break;
+                }
             }
+
+
         }
 
-        // turned temporary off for testing
         if (false === $bAllProductsAvailable) {
-            //$oApi->setOnstock(false);
+            $oApi->setOnstock(false);
         }
         return $oApi;
-
-        //return $this->jsonResponse($deliveryOptions);
     }
 }

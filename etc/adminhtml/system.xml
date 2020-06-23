@@ -50,11 +50,6 @@
                     <comment><![CDATA[The password of Monta REST API provided by Montapacking.]]></comment>
                 </field>
 
-                <field id="googleapikey" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
-                    <label>Google API key</label>
-                    <validate>required-entry</validate>
-                </field>
-
 
                 <field id="price" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Shipping Costs</label>

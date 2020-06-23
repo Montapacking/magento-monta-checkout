@@ -1,4 +1,5 @@
 <?php
+
 namespace Montapacking\MontaCheckout\Api\Objects;
 
 /**
@@ -87,20 +88,31 @@ class Address
         $prepAddr = str_replace('  ', ' ', $address);
         $prepAddr = str_replace(' ', '+', $prepAddr);
         $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey;
-        $geocode = file_get_contents($google_maps_url);
-        $output = json_decode($geocode);
 
-        $result = end($output->results);
-        if (isset($result->geometry)) {
-            $latitude = $result->geometry->location->lat;
-            $longitude = $result->geometry->location->lng;
-        } else {
+
+        try {
+            $geocode = file_get_contents($google_maps_url);
+            $output = json_decode($geocode);
+
+            $result = end($output->results);
+
+            if (isset($result->geometry)) {
+                $latitude = $result->geometry->location->lat;
+                $longitude = $result->geometry->location->lng;
+            } else {
+                $latitude = 0;
+                $longitude = 0;
+            }
+
+        } catch (Exception $e) {
             $latitude = 0;
             $longitude = 0;
         }
 
         $this->longitude = $longitude;
         $this->latitude = $latitude;
+
+
     }
 
     /**

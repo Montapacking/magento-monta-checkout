@@ -42,19 +42,47 @@ define(
          * The Timeout is needed so it gives the Notifier the chance to retrieve the correct country code,
          * and not the default value.
          */
-        $(document).on(
-            'change', fields.join(','), function () {
-                // Clear timeout if exists.
-                if (typeof timer !== 'undefined') {
-                    clearTimeout(timer);
+
+
+        (function() {
+            function checkState() {
+
+                if ($("input[name*='postcode']").length > 0 && $("#montapacking-plugin").length) {
+
+                    var success = true; // do something to check the state
+                    $("input[name*='postcode']").trigger("change");
+                } else {
+                    var success = false; // do something to check the state
                 }
 
-                timer = setTimeout(
-                    function () {
-                        countryCode = $("select[name*='country_id']").val();
-                        valueUpdateNotifier.notifySubscribers();
-                    }, 500
-                );
+                if (!success) {
+                    setTimeout(checkState, 500);
+                }
+            }
+            setTimeout(checkState, 500);
+        })();
+
+
+        $(document).on(
+            'change', fields.join(','), function () {
+
+                var name = $(this).attr("name");
+
+                if ($("input[name*='"+name+"']").length && $("select[name*='country_id']").length) {
+
+                    // Clear timeout if exists.
+                    if (typeof timer !== 'undefined') {
+                        clearTimeout(timer);
+                    }
+
+                    timer = setTimeout(
+                        function () {
+                            countryCode = $("select[name*='country_id']").val();
+                            valueUpdateNotifier.notifySubscribers();
+                        }, 500
+                    );
+
+                }
             }
         );
 
@@ -63,6 +91,7 @@ define(
          */
         return ko.computed(
             function () {
+
                 valueUpdateNotifier();
 
                 /**
@@ -93,7 +122,7 @@ define(
                 $.each(
                     fields, function () {
                         /**
-                    * Second street may not exist and is therefor not required and should only be observed. 
+                    * Second street may not exist and is therefor not required and should only be observed.
                     */
                         if (!$(this).length && this !== "input[name*='street[1]']" && this !== "input[name*='street[2]']") {
                             allFieldsExists = false;

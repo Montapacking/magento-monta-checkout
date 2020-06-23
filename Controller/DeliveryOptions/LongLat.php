@@ -11,6 +11,11 @@ use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 
 use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
 
+/**
+ * Class LongLat
+ *
+ * @package Montapacking\MontaCheckout\Controller\DeliveryOptions
+ */
 class LongLat extends AbstractDeliveryOptions
 {
     /** @var Session $checkoutSession */
@@ -19,13 +24,21 @@ class LongLat extends AbstractDeliveryOptions
     /** @var LocaleResolver $scopeConfig */
     private $localeResolver;
 
+    /**
+     * @var \Montapacking\MontaCheckout\Logger\Logger
+     */
     protected $_logger;
+
+    /**
+     * @var \Magento\Checkout\Model\Cart
+     */
+    private $cart;
 
     /**
      * Services constructor.
      *
-     * @param Context $context
-     * @param Session $checkoutSession
+     * @param Context       $context
+     * @param Session       $checkoutSession
      * @param CarrierConfig $carrierConfig
      */
     public function __construct(
@@ -33,17 +46,20 @@ class LongLat extends AbstractDeliveryOptions
         Session $checkoutSession,
         LocaleResolver $localeResolver,
         CarrierConfig $carrierConfig,
-        \Montapacking\MontaCheckout\Logger\Logger $logger
+        \Montapacking\MontaCheckout\Logger\Logger $logger,
+        \Magento\Checkout\Model\Cart $cart
     )
     {
         $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
+        $this->cart = $cart;
 
         parent::__construct(
             $context,
-            $carrierConfig
+            $carrierConfig,
+            $cart
         );
 
     }
@@ -60,22 +76,38 @@ class LongLat extends AbstractDeliveryOptions
         if ($language != 'NL' && $language != 'BE') {
             $language = 'EN';
         }
-        $oApi = $this->generateApi($request, $language, $this->_logger);
-        $has_connection = $oApi->checkConnection();
 
-        $arr = array();
+        try {
 
-        $arr['longitude'] = $oApi->address->longitude;
-        $arr['latitude'] = $oApi->address->latitude;
-        $arr['language'] = $language;
+            $oApi = $this->generateApi($request, $language, $this->_logger);
+            $has_connection = $oApi->checkConnection();
 
-        if (true === $has_connection) {
-            $arr['hasconnection'] = 'true';
-        } else {
+            $arr = array();
+
+            $arr['longitude'] = $oApi->address->longitude;
+            $arr['latitude'] = $oApi->address->latitude;
+            $arr['language'] = $language;
+
+            if (true === $has_connection) {
+                $arr['hasconnection'] = 'true';
+            } else {
+                $arr['hasconnection'] = 'false';
+            }
+
+        } catch (Exception $e) {
+
+            $arr = array();
+            $arr['longitude'] = 0;
+            $arr['latitude'] = 0;
+            $arr['language'] = $language;
             $arr['hasconnection'] = 'false';
+
+            $context = array('source' => 'Montapacking Checkout');
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
+
         }
 
+
         return $this->jsonResponse($arr);
-        exit;
     }
 }

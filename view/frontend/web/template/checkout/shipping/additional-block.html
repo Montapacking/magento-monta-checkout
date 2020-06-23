@@ -40,7 +40,7 @@
 
             <!-- ko if: deliveryServices().length > 0 -->
 
-            <div class="container montapacking-delivery-service delivery-information" style="display:none">
+            <div class="container montapacking-delivery-service delivery-information displaynone">
 
                 <div class="montapacking-container-header">
 
@@ -50,16 +50,16 @@
                     <div class="montapacking-container-content">
 
                         <p>
-                            <span style="float:left;" class="marginright" data-bind="i18n: 'Your order will be delivered with'"></span>
-                            <span style="float:left;" class="marginright montapacking-delivery-information-company">###</span>
+                            <span class="floatleft marginright" data-bind="i18n: 'Your order will be delivered with'"></span>
+                            <span class="floatleft marginright montapacking-delivery-information-company">###</span>
 
-                            <span style="float:left;" class="dateblock marginright"  data-bind="i18n: 'on'"></span>
-                            <span style="float:left;" class="dateblock marginright montapacking-delivery-information-date">###</span>
+                            <span class="floatleft dateblock marginright"  data-bind="i18n: 'on'"></span>
+                            <span class="floatleft dateblock marginright montapacking-delivery-information-date">###</span>
 
-                            <span style="float:left;" class="timeblock marginright" data-bind="i18n: 'between'"></span>
-                            <span style="float:left;" class="timeblock marginright montapacking-delivery-information-time">###</span>
+                            <span class="floatleft timeblock marginright" data-bind="i18n: 'between'"></span>
+                            <span class="floatleft timeblock marginright montapacking-delivery-information-time">###</span>
 
-                            <div style="clear: both;"></div>
+                            <div class="clearboth"></div>
                             <ul class="montapacking-delivery-information-options">
 
                             </ul>
@@ -72,7 +72,7 @@
 
                     <div class="montapacking-container-price">###</div>
 
-                    <div style="clear: both;"></div>
+                    <div class="clearboth"></div>
                 </div>
 
             </div>
@@ -86,13 +86,13 @@
 
                     <!--<div class="montapacking-container-logo TBQ"></div>-->
 
-                    <div class="montapacking-container-content" style="width:100%">
+                    <div class="montapacking-container-content display100">
 
                         <p class="normal" data-bind="i18n: 'Choose a valid address before you can select a shipping method.'">
 
                         </p>
                     </div>
-                    <div style="clear: both;"></div>
+                    <div class="clearboth"></div>
                 </div>
 
             </div>
@@ -127,7 +127,7 @@
                             </div>
 
                             <div class="montapacking-container-price" data-bind="text: price_string"></div>
-                            <div style="clear: both;"></div>
+                            <div class="clearboth"></div>
                         </div>
 
 
@@ -173,7 +173,7 @@
 
             <!-- ko if: pickupServices().length > 0 -->
 
-            <div class="container montapacking-pickup-service pickup-information" style="display:none">
+            <div class="container montapacking-pickup-service pickup-information displaynone">
 
                 <div class="montapacking-container-header">
 
@@ -188,7 +188,7 @@
                     </div>
 
                     <div class="montapacking-container-price"></div>
-                    <div style="clear: both;"></div>
+                    <div class="clearboth"></div>
                 </div>
 
                 <div class="table-container">
@@ -203,17 +203,17 @@
 
             <!-- ko ifnot: pickupServices().length > 0 -->
 
-            <div class="container montapacking-pickup-service pickup-information" style="display:block !important">
+            <div class="container montapacking-pickup-service pickup-information displayblock">
 
                 <div class="montapacking-container-header">
 
                     <!--<div class="montapacking-container-logo TBQ"></div>-->
 
-                    <div class="montapacking-container-content" style="width:100%">
+                    <div class="montapacking-container-content display100">
 
                         <p class="normal" data-bind="i18n: 'Unfortunately, no pick-up points could be found.'"></p>
                     </div>
-                    <div style="clear: both;"></div>
+                    <div class="clearboth"></div>
                 </div>
 
             </div>
@@ -224,7 +224,7 @@
             <!-- ko if: pickupServices().length > 0 -->
 
             <div class="container montapacking-pickup-service pickup-information">
-                <p style="margin:0;">
+                <p class="nomargin">
                     <span data-bind="i18n: 'Select another pick-up point near you below or'"></span>
                     <a href="javascript:;" data-bind="click: openStoreLocator.bind($parent), i18n: 'click here'"></a>
                     <span data-bind="i18n: 'to choose another pick-up point'"></span>
@@ -278,7 +278,7 @@
                             <!-- ko if: $parent.description.OpeningTimes-->
                             <div class="montapacking-container-price" data-bind="text: price_string"></div>
                             <!-- /ko -->
-                            <div style="clear: both;"></div>
+                            <div class="clearboth"></div>
                         </div>
                         <!-- ko if: $parent.description.OpeningTimes-->
                         <div class="table-container">
@@ -324,12 +324,12 @@
 
 
 <!-- STORE LOCATOR -->
-<div id="storelocator_container" style="display: none">
+<div id="storelocator_container displaynone">
     <div class="container">
         <div class="bh-sl-container">
 
             <div class="bh-sl-filters-container">
-                <button href="javascript:;" data-bind="click: closePopup, i18n: 'Use selection'" class="select-item" style="display:none">
+                <button href="javascript:;" data-bind="click: closePopup, i18n: 'Use selection'" class="select-item displaynone">
 
                 </button>
                 <ul id="category-filters" class="bh-sl-filters"></ul>

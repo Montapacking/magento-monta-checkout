@@ -7,7 +7,6 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/model/sidebar',
         'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop'
-        // @codingStandardsIgnoreLine
     ], function (
         uiComponent,
         $,

@@ -21,10 +21,20 @@ Close,Sluiten
 "Shipping Cost", "Verzendkosten"
 "Pick-up address","Afhaaladres"
 "Delivery Information","Bezorginformatie"
-"hour","h"
+"hour"," uur"
 "SignatureOnDelivery", "Tekenen bij ontvangst"
 "NoNeighbour", "Niet bij de buren afleveren"
 "EveningDelivery", "In avond afleveren"
+"SaturdayDelivery", "Zaterdag levering"
+"SameDayDelivery", "Zelfde dag levering"
+"from", "v.a."
+"Monday", "Maandag"
+"Tuesday", "Dinsdag"
+"Wednesday", "Woensdag"
+"Thursday", "Donderdag"
+"Friday", "Vrijdag"
+"Saturday", "Zaterdag"
+"Sunday", "Zondag"
 
 
 
