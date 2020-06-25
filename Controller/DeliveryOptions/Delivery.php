@@ -290,12 +290,6 @@ class Delivery extends AbstractDeliveryOptions
         }
         $items = $list;
 
-        $debug = isset($_GET['log']) ? true : false;
-        if ($debug == true) {
-            print "<pre>";
-            var_dump($items);
-            exit;
-        }
         return $items;
     }
 
