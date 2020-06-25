@@ -50,7 +50,8 @@
                     <div class="montapacking-container-content">
 
                         <p>
-                            <span class="floatleft marginright" data-bind="i18n: 'Your order will be delivered with'"></span>
+                            <span class="floatleft marginright delivered" data-bind="i18n: 'Your order will be delivered with'"></span>
+                            <span class="floatleft marginright shipped" data-bind="i18n: 'Your order will be shipped with'"></span>
                             <span class="floatleft marginright montapacking-delivery-information-company">###</span>
 
                             <span class="floatleft dateblock marginright"  data-bind="i18n: 'on'"></span>
@@ -87,9 +88,7 @@
                     <!--<div class="montapacking-container-logo TBQ"></div>-->
 
                     <div class="montapacking-container-content display100">
-
                         <p class="normal" data-bind="i18n: 'Choose a valid address before you can select a shipping method.'">
-
                         </p>
                     </div>
                     <div class="clearboth"></div>
@@ -116,6 +115,7 @@
                         <span class="cropped_price montapacking-hidden" data-bind="text: price_raw"></span>
                         <span class="cropped_code montapacking-hidden" data-bind="text: code"></span>
                         <span class="cropped_image_class montapacking-hidden" data-bind="text: image"></span>
+                        <span class="cropped_type montapacking-hidden" data-bind="text: type"></span>
 
                         <div class="montapacking-container-header">
 
@@ -324,7 +324,7 @@
 
 
 <!-- STORE LOCATOR -->
-<div id="storelocator_container displaynone">
+<div id="storelocator_container" class="displaynone">
     <div class="container">
         <div class="bh-sl-container">
 

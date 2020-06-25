@@ -68,7 +68,7 @@ define(
 
                 var name = $(this).attr("name");
 
-                if ($("input[name*='"+name+"']").length && $("select[name*='country_id']").length) {
+                //if ($("input[name*='"+name+"']").length && $("select[name*='country_id']").length) {
 
                     // Clear timeout if exists.
                     if (typeof timer !== 'undefined') {
@@ -82,7 +82,7 @@ define(
                         }, 500
                     );
 
-                }
+                //}
             }
         );
 

@@ -267,6 +267,7 @@ define(
 
                     var code = $(this).val();
                     var name = $(this).parents(".delivery-option").find(".cropped_name").text();
+                    var type = $(this).parents(".delivery-option").find(".cropped_type").text();
                     var date = $(this).parents(".delivery-option").find(".cropped_date").text();
                     var date_text = $(this).parents(".delivery-option").find(".cropped_time").text();
                     var time = $(this).parents(".delivery-option").find(".cropped_time").text();
@@ -296,6 +297,14 @@ define(
 
                     //set image class
                     $(".delivery-information").find(".montapacking-container-logo").removeClass().addClass("montapacking-container-logo").addClass(image_class);
+
+                    if (type == 'ShippingDay') {
+                        $(".delivery-information").find(".delivered").addClass("displaynone");
+                        $(".delivery-information").find(".shipped").removeClass("displaynone");
+                    } else {
+                        $(".delivery-information").find(".delivered").removeClass("displaynone");
+                        $(".delivery-information").find(".shipped").addClass("displaynone");
+                    }
 
                     //set delivery options
 
@@ -598,6 +607,8 @@ define(
                     );
 
                     var html = $("#storelocator_container").html();
+
+                    alert (html);
                     self.showPopup(html);
 
                 },
