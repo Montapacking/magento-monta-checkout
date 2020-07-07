@@ -53,7 +53,6 @@ class Product
         $this->setHeight($height);
         $this->setWeight($weight);
         $this->setQuantity($quantity);
-
     }
 
     /**
@@ -138,7 +137,5 @@ class Product
         ];
 
         return $product;
-
     }
-
 }

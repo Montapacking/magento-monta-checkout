@@ -41,7 +41,6 @@ class Option
         $this->setName($name);
         $this->setPrice($price);
         $this->setCurrency($currency);
-
     }
 
     /**
@@ -102,7 +101,5 @@ class Option
         }
 
         return $option;
-
     }
-
 }

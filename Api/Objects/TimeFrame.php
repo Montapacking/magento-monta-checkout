@@ -1,5 +1,6 @@
 <?php
 namespace Montapacking\MontaCheckout\Api\Objects;
+
 //include("ShippingOption.php");
 
 use Montapacking\MontaCheckout\Api\Objects\ShippingOption as MontaCheckout_ShippingOption;
@@ -53,7 +54,6 @@ class TimeFrame
         $this->setDescription($description);
         $this->setOptions($options);
         $this->setType($type);
-
     }
 
     public function setType($type)
@@ -141,7 +141,6 @@ class TimeFrame
 
         $this->options = $list;
         return $this;
-
     }
 
     /**
@@ -156,7 +155,5 @@ class TimeFrame
         }
 
         return $option;
-
     }
-
 }

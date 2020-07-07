@@ -21,15 +21,15 @@
             ?>
             <?php
                 $block_added = false;
-                foreach ($block->getStarts() as $start):
+            foreach ($block->getStarts() as $start) :
                 if ($start >= $count_lines) {
                     break;
                 }
                 $pagenumber++;
                 ?>
-                <?php if ($start == $block->getStart()): ?>
+                <?php if ($start == $block->getStart()) : ?>
                     <span><strong><?php echo $pagenumber ?></strong></span>
-                <?php else:
+                <?php else :
                     $block_added = true;
                     ?>
                     <a href="<?php echo $block->getStartUrl($start); ?>"><?php echo $pagenumber ?></a>
@@ -39,14 +39,14 @@
 
         <div class="admin__page-section-item-content" style="padding-bottom: 10px; float: right;">
             <span class="label"><?php echo __('Items per page') ?></span>
-            <?php foreach ($block->getLimits() as $limit):
+            <?php foreach ($block->getLimits() as $limit) :
                 if ($limit >= $count_lines) {
                     break;
                 }
                 ?>
-                <?php if ($limit == $block->getLimit()): ?>
+                <?php if ($limit == $block->getLimit()) : ?>
                 <span><strong><?php echo $limit ?></strong></span>
-            <?php else: ?>
+            <?php else : ?>
                 <a href="<?php echo $block->getLimitUrl($limit); ?>"><?php echo $limit ?></a>
             <?php endif; ?>
             <?php endforeach; ?>
@@ -67,7 +67,7 @@
 
         <div class="admin__page-section-item-content">
             <table style="width:100%; background:black;color:#2EC029; !important">
-            <?php foreach ($block->getLogFileBlocks() as $time => $logBlock): ?>
+            <?php foreach ($block->getLogFileBlocks() as $time => $logBlock) : ?>
                 <tr>
                     <td style="vertical-align: top; width: 200px; padding-left: 10px; padding-top:2px; padding-bottom: 2px; font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;">
                         <?php echo $time; ?>
@@ -102,15 +102,15 @@
             $i = 0;
             $pagenumber = 0;
             ?>
-            <?php foreach ($block->getStarts() as $start):
+            <?php foreach ($block->getStarts() as $start) :
                 if ($start >= $count_lines) {
                     break;
                 }
                 $pagenumber++;
                 ?>
-                <?php if ($start == $block->getStart()): ?>
+                <?php if ($start == $block->getStart()) : ?>
                     <span><strong><?php echo $pagenumber ?></strong></span>
-                <?php else: ?>
+                <?php else : ?>
                     <a href="<?php echo $block->getStartUrl($start); ?>"><?php echo $pagenumber ?></a>
                 <?php endif; ?>
             <?php endforeach; ?>

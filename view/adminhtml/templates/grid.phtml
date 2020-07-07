@@ -15,10 +15,10 @@
                     <th>Last Modified</th>
                     <th>Actions</th>
                 </tr>
-            <?php foreach($logs as $log) {
-                    if ($log['name'] != "montapacking_checkout.log") {
-                        continue;
-                    }
+            <?php foreach ($logs as $log) {
+                if ($log['name'] != "montapacking_checkout.log") {
+                    continue;
+                }
                 ?>
                 <tr>
                     <td><a href="<?php echo $block->previewLogFile($log['name']); ?>"><?php echo $log['name'] ?></a></td>

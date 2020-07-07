@@ -24,8 +24,7 @@ abstract class AbstractDeliveryOptions extends Action
         Context $context,
         CarrierConfig $carrierConfig,
         \Magento\Checkout\Model\Cart $cart
-    )
-    {
+    ) {
         $this->carrierConfig = $carrierConfig;
 
         $this->cart = $cart;

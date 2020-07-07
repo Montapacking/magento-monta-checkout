@@ -22,8 +22,7 @@ class QuoteManagement
     public function __construct(
         CartRepositoryInterface $cartRepository,
         OrderRepositoryInterface $orderRepository
-    )
-    {
+    ) {
         $this->cartRepository = $cartRepository;
         $this->orderRepository = $orderRepository;
     }

@@ -91,7 +91,6 @@ class MontapackingShipping
             'Currency' => 'EUR',
             'Language' => $language,
         ];
-
     }
 
     /**
@@ -148,7 +147,6 @@ class MontapackingShipping
     {
 
         $this->_order = new MontaCheckout_Order($total_incl, $total_excl);
-
     }
 
     /**
@@ -173,7 +171,6 @@ class MontapackingShipping
             $countrycode,
             $this->_googlekey
         );
-
     }
 
     /**
@@ -187,7 +184,6 @@ class MontapackingShipping
         } else {
             $this->shippers[] = $shippers;
         }
-
     }
 
     /**
@@ -202,7 +198,6 @@ class MontapackingShipping
     {
 
         $this->_products['products'][] = new MontaCheckout_Product($sku, $length, $width, $height, $weight, $quantity);
-
     }
 
     /**
@@ -249,7 +244,6 @@ class MontapackingShipping
         }
 
         return $shippers;
-
     }
 
 
@@ -283,7 +277,6 @@ class MontapackingShipping
         } else {
             return true;
         }
-
     }
 
     /**
@@ -299,13 +292,14 @@ class MontapackingShipping
     {
 
         if ($this->_carrierConfig->getDisablePickupPoints()) {
-            return array();
+            return [];
         }
 
-        $pickups = array();
+        $pickups = [];
 
         $this->_basic = array_merge(
-            $this->_basic, [
+            $this->_basic,
+            [
                 'OnlyPickupPoints' => 'true',
                 //'MaxNumberOfPickupPoints' => 3,
                 'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
@@ -339,7 +333,6 @@ class MontapackingShipping
         }
 
         return $pickups;
-
     }
 
     /**
@@ -353,13 +346,14 @@ class MontapackingShipping
      */
     public function getShippingOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false)
     {
-        $timeframes = array();
+        $timeframes = [];
 
         if (trim($this->address->postalcode) && (trim($this->address->housenumber) || trim($this->address->street))) {
 
             // Basis gegevens uitbreiden met shipping option specifieke data
             $this->_basic = array_merge(
-                $this->_basic, [
+                $this->_basic,
+                [
                     'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
                     'MailboxShipperMandatory' => $mailbox,
                     'TrackingMandatory' => $trackingonly,
@@ -394,7 +388,6 @@ class MontapackingShipping
         }
 
         return $timeframes;
-
     }
 
     /**
@@ -451,7 +444,7 @@ class MontapackingShipping
         if (curl_errno($ch)) {
             $error_msg = curl_error($ch);
             $logger = $this->_logger;
-            $context = array('source' => 'Montapacking Checkout');
+            $context = ['source' => 'Montapacking Checkout'];
             $logger->critical($error_msg . " (" . $url . ")", $context);
             $result = null;
         }
@@ -465,11 +458,11 @@ class MontapackingShipping
 
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;
-            $context = array('source' => 'Montapacking Checkout');
+            $context = ['source' => 'Montapacking Checkout'];
             $logger->critical("Webshop was unable to connect to Montapacking REST api. Please check your username and password. Otherwise please contact Montapacking (" . $url . ")", $context);
-        }else if (null !== $this->_logger) {
+        } elseif (null !== $this->_logger) {
             $logger = $this->_logger;
-            $context = array('source' => 'Montapacking Checkout');
+            $context = ['source' => 'Montapacking Checkout'];
             $logger->notice("Connection logged (" . $url . ")", $context);
         }
 
@@ -482,7 +475,7 @@ class MontapackingShipping
                 foreach ($result->Warnings as $warning) {
 
                     $logger = $this->_logger;
-                    $context = array('source' => 'Montapacking Checkout');
+                    $context = ['source' => 'Montapacking Checkout'];
 
                     if (null !== $warning->ShipperCode) {
                         $logger->notice($warning->ShipperCode . " - " . $warning->Message, $context);
@@ -498,7 +491,7 @@ class MontapackingShipping
 
                 foreach ($result->Notices as $notice) {
                     $logger = $this->_logger;
-                    $context = array('source' => 'Montapacking Checkout');
+                    $context = ['source' => 'Montapacking Checkout'];
 
                     if (null !== $notice->ShipperCode) {
                         $logger->notice($notice->ShipperCode . " - " . $notice->Message, $context);
@@ -516,7 +509,7 @@ class MontapackingShipping
                     foreach ($impossibleoption->Reasons as $reason) {
 
                         $logger = $this->_logger;
-                        $context = array('source' => 'Montapacking Checkout');
+                        $context = ['source' => 'Montapacking Checkout'];
                         $logger->notice($impossibleoption->ShipperCode . " - " . $reason->Code . " | " . $reason->Reason, $context);
                     }
                 }
@@ -526,8 +519,5 @@ class MontapackingShipping
         }
 
         return $result;
-
     }
-
-
 }

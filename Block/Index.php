@@ -17,8 +17,7 @@ class Index extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Montapacking\MontaCheckout\Helper\Data $logDataHelper,
         array $data = []
-    )
-    {
+    ) {
         $this->logDataHelper = $logDataHelper;
         parent::__construct($context, $data);
     }

@@ -47,7 +47,6 @@ class PickupPoint
         $this->setCode($code);
         $this->setDetails($details);
         $this->setOptions($options);
-
     }
 
     /**
@@ -97,12 +96,12 @@ class PickupPoint
             $today = date("l");
             $times = $details->OpeningTimes;
 
-            $arr = array();
+            $arr = [];
             foreach ($times as $key => $values) {
                 if ($values->Day == $today) {
                     foreach ($values->OpeningTimes as $timekey => $times) {
 
-                        $array = array();
+                        $array = [];
                         $array['from'] = $times->From;
                         $array['to'] = $times->To;
                         $arr[] = $array;
@@ -169,7 +168,6 @@ class PickupPoint
 
         $this->options = $list;
         return $this;
-
     }
 
     /**
@@ -184,7 +182,5 @@ class PickupPoint
         }
 
         return $option;
-
     }
-
 }

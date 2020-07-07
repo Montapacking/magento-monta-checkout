@@ -54,7 +54,7 @@ class Shipping
             $fee = $deliveryOptionAdditionalInfo->total_price;
             $method_title = $deliveryOptionAdditionalInfo->name;
 
-            $desc = array();
+            $desc = [];
             if (trim($deliveryOptionAdditionalInfo->date)) {
                 $desc[] = $deliveryOptionAdditionalInfo->date;
             }

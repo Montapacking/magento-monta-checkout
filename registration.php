@@ -17,5 +17,3 @@
     'Montapacking_MontaCheckout',
     __DIR__
 );
-
-

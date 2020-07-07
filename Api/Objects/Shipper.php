@@ -30,7 +30,6 @@ class Shipper
 
         $this->setName($name);
         $this->setCode($code);
-
     }
 
     /**
@@ -67,7 +66,5 @@ class Shipper
         ];
 
         return $shipper;
-
     }
-
 }

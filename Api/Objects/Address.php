@@ -75,7 +75,6 @@ class Address
         $this->setCountry($countrycode);
         $this->setGoogleApiKey(trim($googleapikey));
         $this->setLongLat();
-
     }
 
     /**
@@ -111,8 +110,6 @@ class Address
 
         $this->longitude = $longitude;
         $this->latitude = $latitude;
-
-
     }
 
     /**
@@ -230,7 +227,5 @@ class Address
         ];
 
         return $address;
-
     }
-
 }

@@ -48,8 +48,7 @@ class Delivery extends AbstractDeliveryOptions
         CarrierConfig $carrierConfig,
         \Montapacking\MontaCheckout\Logger\Logger $logger,
         \Magento\Checkout\Model\Cart $cart
-    )
-    {
+    ) {
         $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
@@ -61,7 +60,6 @@ class Delivery extends AbstractDeliveryOptions
             $carrierConfig,
             $cart
         );
-
     }
 
     /**
@@ -101,12 +99,10 @@ class Delivery extends AbstractDeliveryOptions
 
         } catch (Exception $e) {
 
-            $context = array('source' => 'Montapacking Checkout');
+            $context = ['source' => 'Montapacking Checkout'];
             $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
-            return $this->jsonResponse(array());
+            return $this->jsonResponse([]);
         }
-
-
     }
 
     /**
@@ -116,8 +112,8 @@ class Delivery extends AbstractDeliveryOptions
      */
     public function formatShippingOptions($frames)
     {
-        $items = array();
-        $secondary_items = array();
+        $items = [];
+        $secondary_items = [];
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
         if ($language == 'NL') {
@@ -138,12 +134,12 @@ class Delivery extends AbstractDeliveryOptions
                         $to = $option->to;
                         $date = date("Y-m-d", strtotime($from));
 
-                        $extras = array();
+                        $extras = [];
                         if (isset($option->extras) && count($option->extras) > 0) {
                             $extras = self::calculateExtras($option->extras, $curr);
                         }
 
-                        $description = array();
+                        $description = [];
                         if (trim($option->description)) {
                             $description[] = $option->description;
                         }
@@ -157,13 +153,13 @@ class Delivery extends AbstractDeliveryOptions
 
                         $description = implode(" | ", $description);
 
-                        $options = array();
+                        $options = [];
                         $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string);
 
                         if (null !== $created_option) {
                             $options[] = $created_option;
                             if (!isset($items[$date])) {
-                                $items[$date] = array();
+                                $items[$date] = [];
                             }
                             $items[$date][] = (object)[
                                 'code' => $frame->code,
@@ -186,12 +182,12 @@ class Delivery extends AbstractDeliveryOptions
                         $to = date("Y-m-d", strtotime($option->date));
                         $date = date("Y-m-d", strtotime($from));
 
-                        $extras = array();
+                        $extras = [];
                         if (isset($option->extras)) {
                             $extras = self::calculateExtras($option->extras, $curr);
                         }
 
-                        $description = array();
+                        $description = [];
                         if (trim($option->description)) {
                             $description[] = $option->description;
                         }
@@ -204,14 +200,14 @@ class Delivery extends AbstractDeliveryOptions
 
                         $description = implode(" | ", $description);
 
-                        $options = array();
+                        $options = [];
                         $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string);
                         if (null !== $created_option) {
                             $options[] = $created_option;
 
 
                             if (!isset($items[$date])) {
-                                $items[$date] = array();
+                                $items[$date] = [];
                             }
 
                             $items[$date][] = (object)[
@@ -237,18 +233,19 @@ class Delivery extends AbstractDeliveryOptions
 
                         } elseif ($option->code == 'RED_ShippingDayUnknown') {
                             $from = date('d-m-Y', time());
-                            $to = $from = date('d-m-Y', time());;
+                            $to = $from = date('d-m-Y', time());
+                            ;
 
                         }
 
                         $date = date("Y-m-d", strtotime($from));
 
-                        $extras = array();
+                        $extras = [];
                         if (isset($option->extras)) {
                             $extras = self::calculateExtras($option->extras, $curr);
                         }
 
-                        $description = array();
+                        $description = [];
                         if (trim($option->description)) {
                             $description[] = $option->description;
                         }
@@ -259,13 +256,13 @@ class Delivery extends AbstractDeliveryOptions
 
                         $description = implode(" | ", $description);
 
-                        $options = array();
+                        $options = [];
                         $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string);
                         if (null !== $created_option) {
                             $options[] = $created_option;
 
                             if (!isset($items[$date])) {
-                                $items[$date] = array();
+                                $items[$date] = [];
                             }
                             $items[$date][] = (object)[
                                 'code' => $frame->code,
@@ -282,7 +279,7 @@ class Delivery extends AbstractDeliveryOptions
             }
         }
 
-        $list = array();
+        $list = [];
         foreach ($items as $key => $values) {
             foreach ($values as $key_value => $value) {
                 $list[] = $value;
@@ -293,10 +290,10 @@ class Delivery extends AbstractDeliveryOptions
         return $items;
     }
 
-    public function calculateExtras($extra_values = array(), $curr = '&euro;')
+    public function calculateExtras($extra_values = [], $curr = '&euro;')
     {
 
-        $extras = array();
+        $extras = [];
         if (count($extra_values) > 0) {
 
             foreach ($extra_values as $extra) {

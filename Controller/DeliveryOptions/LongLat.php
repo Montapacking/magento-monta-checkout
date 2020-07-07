@@ -48,8 +48,7 @@ class LongLat extends AbstractDeliveryOptions
         CarrierConfig $carrierConfig,
         \Montapacking\MontaCheckout\Logger\Logger $logger,
         \Magento\Checkout\Model\Cart $cart
-    )
-    {
+    ) {
         $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
@@ -61,7 +60,6 @@ class LongLat extends AbstractDeliveryOptions
             $carrierConfig,
             $cart
         );
-
     }
 
     /**
@@ -82,7 +80,7 @@ class LongLat extends AbstractDeliveryOptions
             $oApi = $this->generateApi($request, $language, $this->_logger);
             $has_connection = $oApi->checkConnection();
 
-            $arr = array();
+            $arr = [];
 
             $arr['longitude'] = $oApi->address->longitude;
             $arr['latitude'] = $oApi->address->latitude;
@@ -96,13 +94,13 @@ class LongLat extends AbstractDeliveryOptions
 
         } catch (Exception $e) {
 
-            $arr = array();
+            $arr = [];
             $arr['longitude'] = 0;
             $arr['latitude'] = 0;
             $arr['language'] = $language;
             $arr['hasconnection'] = 'false';
 
-            $context = array('source' => 'Montapacking Checkout');
+            $context = ['source' => 'Montapacking Checkout'];
             $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
 
         }

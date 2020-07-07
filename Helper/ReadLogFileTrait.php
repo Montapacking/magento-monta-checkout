@@ -25,7 +25,7 @@ trait ReadLogFileTrait
         $block      = 0;
         $blockStamp = null;
 
-        $arr = array();
+        $arr = [];
         $count = 0;
         foreach ($this->fileReader()($file) as $line) {
             $count++;
@@ -71,7 +71,7 @@ trait ReadLogFileTrait
                 throw new Exception('LFI protection. Parent directory is prohibited to use.');
             }
 
-            $rs = @fopen($file, 'r');
+            $rs = fopen($file, 'r');
 
             if (!$rs) {
                 throw new Exception('Cannot open file: '.$file);

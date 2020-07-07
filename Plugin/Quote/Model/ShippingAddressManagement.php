@@ -24,8 +24,7 @@ class ShippingAddressManagement
     public function __construct(
         CartRepositoryInterface $quoteRepository,
         Carrier $carrierConfig
-    )
-    {
+    ) {
         $this->quoteRepository = $quoteRepository;
         $this->carrierConfig = $carrierConfig;
     }
@@ -56,6 +55,5 @@ class ShippingAddressManagement
         $deliveryOption = $extensionAttributes->getMontapacking();
 
         $address->setMontapacking($deliveryOption);
-
     }
 }

@@ -29,7 +29,6 @@ class Order
 
         $this->setIncl($incl);
         $this->setExcl($excl);
-
     }
 
     /**
@@ -66,7 +65,5 @@ class Order
         ];
 
         return $order;
-
     }
-
 }

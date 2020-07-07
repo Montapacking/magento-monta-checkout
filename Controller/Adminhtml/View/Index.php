@@ -32,6 +32,5 @@ class Index extends \Magento\Backend\App\Action
         //$this->_setActiveMenu('Magento_Backend::system');
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('View Log'));
         $this->_view->renderLayout();
-
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Montapacking\MontaCheckout\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -43,9 +44,9 @@ class Data extends AbstractHelper
 
         $output = [];
         foreach ($list as $index => $file) {
-            if (is_dir($path.DIRECTORY_SEPARATOR.$file)) {
-                foreach ($this->getLogFiles($path.DIRECTORY_SEPARATOR.$file) as $childFile) {
-                    $output[] = $file.DIRECTORY_SEPARATOR.$childFile;
+            if (is_dir($path . DIRECTORY_SEPARATOR . $file)) {
+                foreach ($this->getLogFiles($path . DIRECTORY_SEPARATOR . $file) as $childFile) {
+                    $output[] = $file . DIRECTORY_SEPARATOR . $childFile;
                 }
             } else {
                 $output[] = $file;
@@ -56,13 +57,14 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param $bytes
+     * @param     $bytes
      * @param int $precision
+     *
      * @return string
      */
     protected function filesizeToReadableString($bytes, $precision = 2)
     {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
@@ -80,7 +82,7 @@ class Data extends AbstractHelper
     {
         $maxNumOfLogs = 30;
         $logFileData = [];
-        $path = $this->getPath().DIRECTORY_SEPARATOR;
+        $path = $this->getPath() . DIRECTORY_SEPARATOR;
 
         //build log data into array
         foreach ($this->getLogFiles($this->getPath()) as $file) {
@@ -105,7 +107,47 @@ class Data extends AbstractHelper
     {
         $path = $this->getPath();
         $fullPath = $path . $fileName;
-        exec('tail -'. $numOfLines . ' ' . $fullPath, $output);
-        return implode($output);
+        //exec('tail -' . $numOfLines . ' ' . $fullPath, $output);
+        //return implode($output);
+
+        $lines = $this->tailExec($fileName, $numOfLines);
+        $data = "";
+        foreach ($lines as $line) {
+            $data .= $line;
+        }
+
+        return $data;
+    }
+
+
+    public function tailExec($file, $lines)
+    {
+        //global $fsize;
+        $handle = fopen($file, "r");
+        $linecounter = $lines;
+        $pos = -2;
+        $beginning = false;
+        $text = [];
+        while ($linecounter > 0) {
+            $t = " ";
+            while ($t != "\n") {
+                if (fseek($handle, $pos, SEEK_END) == -1) {
+                    $beginning = true;
+                    break;
+                }
+                $t = fgetc($handle);
+                $pos--;
+            }
+            $linecounter--;
+            if ($beginning) {
+                rewind($handle);
+            }
+            $text[$lines - $linecounter - 1] = fgets($handle);
+            if ($beginning) {
+                break;
+            }
+        }
+        fclose($handle);
+        return array_reverse($text);
     }
 }

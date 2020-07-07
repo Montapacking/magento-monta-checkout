@@ -48,9 +48,7 @@ class Pickup extends AbstractDeliveryOptions
         CarrierConfig $carrierConfig,
         \Montapacking\MontaCheckout\Logger\Logger $logger,
         \Magento\Checkout\Model\Cart $cart
-
-    )
-    {
+    ) {
 
         $this->_logger = $logger;
 
@@ -63,7 +61,6 @@ class Pickup extends AbstractDeliveryOptions
             $carrierConfig,
             $cart
         );
-
     }
 
     /**
@@ -87,26 +84,14 @@ class Pickup extends AbstractDeliveryOptions
 
             $pickupoptions_formatted = $this->formatPickupOptions($pickupoptions);
 
-
-            if (isset($_GET['log'])) {
-                print $language . "<br>";
-                echo "<pre>";
-                $json_encode = json_encode($pickupoptions_formatted);
-                var_dump(json_decode($json_encode, true));
-                echo "</pre>";
-                exit;
-            }
-
-
             return $this->jsonResponse($pickupoptions_formatted);
 
         } catch (Exception $e) {
 
-            $context = array('source' => 'Montapacking Checkout');
+            $context = ['source' => 'Montapacking Checkout'];
             $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
-            return $this->jsonResponse(array());
+            return $this->jsonResponse([]);
         }
-
     }
 
     /**
@@ -116,7 +101,7 @@ class Pickup extends AbstractDeliveryOptions
      */
     public function formatPickupOptions($frames)
     {
-        $items = array();
+        $items = [];
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
         if ($language == 'NL') {
@@ -158,8 +143,8 @@ class Pickup extends AbstractDeliveryOptions
 
                         ## Shipper optie toevoegen
 
-                        $description = array();
-                        $description_storelocator = array();
+                        $description = [];
+                        $description_storelocator = [];
                         if (trim($option->description)) {
 
                             $description[] = $option->description;
@@ -211,7 +196,7 @@ class Pickup extends AbstractDeliveryOptions
 
                     }
 
-                    $arr = array();
+                    $arr = [];
 
                     foreach ($frame->description->OpeningTimes as $key => $time) {
 
@@ -266,8 +251,8 @@ class Pickup extends AbstractDeliveryOptions
 
                         ## Shipper optie toevoegen
 
-                        $description = array();
-                        $description_storelocator = array();
+                        $description = [];
+                        $description_storelocator = [];
                         if (trim($option->description)) {
                             $description[] = $option->description;
                             $description_storelocator[] = $option->description;

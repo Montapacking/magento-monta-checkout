@@ -57,8 +57,7 @@ class Montapacking extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
         \Psr\Log\LoggerInterface $customLogger,
         \Magento\Framework\App\RequestInterface $request,
         array $data = []
-    )
-    {
+    ) {
         $this->_request = $request;
         $this->_customLogger = $customLogger;
         $this->rateResultFactory = $rateResultFactory;

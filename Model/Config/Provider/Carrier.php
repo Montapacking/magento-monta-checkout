@@ -76,5 +76,4 @@ class Carrier extends AbstractConfigProvider
     {
         return $this->getConfigValue(self::XPATH_CARRIER_LEADINGSTOCKMONTAPACKING);
     }
-
 }

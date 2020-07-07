@@ -3,6 +3,7 @@
 namespace Montapacking\MontaCheckout\Block\View;
 
 use Montapacking\MontaCheckout\Helper\ReadLogFileTrait;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
 
 class Index extends \Magento\Framework\View\Element\Template
 {
@@ -16,6 +17,11 @@ class Index extends \Magento\Framework\View\Element\Template
     protected $logDataHelper;
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Montapacking\MontaCheckout\Helper\Data                $logDataHelper
      * @param array                                            $data
@@ -23,15 +29,18 @@ class Index extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Montapacking\MontaCheckout\Helper\Data $logDataHelper,
-        array $data = []
-    )
-    {
+        array $data = [],
+        Request $request
+    ) {
 
-
+        $this->request = $request;
         $this->logDataHelper = $logDataHelper;
         parent::__construct($context, $data);
 
-        if (isset($_REQUEST['clear'])) {
+
+        $params = $this->request->getParams();
+
+        if (isset($params['clear'])) {
             $file_name = $this->logDataHelper->getPath().DIRECTORY_SEPARATOR.$this->getFileName();
 
             if (file_exists($file_name)) {
@@ -175,7 +184,7 @@ class Index extends \Magento\Framework\View\Element\Template
         $file= $this->logFile();
         $linecount = 0;
         $handle = fopen($file, "r");
-        while(!feof($handle)){
+        while (!feof($handle)) {
             $line = fgets($handle);
             $linecount++;
         }
@@ -184,5 +193,4 @@ class Index extends \Magento\Framework\View\Element\Template
 
         return $linecount;
     }
-
 }

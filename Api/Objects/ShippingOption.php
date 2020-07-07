@@ -91,7 +91,6 @@ class ShippingOption
         $this->setTo($to);
         $this->setExtras($extras);
         $this->setDate($date);
-
     }
 
     /**
@@ -253,7 +252,5 @@ class ShippingOption
         }
 
         return $option;
-
     }
-
 }
