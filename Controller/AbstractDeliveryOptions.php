@@ -78,7 +78,6 @@ abstract class AbstractDeliveryOptions extends Action
         $housenumberaddition = '';
         $state = '';
 
-
         $postcode = str_replace(" ", "", $postcode);
 
         // check is ZIPCODE valid for dutch customers
@@ -94,18 +93,15 @@ abstract class AbstractDeliveryOptions extends Action
             }
         }
 
-
         /**
          * Configs From Admin
          */
-
 
         $webshop = $this->getCarrierConfig()->getWebshop();
         $username = $this->getCarrierConfig()->getUserName();
         $password = $this->getCarrierConfig()->getPassword();
         $googleapikey = $this->getCarrierConfig()->getGoogleApiKey();
         $leadingstockmontapacking = $this->getCarrierConfig()->getLeadingStockMontapacking();
-
 
         /**
          * Retrieve Order Information
@@ -114,12 +110,11 @@ abstract class AbstractDeliveryOptions extends Action
         //$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $cart = $this->getCart();
 
-
         $oApi = new MontpackingApi($webshop, $username, $password, $googleapikey, $language);
         $oApi->setLogger($logger);
         $oApi->setCarrierConfig($this->getCarrierConfig());
         $oApi->setAddress($street, $housenumber, $housenumberaddition, $postcode, $city, $state, $country);
-        $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal(), $cart->getQuote()->getSubtotal());
+        $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal(), $cart->getQuote()->getSubtotal()); //phpcs:ignore
 
         $items = $cart->getQuote()->getAllVisibleItems();
 
@@ -127,7 +122,7 @@ abstract class AbstractDeliveryOptions extends Action
         foreach ($items as $item) {
 
             if ($leadingstockmontapacking) {
-                $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
+                $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight')); //phpcs:ignore
 
                 if (false === $oApi->checkStock($item->getSku())) {
                     $bAllProductsAvailable = false;
@@ -140,7 +135,6 @@ abstract class AbstractDeliveryOptions extends Action
                     break;
                 }
             }
-
 
         }
 

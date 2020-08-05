@@ -24,6 +24,7 @@ Close,Sluiten
 "Pick-up address","Pick-up address"
 "Delivery Information","Delivery Information"
 "hour","h"
+hour,h
 "SignatureOnDelivery", "Signature on delivery"
 "NoNeighbour", "No delivery at neighbour"
 "EveningDelivery", "Evening delivery"

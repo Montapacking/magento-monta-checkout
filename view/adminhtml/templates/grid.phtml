@@ -4,7 +4,7 @@
 <section class="admin__page-section">
     <div class="admin__page-section-content">
         <div class="admin__page-section-item-title">
-            <span class="title"><?php echo __('Log Info') ?></span>
+            <span class="title"<?= /* @noEscape */ __('Log Info') ?></span>
         </div>
         <div class="admin__page-section-item-content">
             <table class="admin__table-primary">
@@ -21,13 +21,13 @@
                 }
                 ?>
                 <tr>
-                    <td><a href="<?php echo $block->previewLogFile($log['name']); ?>"><?php echo $log['name'] ?></a></td>
+                    <td><a href="<?=  /* @noEscape */ $block->previewLogFile($log['name']); ?>"><?=  /* @noEscape */ $log['name'] ?></a></td>
                     <td>var/log</td>
-                    <td><?php echo $log['filesize'] ?></td>
-                    <td><?php echo $log['modTimeLong'] ?></td>
+                    <td><?=  /* @noEscape */ $log['filesize'] ?></td>
+                    <td><?=  /* @noEscape */ $log['modTimeLong'] ?></td>
                     <td>
-                        <span class="action-children"><a href="<?php echo $block->previewLogFile($log['name']); ?>" class="icon-view"></a></span>
-                        <span class="action-children"><a href="<?php echo $block->downloadLogFiles($log['name']); ?>" class="icon-export"></a></span>
+                        <span class="action-children"><a href="<?=  /* @noEscape */ $block->previewLogFile($log['name']); ?>" class="icon-view"></a></span>
+                        <span class="action-children"><a href="<?=  /* @noEscape */ $block->downloadLogFiles($log['name']); ?>" class="icon-export"></a></span>
                     </td>
                 </tr>
             <?php } ?>

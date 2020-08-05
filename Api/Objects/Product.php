@@ -4,7 +4,6 @@ namespace Montapacking\MontaCheckout\Api\Objects;
 /**
  * Class Product
  *
- * @package Montapacking\MontaCheckout\Api\Objects
  */
 class Product
 {

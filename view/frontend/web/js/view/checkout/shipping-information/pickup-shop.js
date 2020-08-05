@@ -22,7 +22,7 @@ define(
 
 
                     var checkoutConfig = window.checkoutConfig;
-                    var montapacking = checkoutConfig.quoteData.montapacking;
+                    var montapacking = checkoutConfig.quoteData.montapacking_montacheckout_data;
 
                     if (montapacking !== undefined) {
                         montapacking = JSON.parse(montapacking);

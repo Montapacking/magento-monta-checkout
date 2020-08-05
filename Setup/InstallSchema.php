@@ -19,7 +19,7 @@ class InstallSchema implements InstallSchemaInterface
         $connection
             ->addColumn(
                 $installer->getTable('quote_address'),
-                'montapacking',
+                'montapacking_montacheckout_data',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table ::TYPE_TEXT,
                     'nullable' => true,
@@ -31,7 +31,7 @@ class InstallSchema implements InstallSchemaInterface
         $connection
             ->addColumn(
                 $installer->getTable('sales_order'),
-                'montapacking',
+                'montapacking_montacheckout_data',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table ::TYPE_TEXT,
                     'nullable' => true,

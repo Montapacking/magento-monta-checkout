@@ -27,11 +27,11 @@ define(
                         var checkedOptionDelivery = $('input.montapacking_delivery_option:checked').val();
                         var checkedOptionPickup = $('input.initialPickupRadio:checked').val();
 
-                        //console.log(checkoutConfig.quoteData.montapacking);
+                        //console.log(checkoutConfig.quoteData.montapacking_montacheckout_data);
                         //console.log(checkedOptionDelivery);
                         //console.log(checkedOptionPickup);
 
-                        if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || checkoutConfig.quoteData.montapacking === undefined) {
+                        if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || checkoutConfig.quoteData.montapacking_montacheckout_data === undefined) {
                             this.errorValidationMessage(
                                 $t('Please select a delivery option. If no options are visible, please make sure you\'ve entered your address information correctly.')
                             );
@@ -45,7 +45,7 @@ define(
                             shippingAddress.extension_attributes = {};
                         }
 
-                        shippingAddress.extension_attributes.montapacking = checkoutConfig.quoteData.montapacking;
+                        shippingAddress.extension_attributes.montapacking_montacheckout_data = checkoutConfig.quoteData.montapacking_montacheckout_data;
 
                         return originalResult;
                     }

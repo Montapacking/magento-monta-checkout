@@ -1,14 +1,11 @@
 <?php
 namespace Montapacking\MontaCheckout\Api\Objects;
 
-//include("ShippingOption.php");
-
 use Montapacking\MontaCheckout\Api\Objects\ShippingOption as MontaCheckout_ShippingOption;
 
 /**
  * Class TimeFrame
  *
- * @package Montapacking\MontaCheckout\Api\Objects
  */
 class TimeFrame
 {

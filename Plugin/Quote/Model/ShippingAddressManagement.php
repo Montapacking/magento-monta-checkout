@@ -48,12 +48,12 @@ class ShippingAddressManagement
 
         $extensionAttributes = $address->getExtensionAttributes();
 
-        if (!$extensionAttributes || !$extensionAttributes->getMontapacking()) {
+        if (!$extensionAttributes || !$extensionAttributes->getMontapackingMontacheckoutData()) {
             return $result;
         }
 
-        $deliveryOption = $extensionAttributes->getMontapacking();
+        $deliveryOption = $extensionAttributes->getMontapackingMontacheckoutData();
 
-        $address->setMontapacking($deliveryOption);
+        $address->setMontapackingMontacheckoutData($deliveryOption);
     }
 }

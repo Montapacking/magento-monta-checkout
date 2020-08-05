@@ -37,7 +37,6 @@ class Index extends \Magento\Framework\View\Element\Template
         $this->logDataHelper = $logDataHelper;
         parent::__construct($context, $data);
 
-
         $params = $this->request->getParams();
 
         if (isset($params['clear'])) {
@@ -109,7 +108,6 @@ class Index extends \Magento\Framework\View\Element\Template
             'file'         => $this->getFileName(),
         ]);
     }
-
 
     /**
      * Get clear URL

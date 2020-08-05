@@ -76,7 +76,7 @@ class ShippingOption
      * @param $extras
      * @param $date
      */
-    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date)
+    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date) //phpcs:ignore
     {
 
         $this->setCode($code);

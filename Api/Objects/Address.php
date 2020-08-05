@@ -5,7 +5,6 @@ namespace Montapacking\MontaCheckout\Api\Objects;
 /**
  * Class Address
  *
- * @package Montapacking\MontaCheckout\Api\Objects
  */
 class Address
 {
@@ -63,7 +62,7 @@ class Address
      * @param $countrycode
      * @param $googleapikey
      */
-    public function __construct($street, $housenumber, $housenumberaddition, $postalcode, $city, $state, $countrycode, $googleapikey)
+    public function __construct($street, $housenumber, $housenumberaddition, $postalcode, $city, $state, $countrycode, $googleapikey) //phpcs:ignore
     {
 
         $this->setStreet($street);
@@ -86,8 +85,7 @@ class Address
         $address = $this->street . ' ' . $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode . ''; // Google HQ
         $prepAddr = str_replace('  ', ' ', $address);
         $prepAddr = str_replace(' ', '+', $prepAddr);
-        $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey;
-
+        $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
 
         try {
             $geocode = file_get_contents($google_maps_url);

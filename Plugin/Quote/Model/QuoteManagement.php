@@ -39,7 +39,7 @@ class QuoteManagement
         $quote = $this->cartRepository->getActive($cartId);
         $shippingAddress = $quote->getShippingAddress();
         $billingAddress = $quote->getBillingAddress();
-        $deliveryOption = $shippingAddress->getMontapacking();
+        $deliveryOption = $shippingAddress->getMontapackingMontacheckoutData();
 
         if (!$deliveryOption) {
             return;
@@ -74,19 +74,19 @@ class QuoteManagement
     {
         $order = $this->orderRepository->get($orderId);
 
-        if ($order->getMontapacking()) {
+        if ($order->getMontapackingMontacheckoutData()) {
             return $orderId;
         }
 
         $quote = $this->cartRepository->get($quoteId);
         $address = $quote->getShippingAddress();
-        $deliveryOption = $address->getMontapacking();
+        $deliveryOption = $address->getMontapackingMontacheckoutData();
 
         if (!$deliveryOption) {
             return $orderId;
         }
 
-        $order->setMontapacking($deliveryOption);
+        $order->setMontapackingMontacheckoutData($deliveryOption);
         $order->save();
 
         return $orderId;

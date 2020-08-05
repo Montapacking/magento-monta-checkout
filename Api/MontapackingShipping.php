@@ -11,7 +11,6 @@ use Montapacking\MontaCheckout\Api\Objects\TimeFrame as MontaCheckout_PickupPoin
 /**
  * Class MontapackingShipping
  *
- * @package Montapacking\MontaCheckout\Api
  */
 class MontapackingShipping
 {
@@ -246,7 +245,6 @@ class MontapackingShipping
         return $shippers;
     }
 
-
     /**
      * @param $sku
      *
@@ -271,7 +269,6 @@ class MontapackingShipping
         curl_close($ch);
         $result = json_decode($result);
 
-
         if (null !== $result && $result->Message == 'Zero products found with sku ' . $sku) {
             return false;
         } else {
@@ -288,7 +285,7 @@ class MontapackingShipping
      *
      * @return array
      */
-    public function getPickupOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false)
+    public function getPickupOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false) //phpcs:ignore
     {
 
         if ($this->_carrierConfig->getDisablePickupPoints()) {
@@ -313,7 +310,7 @@ class MontapackingShipping
         $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH'];
 
         // Timeframes omzetten naar bruikbaar object
-        $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products', 'allowedshippers']);
+        $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products', 'allowedshippers']); //phpcs:ignore
         if (isset($result->Timeframes)) {
 
             // Shippers omzetten naar shipper object
@@ -344,7 +341,7 @@ class MontapackingShipping
      *
      * @return array
      */
-    public function getShippingOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false)
+    public function getShippingOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false) //phpcs:ignore
     {
         $timeframes = [];
 
@@ -363,10 +360,8 @@ class MontapackingShipping
                 ]
             );
 
-
             // Timeframes omzetten naar bruikbaar object
             $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products']);
-
 
             if (isset($result->Timeframes)) {
 
@@ -379,7 +374,7 @@ class MontapackingShipping
                         $timeframe->TypeCode,
                         $timeframe->TypeDescription,
                         $timeframe->ShippingOptions,
-                        $timeframe->FromToTypeCode,
+                        $timeframe->FromToTypeCode
                     );
 
                 }
@@ -438,7 +433,6 @@ class MontapackingShipping
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 
-
         $result = curl_exec($ch);
 
         if (curl_errno($ch)) {
@@ -451,7 +445,6 @@ class MontapackingShipping
 
         curl_close($ch);
 
-
         $result = json_decode($result);
 
         $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;
@@ -459,16 +452,14 @@ class MontapackingShipping
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;
             $context = ['source' => 'Montapacking Checkout'];
-            $logger->critical("Webshop was unable to connect to Montapacking REST api. Please check your username and password. Otherwise please contact Montapacking (" . $url . ")", $context);
+            $logger->critical("Webshop was unable to connect to Montapacking REST api. Please check your username and password. Otherwise please contact Montapacking (" . $url . ")", $context); //phpcs:ignore
         } elseif (null !== $this->_logger) {
             $logger = $this->_logger;
             $context = ['source' => 'Montapacking Checkout'];
             $logger->notice("Connection logged (" . $url . ")", $context);
         }
 
-
         if ($this->_carrierConfig->getLogErrors()) {
-
 
             if (null !== $this->_logger && isset($result->Warnings)) {
 
@@ -482,7 +473,6 @@ class MontapackingShipping
                     } else {
                         $logger->notice($warning->Message, $context);
                     }
-
 
                 }
             }
@@ -499,7 +489,6 @@ class MontapackingShipping
                         $logger->notice($notice->Message, $context);
                     }
 
-
                 }
             }
 
@@ -510,7 +499,7 @@ class MontapackingShipping
 
                         $logger = $this->_logger;
                         $context = ['source' => 'Montapacking Checkout'];
-                        $logger->notice($impossibleoption->ShipperCode . " - " . $reason->Code . " | " . $reason->Reason, $context);
+                        $logger->notice($impossibleoption->ShipperCode . " - " . $reason->Code . " | " . $reason->Reason, $context); //phpcs:ignore
                     }
                 }
 

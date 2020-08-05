@@ -4,7 +4,6 @@ namespace Montapacking\MontaCheckout\Api\Objects;
 /**
  * Class Option
  *
- * @package Montapacking\MontaCheckout\Api\Objects
  */
 class Option
 {

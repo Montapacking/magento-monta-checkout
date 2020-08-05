@@ -231,7 +231,7 @@ define(
 
                     var checkoutConfig = window.checkoutConfig;
                     // Do not refactor this.
-                    checkoutConfig.quoteData.montapacking = JSON.stringify(deliveryOption);
+                    checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(deliveryOption);
 
                 },
 
@@ -270,10 +270,17 @@ define(
                     var type = $(this).parents(".delivery-option").find(".cropped_type").text();
                     var date = $(this).parents(".delivery-option").find(".cropped_date").text();
                     var date_text = $(this).parents(".delivery-option").find(".cropped_time").text();
+
+                    if (date == '01-01-1970') {
+                        date = '';
+                        date_text = '';
+                    }
+
                     var time = $(this).parents(".delivery-option").find(".cropped_time").text();
                     var time_text = $(this).parents(".delivery-option").find(".cropped_time_text").text();
                     var price = $(this).parents(".delivery-option").find(".cropped_price").text();
                     var image_class = $(this).parents(".delivery-option").find(".cropped_image_class").text();
+                    var short_code = image_class;
                     var checked_boxes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-options input[type=checkbox]:checked");
                     var total_price = parseFloat(price);
 
@@ -356,7 +363,7 @@ define(
                         }
                     );
 
-                    var details = [$(this).val(), options];
+                    var details = [short_code, options];
                     self.setDeliveryOption('delivery', details, additional_info);
                     self.deliveryFee(total_price);
 

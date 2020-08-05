@@ -4,7 +4,6 @@ namespace Montapacking\MontaCheckout\Api\Objects;
 /**
  * Class Order
  *
- * @package Montapacking\MontaCheckout\Api\Objects
  */
 class Order
 {

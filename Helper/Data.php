@@ -119,7 +119,6 @@ class Data extends AbstractHelper
         return $data;
     }
 
-
     public function tailExec($file, $lines)
     {
         //global $fsize;

@@ -72,7 +72,6 @@ class Pickup extends AbstractDeliveryOptions
         $request = $this->getRequest();
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-
         try {
             $oApi = $this->generateApi($request, $language, $this->_logger);
 
@@ -89,7 +88,7 @@ class Pickup extends AbstractDeliveryOptions
         } catch (Exception $e) {
 
             $context = ['source' => 'Montapacking Checkout'];
-            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api.", $context);
             return $this->jsonResponse([]);
         }
     }
@@ -140,7 +139,6 @@ class Pickup extends AbstractDeliveryOptions
                             $selected = $option;
                         }
 
-
                         ## Shipper optie toevoegen
 
                         $description = [];
@@ -156,14 +154,9 @@ class Pickup extends AbstractDeliveryOptions
                             $description[] = str_replace(".", ",", $distance) . " km";
                         }
 
-                        if (date('H:i', strtotime($from)) != '00:00') {
-                            // $description[] = date('d-m-Y', strtotime($frame->from))." ".$from_string . date('H:i', strtotime($from)) . $hour_string;
-                        }
-
                         $description = implode(" | ", $description);
 
                         $marker_id++;
-
 
                         $options[$onr] = (object)[
                             'marker_id' => $marker_id,
@@ -184,10 +177,9 @@ class Pickup extends AbstractDeliveryOptions
                             'date' => date("d-m-Y", strtotime($from)),
                             'date_string' => strftime('%A %e %B %Y', strtotime($from)),
                             'date_from_to' => date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)),
-                            'date_from_to_formatted' => date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string
+                            'date_from_to_formatted' => date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string //phpcs:ignore
 
                         ];
-
 
                         ## Check if we have a lower price
                         if ($option->price < $lowest) {
@@ -212,7 +204,6 @@ class Pickup extends AbstractDeliveryOptions
 
                     }
                     $frame->description->OpeningTimes = $arr;
-
 
                     ## Check of er een prijs is
                     if ($options !== null) {
@@ -248,7 +239,6 @@ class Pickup extends AbstractDeliveryOptions
                             $selected = $option;
                         }
 
-
                         ## Shipper optie toevoegen
 
                         $description = [];
@@ -262,7 +252,6 @@ class Pickup extends AbstractDeliveryOptions
                             $distance = round($frame->description->DistanceMeters / 1000, 2);
                             $description[] = str_replace(".", ",", $distance) . " km";
                         }
-
 
                         $description = implode(" | ", $description);
 
@@ -297,7 +286,6 @@ class Pickup extends AbstractDeliveryOptions
                         }
 
                     }
-
 
                     ## Check of er een prijs is
                     if ($options !== null) {

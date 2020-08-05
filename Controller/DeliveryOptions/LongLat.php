@@ -101,10 +101,9 @@ class LongLat extends AbstractDeliveryOptions
             $arr['hasconnection'] = 'false';
 
             $context = ['source' => 'Montapacking Checkout'];
-            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context); //phpcs:ignore
 
         }
-
 
         return $this->jsonResponse($arr);
     }

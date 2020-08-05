@@ -41,7 +41,6 @@ class Shipping
         $deliveryOptionDetails = $deliveryOption->details[1];
         $deliveryOptionAdditionalInfo = $deliveryOption->additional_info[0];
 
-
         if ($deliveryOptionType == 'pickup') {
 
             $fee = $deliveryOptionAdditionalInfo->total_price;
@@ -69,10 +68,8 @@ class Shipping
                 $desc[] = $value;
             }
 
-
             $desc = implode(" | ", $desc);
         }
-
 
         $this->adjustTotals($method_title, $subject->getCode(), $address, $total, $fee, $desc);
     }
@@ -84,7 +81,7 @@ class Shipping
      */
     private function getDeliveryOption($address)
     {
-        $option = $address->getMontapacking();
+        $option = $address->getMontapackingMontacheckoutData();
 
         if (!$option) {
             return null;

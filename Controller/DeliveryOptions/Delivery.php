@@ -82,25 +82,12 @@ class Delivery extends AbstractDeliveryOptions
 
             $shippingoptions_formatted = $this->formatShippingOptions($shippingoptions);
 
-
-            /* turned off
-            if (isset($_GET['log'])) {
-
-                print $language."<br>";
-                echo "<pre>";
-                $json_encode = json_encode($shippingoptions_formatted);
-                var_dump(json_decode($json_encode, true));
-                echo "</pre>";
-                exit;
-            }
-            */
-
             return $this->jsonResponse($shippingoptions_formatted);
 
         } catch (Exception $e) {
 
             $context = ['source' => 'Montapacking Checkout'];
-            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context);
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context); //phpcs:ignore
             return $this->jsonResponse([]);
         }
     }
@@ -144,7 +131,7 @@ class Delivery extends AbstractDeliveryOptions
                             $description[] = $option->description;
                         }
                         if (date('H:i', strtotime($from)) != '00:00') {
-                            $description[] = date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string;
+                            $description[] = date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string; //phpcs:ignore
                         }
                         if (trim($frame->code) && null !== $frame->code) {
                             $frame->code_desc = __($frame->code);
@@ -154,7 +141,7 @@ class Delivery extends AbstractDeliveryOptions
                         $description = implode(" | ", $description);
 
                         $options = [];
-                        $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string);
+                        $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string); //phpcs:ignore
 
                         if (null !== $created_option) {
                             $options[] = $created_option;
@@ -164,7 +151,7 @@ class Delivery extends AbstractDeliveryOptions
                             $items[$date][] = (object)[
                                 'code' => $frame->code,
                                 'date' => date('d-m-Y', strtotime($frame->from)),
-                                'time' => (date('H:i', strtotime($frame->from)) != date('H:i', strtotime($frame->to))) ? date('H:i', strtotime($frame->from)) . '-' . date('H:i', strtotime($frame->to)) : '',
+                                'time' => (date('H:i', strtotime($frame->from)) != date('H:i', strtotime($frame->to))) ? date('H:i', strtotime($frame->from)) . '-' . date('H:i', strtotime($frame->to)) : '', //phpcs:ignore
                                 'description' => $frame->description,
                                 'price_currency' => $curr,
                                 'options' => $options
@@ -201,10 +188,9 @@ class Delivery extends AbstractDeliveryOptions
                         $description = implode(" | ", $description);
 
                         $options = [];
-                        $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string);
+                        $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string); //phpcs:ignore
                         if (null !== $created_option) {
                             $options[] = $created_option;
-
 
                             if (!isset($items[$date])) {
                                 $items[$date] = [];
@@ -227,6 +213,9 @@ class Delivery extends AbstractDeliveryOptions
 
                     foreach ($frame->options as $onr => $option) {
 
+                        $from = null;
+                        $to = null;
+
                         if (strtotime($option->date) > 0) {
                             $from = date("Y-m-d", strtotime($option->date));
                             $to = date("Y-m-d", strtotime($option->date));
@@ -234,8 +223,6 @@ class Delivery extends AbstractDeliveryOptions
                         } elseif ($option->code == 'RED_ShippingDayUnknown') {
                             $from = date('d-m-Y', time());
                             $to = $from = date('d-m-Y', time());
-                            ;
-
                         }
 
                         $date = date("Y-m-d", strtotime($from));
@@ -257,7 +244,7 @@ class Delivery extends AbstractDeliveryOptions
                         $description = implode(" | ", $description);
 
                         $options = [];
-                        $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string);
+                        $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string); //phpcs:ignore
                         if (null !== $created_option) {
                             $options[] = $created_option;
 
@@ -335,10 +322,10 @@ class Delivery extends AbstractDeliveryOptions
             'price_formatted' => number_format($option->price, 2, ',', ''),
             'from' => date('H:i', strtotime($from)),
             'to' => date('H:i', strtotime($to)),
-            'date' => date("d-m-Y", strtotime($from)),
-            'date_string' => strftime('%A %e %B %Y', strtotime($from)),
-            'date_from_to' => date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)),
-            'date_from_to_formatted' => date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string,
+            'date' =>  strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
+            'date_string' => strtotime($from) > 0 ? strftime('%A %e %B %Y', strtotime($from)) : "",
+            'date_from_to' => strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
+            'date_from_to_formatted' => strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
             'extras' => $extras,
         ];
 

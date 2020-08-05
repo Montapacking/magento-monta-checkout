@@ -19,6 +19,12 @@
         <plugin name="montapacking_montacheckout_quote_management_after_place_order" type="Montapacking\MontaCheckout\Plugin\Quote\Model\QuoteManagement" sortOrder="100" />
     </type>
 
+
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="montapacking_montacheckout_data_extension_attribute"
+                type="Montapacking\MontaCheckout\Plugin\OrderRepositoryPlugin" />
+    </type>
+
     <type name="Montapacking\MontaCheckout\Logger\Handler">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>

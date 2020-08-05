@@ -4,7 +4,6 @@ namespace Montapacking\MontaCheckout\Api\Objects;
 /**
  * Class PickupPoint
  *
- * @package Montapacking\MontaCheckout\Api\Objects
  */
 class PickupPoint
 {
