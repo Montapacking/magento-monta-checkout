@@ -158,9 +158,15 @@ class Pickup extends AbstractDeliveryOptions
 
                         $marker_id++;
 
+                        $extra_code = "";
+                        foreach ($option->optionsWithValue as $key => $value) {
+                            $extra_code  = $key."_".$value;
+                        }
+
                         $options[$onr] = (object)[
                             'marker_id' => $marker_id,
                             'code' => $option->code,
+                            'code_pickup' => $extra_code,
                             'codes' => $option->codes,
                             'image' => $option->codes[0],
                             'optionCodes' => json_encode((array)$option->optioncodes),
@@ -257,9 +263,15 @@ class Pickup extends AbstractDeliveryOptions
 
                         $marker_id++;
 
+                        $extra_code = "";
+                        foreach ($option->optionsWithValue as $key => $value) {
+                            $extra_code  = $key."_".$value;
+                        }
+
                         $options[$onr] = (object)[
                             'marker_id' => $marker_id,
                             'code' => $option->code,
+                            'code_pickup' => $extra_code,
                             'codes' => $option->codes,
                             'image' => $option->codes[0],
                             'optionCodes' => json_encode((array)$option->optioncodes),

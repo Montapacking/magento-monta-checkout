@@ -38,7 +38,7 @@ class Shipping
         $method = $shipping->getMethod();
 
         $deliveryOptionType = $deliveryOption->type;
-        $deliveryOptionDetails = $deliveryOption->details[1];
+        $deliveryOptionDetails = $deliveryOption->details[0];
         $deliveryOptionAdditionalInfo = $deliveryOption->additional_info[0];
 
         if ($deliveryOptionType == 'pickup') {
@@ -64,7 +64,7 @@ class Shipping
 
             // extra options
 
-            foreach ($deliveryOptionDetails as $value) {
+            foreach ($deliveryOptionDetails->options as $value) {
                 $desc[] = $value;
             }
 

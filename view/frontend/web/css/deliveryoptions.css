@@ -242,7 +242,8 @@ nomargin {
     background-image: url(../images/DHL.png) !important;
 }
 
-.montapacking-container-logo.DPD {
+.montapacking-container-logo.DPD,
+.montapacking-container-logo.DPDparcelstore{
     background-image: url(../images/DPD.png) !important;
 }
 

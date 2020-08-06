@@ -227,8 +227,6 @@ define(
                         additional_info: additional_info
                     };
 
-                    //console.log(deliveryOption);
-
                     var checkoutConfig = window.checkoutConfig;
                     // Do not refactor this.
                     checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(deliveryOption);
@@ -282,6 +280,7 @@ define(
                     var image_class = $(this).parents(".delivery-option").find(".cropped_image_class").text();
                     var short_code = image_class;
                     var checked_boxes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-options input[type=checkbox]:checked");
+                    var option_codes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-optioncodes input[type=hidden]");
                     var total_price = parseFloat(price);
 
                     // set delivery information
@@ -332,6 +331,15 @@ define(
                         }
                     );
 
+                    $(option_codes).each(
+                        function (index, element) {
+                            options.push($(element).val());
+                        }
+                        //options.push();
+                    );
+
+
+
                     $('.delivery-option input[type=checkbox]:checked').not(checked_boxes).attr('checked', false);
 
                     $(".delivery-information").fadeIn('slow');
@@ -363,7 +371,14 @@ define(
                         }
                     );
 
-                    var details = [short_code, options];
+                    var details = [];
+                    details.push(
+                        {
+                            short_code: short_code,
+                            options: options,
+                        }
+                    );
+
                     self.setDeliveryOption('delivery', details, additional_info);
                     self.deliveryFee(total_price);
 
@@ -381,6 +396,7 @@ define(
                     // set vars
                     var code = $(this).val();
                     var shipper = $(this).parents(".pickup-option").find(".cropped_shipper").text();
+                    var code_pickup = $(this).parents(".pickup-option").find(".cropped_codepickup").text();
                     var shippingoptions = $(this).parents(".pickup-option").find(".cropped_shippingoptions").text();
                     var company = $(this).parents(".pickup-option").find(".cropped_company").text();
                     var street = $(this).parents(".pickup-option").find(".cropped_street").text();
@@ -391,6 +407,7 @@ define(
                     var country = $(this).parents(".pickup-option").find(".cropped_country").text();
                     var price = $(this).parents(".pickup-option").find(".cropped_price").text();
                     var image_class = $(this).parents(".pickup-option").find(".cropped_image_class").text();
+                    var short_code = image_class;
                     var distance = $(this).parents(".pickup-option").find(".cropped_distance").text();
                     var optionsvalues = $(this).parents(".pickup-option").find(".cropped_optionswithvalue").text();
                     var openingtimes_html = $(this).parents(".pickup-option").find(".table-container .table").clone().html();
@@ -427,6 +444,7 @@ define(
                     additional_info.push(
                         {
                             code: code,
+                            code_pickup: code_pickup,
                             shipper: shipper,
                             company: company,
                             street: street,
@@ -436,19 +454,19 @@ define(
                             description: description,
                             country: country,
                             price: price,
+                            country: country,
                             total_price: total_price_raw,
                         }
                     );
 
-
-                    var options = [];
-                    options.push(
+                    var details = [];
+                    details.push(
                         {
-                            optionsvalues,
+                            short_code: short_code,
+                            options: [],
                         }
                     );
 
-                    var details = [$(this).val(), options];
                     self.setDeliveryOption('pickup', details, additional_info);
                     self.pickupFee(total_price);
                     pickupShop().parcelShopAddress(additional_info[0]);
@@ -600,23 +618,27 @@ define(
 
                                 };
 
-                                //$(document).ready(function(){
+
 
                                 setTimeout(
                                     function () {
+
                                         useLocator.storeLocator(config);
-                                    }, 1000
+
+                                        var html = $("#storelocator_container").html();
+                                        self.showPopup(html);
+
+                                    }, 2000
                                 );
-                                //});
+
                             }
+
+
 
                         }
                     );
 
-                    var html = $("#storelocator_container").html();
 
-                    alert (html);
-                    self.showPopup(html);
 
                 },
 

@@ -19,6 +19,7 @@ define(
 
                         if (quote.shippingMethod().carrier_code !== 'montapacking') {
                             return originalResult;
+                            return originalResult;
                         }
 
                         var checkoutConfig = window.checkoutConfig;

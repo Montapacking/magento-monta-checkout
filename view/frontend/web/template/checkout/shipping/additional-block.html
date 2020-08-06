@@ -150,6 +150,20 @@
                         </div>
                         <!-- /ko -->
 
+                        <!-- ko if: optionCodes-->
+                        <div class="montapacking-container-delivery-optioncodes">
+                            <div data-bind="foreach: optionCodes">
+
+                                <input
+                                    data-bind="value: $data, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +$data + ']', id: $parent.code +$data}"
+                                    type="hidden"
+                                    class="text"/>
+
+                            </div>
+
+                        </div>
+                        <!-- /ko -->
+
 
                         <div class="montapacking-container-select-option montapacking-styled-radiobutton">
                             <input
@@ -260,7 +274,7 @@
                         <span class="cropped_lat montapacking-hidden" data-bind="text: $parent.description.Latitude "></span>
                         <span class="cropped_optioncodes montapacking-hidden" data-bind="text: optionCodes"></span>
                         <span class="cropped_optionswithvalue montapacking-hidden" data-bind="text: optionsWithValue"></span>
-
+                        <span class="cropped_codepickup montapacking-hidden" data-bind="text: code_pickup"></span>
 
 
                         <div class="montapacking-container-header">
