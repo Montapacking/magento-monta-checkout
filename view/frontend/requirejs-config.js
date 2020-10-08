@@ -3,7 +3,9 @@ var config = {
         'Handlebars': 'Montapacking_MontaCheckout/js/view/checkout/shipping/handlebars.min',
         'google': 'https://maps.google.com/maps/api/js?key=AIzaSyDuNPZlLCSlPM6Z55EUhanhzLZSiKcoUi0',
         'storeLocator': 'Montapacking_MontaCheckout/js/view/checkout/shipping/jquery.storelocator',
+
     },
+    /*
     shim: {
         google: {
             exports: 'google'
@@ -11,8 +13,13 @@ var config = {
         storeLocator: {
             exports: 'storeLocator'
         },
+        Handlebars: {
+            exports: 'Handlebars'
+        }
 
     },
+
+     */
     config: {
         mixins: {
             'Magento_Checkout/js/view/shipping': {

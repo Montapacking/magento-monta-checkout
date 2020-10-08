@@ -3,11 +3,11 @@
     "description": "Montapacking Checkout Extension",
     "require": {
         "php": "~7.1|~7.2|~7.3",
-        "magento/framework": "~101.0|~102.0",
         "ext-json": "*"
     },
     "type": "magento2-module",
     "license": "CC-BY-NC-ND-3.0",
+    "version": "1.0.2",
     "minimum-stability": "stable",
     "authors": [
         {

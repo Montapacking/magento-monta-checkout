@@ -13,7 +13,7 @@ abstract class AbstractDeliveryOptions extends Action
     /** @var $carrierConfig CarrierConfig */
     private $carrierConfig;
 
-    private $cart;
+    public $cart;
 
     /**
      * AbstractDeliveryOptions constructor.
@@ -117,6 +117,7 @@ abstract class AbstractDeliveryOptions extends Action
         $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal(), $cart->getQuote()->getSubtotal()); //phpcs:ignore
 
         $items = $cart->getQuote()->getAllVisibleItems();
+
 
         $bAllProductsAvailable = true;
         foreach ($items as $item) {

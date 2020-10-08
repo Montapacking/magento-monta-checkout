@@ -1,5 +1,14 @@
 /* SHIPPING METHODS TABLE */
 
+#montapacking-plugin a {
+    color: #005293 !important;
+    text-decoration: none !important;
+}
+
+#montapacking-plugin a:hover {
+    text-decoration: underline !important;
+}
+
 .marginleft {
     margin-right: 4px;
 }
@@ -70,7 +79,7 @@ nomargin {
 .montapacking-parent {
     display: inline-block;
     width: 100%;
-    max-width: 500px
+    /*max-width: 500px*/
 }
 
 .montapacking-parent * {
@@ -171,6 +180,7 @@ nomargin {
     margin-bottom: 10px;
     background: white;
     text-align: center;
+    max-width: 250px;
 }
 
 .montapacking-parent .montapacking-tab:first-child {
@@ -238,6 +248,7 @@ nomargin {
 .montapacking-container-logo.DHLpallet,
 .montapacking-container-logo.DHLservicepunt,
 .montapacking-container-logo.SELSELBuspakje,
+.montapacking-container-logo.DHLParcelConnect,
 .montapacking-container-logo.SEL {
     background-image: url(../images/DHL.png) !important;
 }
@@ -418,8 +429,8 @@ nomargin {
 .montapacking-pickup-service .close {
     color: #01B5E2;
     position: absolute;
-    top: 15px;
-    right: 10px;
+    top: -25px;
+    right: -10px;
     cursor: pointer;
 }
 
@@ -467,24 +478,32 @@ nomargin {
     width: 100%;
     height: 100%;
     position: fixed;
-    display: block;
+    /*display: block;*/
+    display: none;
     background-color: #000000;
     opacity: 0.8;
     filter: alpha(opacity=80);
     z-index: 1500;
+    top:0px;
+    left:0px;
 }
 
 #modular-container {
-    display: table;
+    /*display: table;*/
+    display: none;
     height: 100%;
     position: fixed;
     width: 100%;
     z-index: 1501;
+    top:0px;
+    left:0px;
+
 }
 
 #modular-container .positioning {
     display: table-cell;
     vertical-align: middle;
+
 }
 
 #modular-container .positioning .container{

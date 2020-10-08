@@ -32,7 +32,7 @@ class Delivery extends AbstractDeliveryOptions
     /**
      * @var \Magento\Checkout\Model\Cart
      */
-    private $cart;
+    public $cart;
 
     /**
      * Services constructor.
@@ -103,11 +103,15 @@ class Delivery extends AbstractDeliveryOptions
         $secondary_items = [];
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
+
+        $hour_string = "h";
         if ($language == 'NL') {
-            setlocale(LC_TIME, "nl_NL");
+            //setlocale(LC_TIME, "nl_NL");
+            $hour_string = " uur";
+
         }
 
-        $hour_string = __("hour");
+        ## Currency symbol
         $curr = '€';
 
         if (is_array($frames) || is_object($frames)) {
@@ -307,6 +311,44 @@ class Delivery extends AbstractDeliveryOptions
             return null;
         }
 
+        $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
+
+
+        $date_string = "";
+
+        if ($from > 0) {
+          $date_string = date("l", strtotime($from))." ". date("d", strtotime($from))." ". date("F", strtotime($from));
+        }
+
+        if ($language == 'NL') {
+
+            $weeks = array();
+            $weeks['Monday'] = "maandag";
+            $weeks['Tuesday'] = "dinsdag";
+            $weeks['Wednesday'] = "woensdag";
+            $weeks['Thursday'] = "donderdag";
+            $weeks['Friday'] = "vrijdag";
+            $weeks['Saturday'] = "zaterdag";
+            $weeks['Sunday'] = "zondag";
+
+            $months = array();
+            $months['January'] = "januari";
+            $months['February'] = "februari";
+            $months['March'] = "maart";
+            $months['April'] = "april";
+            $months['May'] = "mei";
+            $months['June'] = "juni";
+            $months['July'] = "juli";
+            $months['August'] = "augustus";
+            $months['September'] = "september";
+            $months['October'] = "oktober";
+            $months['November'] = "november ";
+            $months['December'] = "december";
+
+            if ($from > 0) {
+                $date_string = $weeks[date("l", strtotime($from))]." ". date("j", strtotime($from))." ". $months[date("F", strtotime($from))];
+            }
+        }
 
         $options = (object)[
             'code' => $option->code,
@@ -323,7 +365,7 @@ class Delivery extends AbstractDeliveryOptions
             'from' => date('H:i', strtotime($from)),
             'to' => date('H:i', strtotime($to)),
             'date' =>  strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
-            'date_string' => strtotime($from) > 0 ? strftime('%A %e %B %Y', strtotime($from)) : "",
+            'date_string' => $date_string,
             'date_from_to' => strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
             'date_from_to_formatted' => strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
             'extras' => $extras,

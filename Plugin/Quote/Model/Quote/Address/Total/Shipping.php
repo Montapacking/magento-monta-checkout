@@ -63,9 +63,10 @@ class Shipping
             }
 
             // extra options
-
-            foreach ($deliveryOptionDetails->options as $value) {
-                $desc[] = $value;
+            if (isset($deliveryOptionDetails->options)) {
+                foreach ($deliveryOptionDetails->options as $value) {
+                    $desc[] = $value;
+                }
             }
 
             $desc = implode(" | ", $desc);

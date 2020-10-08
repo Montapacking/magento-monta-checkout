@@ -6,17 +6,19 @@
 "on", "op"
 "between", "tussen"
 "Click here to choose a different delivery option", "Klik hier om een andere bezorgoptie te kiezen"
+"Want to deliver today or another day? Click here", "Wilt u vandaag nog laten bezorgen of op een andere dag? Klik hier"
 "Choose a valid address before you can select a shipping method.", "Kies een geldig afleveradres voordat u een verzendmethode kunt selecteren."
 "Show business hours", "Toon openingstijden"
 "Unfortunately, no pick-up points could be found.", " Er konden helaas geen afhaalpunten gevonden worden."
 "Select another pick-up point near you below or", " Selecteer hieronder een ander afhaalpunt of"
 "click here", " klik hier "
 "to choose another pick-up point", "om een ander afhaalpunt te kiezen"
+"Select another pick-up point near you below or click here to choose another pick-up point", "Selecteer hieronder een ander afhaalpunt of klik hier om een ander afhaalpunt te kiezen"
 Close,Sluiten
 "Show business hours","Toon openingstijden"
 "Select pick-up point","Selecteer afhaalpunt"
 "Use selection","Gebruik selectie"
-"Select address", "Selecteer adres"
+"Select delivery option", "Selecteer bezorgoptie"
 "Montapacking - Webshop", "Montapacking - Webshop"
 "Montapacking - Username", "Montapacking - Username"
 "Montapacking - Password", "Montapacking - Password"
@@ -24,7 +26,6 @@ Close,Sluiten
 "Pick-up address","Afhaaladres"
 "Delivery Information","Bezorginformatie"
 "hour"," uur"
-
 "SignatureOnDelivery", "Tekenen bij ontvangst"
 "NoNeighbour", "Niet bij de buren afleveren"
 "EveningDelivery", "In avond afleveren"
@@ -38,6 +39,8 @@ Close,Sluiten
 "Friday", "Vrijdag"
 "Saturday", "Zaterdag"
 "Sunday", "Zondag"
+"Choose your desired additional options", "Kies uw gewenste extra opties"
+
 
 
 

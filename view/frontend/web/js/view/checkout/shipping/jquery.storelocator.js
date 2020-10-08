@@ -2832,9 +2832,9 @@
                 openMap = $mapDiv.hasClass('bh-sl-map-open');
 
                 // Set a variable for fullMapStart so we can detect the first run
-                if (( _this.settings.fullMapStart === true && openMap === false ) 
-                    || ( _this.settings.autoGeocode === true && openMap === false ) 
-                    || ( _this.settings.defaultLoc === true && openMap === false ) 
+                if (( _this.settings.fullMapStart === true && openMap === false )
+                    || ( _this.settings.autoGeocode === true && openMap === false )
+                    || ( _this.settings.defaultLoc === true && openMap === false )
                     || reload === true
                 ) {
                     firstRun = true;

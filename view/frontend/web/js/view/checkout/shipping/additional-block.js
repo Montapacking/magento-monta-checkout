@@ -1,15 +1,15 @@
 define(
     [
-    'jquery',
-    'uiComponent',
-    'ko',
-    'Magento_Catalog/js/price-utils',
-    'Magento_Checkout/js/model/quote',
-    'Montapacking_MontaCheckout/js/helper/address-finder',
-    'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
-    'Handlebars',
-    'google',
-    'storeLocator'
+        'jquery',
+        'uiComponent',
+        'ko',
+        'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/quote',
+        'Montapacking_MontaCheckout/js/helper/address-finder',
+        'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
+        'Handlebars',
+        'google',
+        'storeLocator'
     ], function (
         $,
         Component,
@@ -63,14 +63,15 @@ define(
 
                     this._super().observe(
                         [
-                        'postcode',
-                        'hasconnection',
-                        'country',
-                        'street',
-                        'deliveryServices',
-                        'pickupPoints'
+                            'postcode',
+                            'hasconnection',
+                            'country',
+                            'street',
+                            'deliveryServices',
+                            'pickupPoints'
                         ]
                     );
+
 
                     AddressFinder.subscribe(
                         function (address) {
@@ -101,6 +102,8 @@ define(
 
                         }.bind(this)
                     );
+
+                    self.loadPopup();
 
                     return this;
                 },
@@ -246,6 +249,12 @@ define(
                         } else {
                             $("input.selectshipment").val("delivery");
                             $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
+
+                            if ($(".SameDayDelivery").length) {
+                                $(".havesameday").removeClass("displaynone");
+                            } else {
+                                $(".nothavesameday").removeClass("displaynone");
+                            }
                         }
                     }
 
@@ -268,6 +277,7 @@ define(
                     var type = $(this).parents(".delivery-option").find(".cropped_type").text();
                     var date = $(this).parents(".delivery-option").find(".cropped_date").text();
                     var date_text = $(this).parents(".delivery-option").find(".cropped_time").text();
+                    var date_string = $(this).parents(".delivery-option").find(".cropped_date_text").text();
 
                     if (date == '01-01-1970') {
                         date = '';
@@ -285,7 +295,7 @@ define(
 
                     // set delivery information
                     $(".delivery-information").find(".montapacking-delivery-information-company").html(name);
-                    $(".delivery-information").find(".montapacking-delivery-information-date").html(date);
+                    $(".delivery-information").find(".montapacking-delivery-information-date").html(date_string);
 
 
                     if (date == '') {
@@ -337,7 +347,6 @@ define(
                         }
                         //options.push();
                     );
-
 
 
                     $('.delivery-option input[type=checkbox]:checked').not(checked_boxes).attr('checked', false);
@@ -487,8 +496,9 @@ define(
 
 
                 showPopup: function (sHtml) {
-
-
+                    $("#modular-container").css("display", "table");
+                    $("#modular-background").css("display", "block");
+                    /*
                     $("body").prepend('<div id="modular-container"/>');
                     $("body").prepend('<div id="modular-background"/>');
 
@@ -496,47 +506,74 @@ define(
                         '<div class="positioning">' + sHtml +
                         '</div>'
                     );
+                    */
+                    //ko.applyBindings(self, document.getElementById('modular-container'))
+                },
+
+                loadPopup: function (sHtml) {
+
+                    $("body").prepend('<div id="modular-container"/>');
+                    $("body").prepend('<div id="modular-background"/>');
+
+                    var html = "<div id=\"storelocator_container\">\n" +
+                        "    <div class=\"container\">\n" +
+                        "        <div class=\"bh-sl-container\">\n" +
+                        "            <div class=\"bh-sl-filters-container\">\n" +
+                        "                <button href=\"javascript:;\" data-bind=\"click: closePopup, i18n: 'Use selection'\" class=\"select-item displaynone\"></button>\n" +
+                        "                <ul id=\"category-filters\" class=\"bh-sl-filters\"></ul>\n" +
+                        "            </div>\n" +
+                        "            <div id=\"bh-sl-map-container\" class=\"bh-sl-map-container\">\n" +
+                        "                <div id=\"bh-sl-map\" class=\"bh-sl-map\"></div>\n" +
+                        "                <div class=\"bh-sl-loc-list\">\n" +
+                        "                    <ul class=\"list listitemsforpopup\"></ul>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "    </div>\n" +
+                        "</div>";
+
+                    $("#modular-container").append(
+                        '<div class="positioning">' + html + '</div>'
+                    );
 
                     ko.applyBindings(self, document.getElementById('modular-container'))
                 },
 
                 closePopup: function () {
 
-                    var useLocator = $('#bh-sl-map-container');
-                    useLocator.storeLocator('destroy');
+                    //var useLocator = $('#bh-sl-map-container');
+                    //useLocator.storeLocator('reset');
 
-                    $("#modular-background").remove();
-                    $("#modular-container").remove();
+                    $("#modular-container").css("display", "none");
+                    $("#modular-background").css("display", "none");
                     return false;
 
                 },
 
                 openStoreLocator: function () {
 
-
-                    $(".bh-sl-loc-list ul").empty();
-
                     require(
                         ['Handlebars',
-                        'jquery',
-                        'google',
-                        'storeLocator'], function (Handlebars, $) {
+                            'jquery',
+                            'google',
+                            'storeLocator'], function (Handlebars, $, google, storeLocator) {
 
                             window.Handlebars = Handlebars;
 
                             var useLocator = $('#bh-sl-map-container');
+
+                            //console.log(useLocator.html());
+
                             var site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
                             /* Map */
                             if (useLocator) {
 
                                 var markers = [];
 
-
                                 $(".montapacking-pickup-service.pickup-option").each(
                                     function (index) {
 
                                         var openingtimes = $(this).find(".table-container .table").html();
-
 
                                         markers.push(
                                             {
@@ -562,12 +599,10 @@ define(
                                             }
                                         );
 
-
                                         if ($('.cat-' + $(this).find("span.cropped_shipper").text() + '').length === 0) {
                                             var html = '<li class="cat-' + $(this).find("span.cropped_shipper").text() + '"><label><input checked="checked" type="checkbox" name="category" value="' + $(this).find("span.cropped_shipper").text() + '"> ' + $(this).find("span.cropped_description_storelocator").text() + '</label></li>';
                                             $('#category-filters').append(html);
                                         }
-
                                     }
                                 );
 
@@ -578,7 +613,6 @@ define(
                                     'listTemplatePath': site_url + '/template/checkout/storelocator/location-list-description.html',
                                     'distanceAlert': -1,
                                     'dataType': "json",
-
                                     'dataRaw': JSON.stringify(markers, null, 2),
                                     'slideMap': false,
                                     'inlineDirections': false,
@@ -588,7 +622,6 @@ define(
                                     'defaultLat': $("#montapacking_latitude").val(),
                                     'defaultLng': $("#montapacking_longitude").val(),
                                     'lengthUnit': 'km',
-
                                     'exclusiveFiltering': true,
                                     'taxonomyFilters': {
                                         'category': 'category-filters',
@@ -598,15 +631,12 @@ define(
                                         'DHLservicepunt': [site_url + '/images/DHL.png', 32, 32],
                                         'DPDparcelstore': [site_url + '/images/DPD.png', 32, 32]
                                     },
-
                                     callbackMarkerClick: function (marker, markerId, $selectedLocation, location) {
                                         $(".bh-sl-container .bh-sl-filters-container .select-item").css("display", "block");
                                         $(".pickup-option[data-markerid=" + location.listid + "]").find(".initialPickupRadio").trigger("click");
                                     },
                                     callbackListClick: function (markerId, selectedMarker, location) {
-
                                         var selected_input = location.code;
-
 
                                         $(".bh-sl-container .bh-sl-filters-container .select-item").css("display", "block");
                                         $(".pickup-option[data-markerid=" + location.listid + "]").find(".initialPickupRadio").trigger("click");
@@ -619,25 +649,17 @@ define(
                                 };
 
 
+                                useLocator.storeLocator(config);
 
-                                setTimeout(
-                                    function () {
+                                var html = $("#storelocator_container").html();
+                                self.showPopup(html);
 
-                                        useLocator.storeLocator(config);
-
-                                        var html = $("#storelocator_container").html();
-                                        self.showPopup(html);
-
-                                    }, 2000
-                                );
 
                             }
 
 
-
                         }
                     );
-
 
 
                 },

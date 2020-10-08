@@ -32,7 +32,7 @@ class LongLat extends AbstractDeliveryOptions
     /**
      * @var \Magento\Checkout\Model\Cart
      */
-    private $cart;
+    public $cart;
 
     /**
      * Services constructor.

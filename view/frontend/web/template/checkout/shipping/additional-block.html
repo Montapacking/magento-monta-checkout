@@ -3,6 +3,7 @@
 <input type="hidden" id="montapacking_language" name="montapacking_language" value="">
 <input type="hidden" id="old_address" name="old_address" value="">
 
+
 <!-- ko if: hasconnection -->
 
 <div id="montapacking-plugin" class="montapacking-parent"
@@ -66,7 +67,10 @@
                             </ul>
                         </p>
 
-                        <a href="javascript:;"
+                        <a class="displaynone havesameday"href="javascript:;"
+                           data-bind="i18n: 'Want to deliver today or another day? Click here',click: showDeliveryOptions.bind($parent, '.delivery-information', '.delivery-option')"></a>
+
+                        <a class="displaynone nothavesameday"href="javascript:;"
                            data-bind="i18n: 'Click here to choose a different delivery option',click: showDeliveryOptions.bind($parent, '.delivery-information', '.delivery-option')"></a>
 
                     </div>
@@ -134,6 +138,9 @@
                         <!-- ko if: extras-->
                         <div class="montapacking-container-delivery-options">
 
+                            <!-- ko if: extras.length > 0 -->
+                            <p class="normal" data-bind="i18n: 'Choose your desired additional options'"></p>
+                            <!-- /ko -->
                             <div data-bind="foreach: extras">
 
                                 <div class="montapacking-delivery-option">
@@ -170,7 +177,7 @@
                                 data-bind="click: $parents[1].selectShipper.bind($element), checked: $parent.selectedShippers, , attr: {id: code, value: code}"
                                 type="radio" class="montapacking_delivery_option" class="radio"
                                 name="montapacking[shipper]"/>
-                            <label data-bind="attr: {for: code}, i18n: 'Select address'"></label>
+                            <label data-bind="attr: {for: code}, i18n: 'Select delivery option'"></label>
                         </div>
 
                     </div>
@@ -238,11 +245,9 @@
             <!-- ko if: pickupServices().length > 0 -->
 
             <div class="container montapacking-pickup-service pickup-information">
-                <p class="nomargin">
-                    <span data-bind="i18n: 'Select another pick-up point near you below or'"></span>
-                    <a href="javascript:;" data-bind="click: openStoreLocator.bind($parent), i18n: 'click here'"></a>
-                    <span data-bind="i18n: 'to choose another pick-up point'"></span>
-                </p>
+
+                <a href="javascript:;" data-bind="click: openStoreLocator.bind($parent), i18n: 'Select another pick-up point near you below or click here to choose another pick-up point'"></a>
+
             </div>
 
             <!-- /ko -->
@@ -330,37 +335,10 @@
             </div>
             <!-- /ko -->
 
-
         </div>
-
     </div>
 </div>
 
 
-<!-- STORE LOCATOR -->
-<div id="storelocator_container" class="displaynone">
-    <div class="container">
-        <div class="bh-sl-container">
-
-            <div class="bh-sl-filters-container">
-                <button href="javascript:;" data-bind="click: closePopup, i18n: 'Use selection'" class="select-item displaynone">
-
-                </button>
-                <ul id="category-filters" class="bh-sl-filters"></ul>
-            </div>
-
-
-            <div id="bh-sl-map-container" class="bh-sl-map-container">
-                <div id="bh-sl-map" class="bh-sl-map"></div>
-                <div class="bh-sl-loc-list">
-                    <ul class="list listitemsforpopup"></ul>
-                </div>
-            </div>
-
-
-        </div>
-
-    </div>
-</div>
 
 <!-- /ko -->

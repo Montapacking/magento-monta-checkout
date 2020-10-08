@@ -310,7 +310,7 @@ class MontapackingShipping
         $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH'];
 
         // Timeframes omzetten naar bruikbaar object
-        $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products', 'allowedshippers']); //phpcs:ignore
+        $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products', '_allowedshippers']); //phpcs:ignore
         if (isset($result->Timeframes)) {
 
             // Shippers omzetten naar shipper object
@@ -361,7 +361,7 @@ class MontapackingShipping
             );
 
             // Timeframes omzetten naar bruikbaar object
-            $result = $this->call('ShippingOptions', ['_basic', 'shippers', 'order', 'address', 'products']);
+            $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products']);
 
             if (isset($result->Timeframes)) {
 

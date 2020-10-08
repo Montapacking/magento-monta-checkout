@@ -32,7 +32,7 @@ class Pickup extends AbstractDeliveryOptions
     /**
      * @var \Magento\Checkout\Model\Cart
      */
-    private $cart;
+    public $cart;
 
     /**
      * Services constructor.
@@ -103,11 +103,12 @@ class Pickup extends AbstractDeliveryOptions
         $items = [];
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
-        if ($language == 'NL') {
-            setlocale(LC_TIME, "nl_NL");
-        }
 
-        $hour_string = __("hour");
+        $hour_string = "h";
+        if ($language == 'NL') {
+            //setlocale(LC_TIME, "nl_NL");
+            $hour_string = " uur";
+        }
 
         ## Currency symbol
         $curr = '€';
