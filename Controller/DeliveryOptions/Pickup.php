@@ -203,7 +203,7 @@ class Pickup extends AbstractDeliveryOptions
                             $obj = (object)[
                                 'Day' => __($time->Day),
                                 'OpeningTimes' => $time->OpeningTimes,
-                                'TimeNotation' => __("hour")
+                                'TimeNotation' => $hour_string
                             ];
 
                             $arr[$key] = $obj;

@@ -1,15 +1,15 @@
 define(
     [
-        'jquery',
-        'uiComponent',
-        'ko',
-        'Magento_Catalog/js/price-utils',
-        'Magento_Checkout/js/model/quote',
-        'Montapacking_MontaCheckout/js/helper/address-finder',
-        'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
-        'Handlebars',
-        'google',
-        'storeLocator'
+    'jquery',
+    'uiComponent',
+    'ko',
+    'Magento_Catalog/js/price-utils',
+    'Magento_Checkout/js/model/quote',
+    'Montapacking_MontaCheckout/js/helper/address-finder',
+    'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
+    'Handlebars',
+    'google',
+    'storeLocator'
     ], function (
         $,
         Component,
@@ -22,6 +22,9 @@ define(
         google,
         storeLocator
     ) {
+
+        console.log(storeLocator);
+
         'use strict';
 
         return Component.extend(
@@ -63,12 +66,12 @@ define(
 
                     this._super().observe(
                         [
-                            'postcode',
-                            'hasconnection',
-                            'country',
-                            'street',
-                            'deliveryServices',
-                            'pickupPoints'
+                        'postcode',
+                        'hasconnection',
+                        'country',
+                        'street',
+                        'deliveryServices',
+                        'pickupPoints'
                         ]
                     );
 
@@ -298,6 +301,7 @@ define(
                     $(".delivery-information").find(".montapacking-delivery-information-date").html(date_string);
 
 
+
                     if (date == '') {
                         $(".dateblock").css("display", "none");
                     } else {
@@ -347,6 +351,7 @@ define(
                         }
                         //options.push();
                     );
+
 
 
                     $('.delivery-option input[type=checkbox]:checked').not(checked_boxes).attr('checked', false);
@@ -533,7 +538,7 @@ define(
                         "</div>";
 
                     $("#modular-container").append(
-                        '<div class="positioning">' + html + '</div>'
+                        '<div class="positioning">'+html+'</div>'
                     );
 
                     ko.applyBindings(self, document.getElementById('modular-container'))
@@ -554,9 +559,10 @@ define(
 
                     require(
                         ['Handlebars',
-                            'jquery',
-                            'google',
-                            'storeLocator'], function (Handlebars, $, google, storeLocator) {
+                        'jquery',
+                        'google',
+                        'storeLocator'], function (Handlebars, $, google, storeLocator) {
+
 
                             window.Handlebars = Handlebars;
 
@@ -569,6 +575,7 @@ define(
                             if (useLocator) {
 
                                 var markers = [];
+
 
                                 $(".montapacking-pickup-service.pickup-option").each(
                                     function (index) {
@@ -648,18 +655,21 @@ define(
 
                                 };
 
-
-                                useLocator.storeLocator(config);
+                                setTimeout(function(){
+                                    useLocator.storeLocator(config);
 
                                 var html = $("#storelocator_container").html();
                                 self.showPopup(html);
 
+                                }, 3000);
 
                             }
 
 
+
                         }
                     );
+
 
 
                 },
