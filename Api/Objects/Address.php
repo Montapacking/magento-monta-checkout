@@ -72,7 +72,8 @@ class Address
         $this->setCity($city);
         $this->setState($state);
         $this->setCountry($countrycode);
-        $this->setGoogleApiKey(trim($googleapikey));
+        //$this->setGoogleApiKey(trim($googleapikey));
+		$this->setGoogleApiKey("AIzaSyDuNPZlLCSlPM6Z55EUhanhzLZSiKcoUi0");
         $this->setLongLat();
     }
 
