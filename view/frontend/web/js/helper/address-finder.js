@@ -27,15 +27,28 @@ define(
         allFieldsExists = true,
         valueUpdateNotifier = ko.observable(null);
 
-        var fields = [
-        "input[name*='street[0]']",
-        "input[name*='street[1]']",
-        "input[name*='street[2]']",
-        "input[name*='city']",
-        "input[name*='postcode']",
-        "select[name*='country_id']",
+        if ($("select[name*='postalCode']").length > 0) {
+            var fields = [
+                "input[name*='street[0]']",
+                "input[name*='street[1]']",
+                "input[name*='street[2]']",
+                "input[name*='city']",
+                "input[name*='postalCode']",
+                "select[name*='country_id']",
 
-        ];
+            ];
+        } else {
+            var fields = [
+                "input[name*='street[0]']",
+                "input[name*='street[1]']",
+                "input[name*='street[2]']",
+                "input[name*='city']",
+                "input[name*='postcode']",
+                "select[name*='country_id']",
+
+            ];
+        }
+
 
         /**
          * Without cookie data Magento is not observing the fields so the AddressFinder is never triggered.
@@ -47,13 +60,26 @@ define(
         (function() {
             function checkState() {
 
-                if ($("input[name*='postcode']").length > 0 && $("#montapacking-plugin").length) {
+                if ($("select[name*='postalCode']").length > 0) {
+                    if ($("input[name*='postalCode']").length > 0 && $("#montapacking-plugin").length) {
 
-                    var success = true; // do something to check the state
-                    $("input[name*='postcode']").trigger("change");
+                        var success = true; // do something to check the state
+                        $("input[name*='postalCode']").trigger("change");
+                    } else {
+                        var success = false; // do something to check the state
+                    }
+
                 } else {
-                    var success = false; // do something to check the state
+
+                    if ($("input[name*='postcode']").length > 0 && $("#montapacking-plugin").length) {
+
+                        var success = true; // do something to check the state
+                        $("input[name*='postcode']").trigger("change");
+                    } else {
+                        var success = false; // do something to check the state
+                    }
                 }
+
 
                 if (!success) {
                     setTimeout(checkState, 500);
@@ -144,7 +170,12 @@ define(
                     2 : $("input[name*='street[2]']").val()
                 };
 
-                address.postcode   = $("input[name*='postcode']").val();
+                if ($("select[name*='postalCode']").length > 0) {
+                    address.postcode   = $("input[name*='postalCode']").val();
+                } else {
+                    address.postcode   = $("input[name*='postcode']").val();
+                }
+
                 address.city   = $("input[name*='city']").val();
                 address.firstname  = $("input[name*='firstname']").val();
                 address.lastname   = $("input[name*='lastname']").val();
