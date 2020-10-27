@@ -74,8 +74,8 @@ abstract class AbstractDeliveryOptions extends Action
         $city = $request->getParam('city') ? trim($request->getParam('city')) : "";
         $country = $request->getParam('country') ? trim($request->getParam('country')) : "";
 
-        $housenumber = '';
-        $housenumberaddition = '';
+        $housenumber =  $request->getParam('housenumber') ? trim($request->getParam('housenumber')) : "";
+        $housenumberaddition =  $request->getParam('housenumberaddition') ? trim($request->getParam('housenumberaddition')) : "";
         $state = '';
 
         $postcode = str_replace(" ", "", $postcode);

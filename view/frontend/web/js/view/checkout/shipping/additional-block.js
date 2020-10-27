@@ -1,15 +1,15 @@
 define(
     [
-    'jquery',
-    'uiComponent',
-    'ko',
-    'Magento_Catalog/js/price-utils',
-    'Magento_Checkout/js/model/quote',
-    'Montapacking_MontaCheckout/js/helper/address-finder',
-    'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
-    'Handlebars',
-    'google',
-    'storeLocator'
+        'jquery',
+        'uiComponent',
+        'ko',
+        'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/quote',
+        'Montapacking_MontaCheckout/js/helper/address-finder',
+        'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
+        'Handlebars',
+        'google',
+        'storeLocator'
     ], function (
         $,
         Component,
@@ -34,6 +34,7 @@ define(
                     postcode: null,
                     country: null,
                     hasconnection: 'true',
+                    urlPrefix: '',
                     deliveryServices: ko.observableArray([]),
                     pickupServices: ko.observableArray([]),
                     deliveryFee: ko.observable(),
@@ -47,6 +48,40 @@ define(
 
                     self = this;
 
+                    var url = new URL(window.location.href).toString();
+
+
+                    var urlPrefix = '';
+
+                    if (url.includes('/nl/')) {
+                        urlPrefix = '/nl';
+                    }
+
+                    if (url.includes('/be/')) {
+                        urlPrefix = '/be';
+                    }
+
+                    if (url.includes('/de/')) {
+                        urlPrefix = '/de';
+                    }
+
+                    if (url.includes('/en/')) {
+                        urlPrefix = '/en';
+                    }
+
+                    if (url.includes('/fr/')) {
+                        urlPrefix = '/fr';
+                    }
+
+                    if (url.includes('/it/')) {
+                        urlPrefix = '/it';
+                    }
+
+                    if (url.includes('/es/')) {
+                        urlPrefix = '/es';
+                    }
+
+                    this.urlPrefix = urlPrefix;
                     this.selectedMethod = ko.computed(
                         function () {
                             var method = quote.shippingMethod();
@@ -66,12 +101,12 @@ define(
 
                     this._super().observe(
                         [
-                        'postcode',
-                        'hasconnection',
-                        'country',
-                        'street',
-                        'deliveryServices',
-                        'pickupPoints'
+                            'postcode',
+                            'hasconnection',
+                            'country',
+                            'street',
+                            'deliveryServices',
+                            'pickupPoints'
                         ]
                     );
 
@@ -96,9 +131,9 @@ define(
                             this.pickupFee(null);
                             this.hasconnection('true');
 
-                            this.getLongLat(address.street, address.postcode, address.city, address.country);
-                            this.getPickupServices(address.street, address.postcode, address.city, address.country);
-                            this.getDeliveryServices(address.street, address.postcode, address.city, address.country);
+                            this.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
+                            this.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
+                            this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
 
                             this.loadDeliveryJs(true);
 
@@ -127,20 +162,21 @@ define(
                 /**
                  * Retrieve LONG LAT
                  */
-                getLongLat: function (street, postcode, city, country) {
-
+                getLongLat: function (street, postcode, city, country, housenumber, housenumberaddition) {
 
                     $.ajax(
                         {
                             method: 'GET',
-                            url: '/montacheckout/deliveryoptions/longlat',
+                            url: this.urlPrefix+'/montacheckout/deliveryoptions/longlat',
                             type: 'jsonp',
                             showLoader: true,
                             data: {
                                 street: street,
                                 postcode: postcode,
                                 city: city,
-                                country: country
+                                country: country,
+                                housenumber: housenumber,
+                                housenumberaddition: housenumberaddition
                             }
                         }
                     ).done(
@@ -161,19 +197,21 @@ define(
                 /**
                  * Retrieve Delivery Options from Montapacking.
                  */
-                getDeliveryServices: function (street, postcode, city, country) {
+                getDeliveryServices: function (street, postcode, city, country, housenumber, housenumberaddition) {
 
                     $.ajax(
                         {
                             method: 'GET',
-                            url: '/montacheckout/deliveryoptions/delivery',
+                            url: this.urlPrefix+'/montacheckout/deliveryoptions/delivery',
                             type: 'jsonp',
                             showLoader: true,
                             data: {
                                 street: street,
                                 postcode: postcode,
                                 city: city,
-                                country: country
+                                country: country,
+                                housenumber: housenumber,
+                                housenumberaddition: housenumberaddition
                             }
                         }
                     ).done(
@@ -188,19 +226,21 @@ define(
                 /**
                  * Retrieve Delivery Options from Montapacking.
                  */
-                getPickupServices: function (street, postcode, city, country) {
+                getPickupServices: function (street, postcode, city, country, housenumber, housenumberaddition) {
 
                     $.ajax(
                         {
                             method: 'GET',
-                            url: '/montacheckout/deliveryoptions/pickup',
+                            url: this.urlPrefix+'/montacheckout/deliveryoptions/pickup',
                             type: 'jsonp',
                             showLoader: true,
                             data: {
                                 street: street,
                                 postcode: postcode,
                                 city: city,
-                                country: country
+                                country: country,
+                                housenumber: housenumber,
+                                housenumberaddition: housenumberaddition
                             }
                         }
                     ).done(
@@ -366,7 +406,7 @@ define(
 
                     setTimeout(
                         function () {
-                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").text("€ " + total_price);
+                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").text("â‚¬ " + total_price);
                         }, 250
                     );
 
@@ -450,7 +490,7 @@ define(
 
                     setTimeout(
                         function () {
-                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").text("€ " + total_price);
+                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").text("â‚¬ " + total_price);
                         }, 250
                     );
 
@@ -559,9 +599,9 @@ define(
 
                     require(
                         ['Handlebars',
-                        'jquery',
-                        'google',
-                        'storeLocator'], function (Handlebars, $, google, storeLocator) {
+                            'jquery',
+                            'google',
+                            'storeLocator'], function (Handlebars, $, google, storeLocator) {
 
 
                             window.Handlebars = Handlebars;
@@ -658,8 +698,8 @@ define(
                                 setTimeout(function(){
                                     useLocator.storeLocator(config);
 
-                                var html = $("#storelocator_container").html();
-                                self.showPopup(html);
+                                    var html = $("#storelocator_container").html();
+                                    self.showPopup(html);
 
                                 }, 3000);
 

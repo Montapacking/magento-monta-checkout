@@ -72,7 +72,8 @@ class Address
         $this->setCity($city);
         $this->setState($state);
         $this->setCountry($countrycode);
-        $this->setGoogleApiKey(trim($googleapikey));
+        //$this->setGoogleApiKey(trim($googleapikey));
+        $this->setGoogleApiKey("AIzaSyDuNPZlLCSlPM6Z55EUhanhzLZSiKcoUi0");
         $this->setLongLat();
     }
 
@@ -82,13 +83,28 @@ class Address
     public function setLongLat()
     {
         // Get lat and long by address
-        $address = $this->street . ' ' . $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode . ''; // Google HQ
-        $prepAddr = str_replace('  ', ' ', $address);
-        $prepAddr = str_replace(' ', '+', $prepAddr);
-        $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
+
+        if (!trim($this->street)) {
+            $address = $this->postalcode . ' ' . $this->countrycode . ''; // Google HQ
+
+            $prepAddr = str_replace('  ', ' ', $address);
+            $prepAddr = str_replace(' ', '+', $prepAddr);
+            $google_maps_url = "https://maps.google.com/maps/api/geocode/json?language=". $this->countrycode."&address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
+
+
+        } else {
+            $address = $this->street . ' ' . $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode . ''; // Google HQ
+
+            $prepAddr = str_replace('  ', ' ', $address);
+            $prepAddr = str_replace(' ', '+', $prepAddr);
+            $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
+
+        }
+
 
         try {
             $geocode = file_get_contents($google_maps_url);
+
             $output = json_decode($geocode);
 
             $result = end($output->results);

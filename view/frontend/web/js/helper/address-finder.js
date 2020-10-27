@@ -1,9 +1,9 @@
 define(
     [
-    'ko',
-    'Magento_Checkout/js/model/quote',
-    'jquery',
-    'Magento_Customer/js/model/customer'
+        'ko',
+        'Magento_Checkout/js/model/quote',
+        'jquery',
+        'Magento_Customer/js/model/customer'
     ], function (
         ko,
         quote,
@@ -13,29 +13,40 @@ define(
         'use strict';
 
         var address = {
-            postcode    : null,
-            country     : null,
-            street      : null,
-            city        : null,
-            firstname   : null,
-            lastname    : null,
-            telephone   : null,
-            housenumber : null
-        },
-        countryCode,
-        timer,
-        allFieldsExists = true,
-        valueUpdateNotifier = ko.observable(null);
+                postcode    : null,
+                country     : null,
+                street      : null,
+                city        : null,
+                firstname   : null,
+                lastname    : null,
+                telephone   : null,
+                housenumber : null,
+                housenumberaddition : null
+            },
+            countryCode,
+            timer,
+            allFieldsExists = true,
+            valueUpdateNotifier = ko.observable(null);
 
-        var fields = [
-        "input[name*='street[0]']",
-        "input[name*='street[1]']",
-        "input[name*='street[2]']",
-        "input[name*='city']",
-        "input[name*='postcode']",
-        "select[name*='country_id']",
+        if ($("input[name*='postalCode']").length > 0) {
+            var fields = [
+                "input[name*='streetNumber']",
+                "input[name*='strNumberAddition",
+                "input[name*='postalCode']",
+                "select[name*='country_id']",
 
-        ];
+            ];
+        } else {
+            var fields = [
+                "input[name*='street[0]']",
+                "input[name*='street[1]']",
+                "input[name*='street[2]']",
+                "input[name*='city']",
+                "input[name*='postcode']",
+                "select[name*='country_id']",
+            ];
+        }
+
 
         /**
          * Without cookie data Magento is not observing the fields so the AddressFinder is never triggered.
@@ -47,13 +58,27 @@ define(
         (function() {
             function checkState() {
 
-                if ($("input[name*='postcode']").length > 0 && $("#montapacking-plugin").length) {
+                if ($("input[name*='postalCode']").length > 0) {
 
-                    var success = true; // do something to check the state
-                    $("input[name*='postcode']").trigger("change");
+                    if ($("input[name*='postalCode']").length > 0 && $("#montapacking-plugin").length) {
+
+                        var success = true; // do something to check the state
+                        $("input[name*='postalCode']").trigger("change");
+                    } else {
+                        var success = false; // do something to check the state
+                    }
+
                 } else {
-                    var success = false; // do something to check the state
+
+                    if ($("input[name*='postcode']").length > 0 && $("#montapacking-plugin").length) {
+
+                        var success = true; // do something to check the state
+                        $("input[name*='postcode']").trigger("change");
+                    } else {
+                        var success = false; // do something to check the state
+                    }
                 }
+
 
                 if (!success) {
                     setTimeout(checkState, 500);
@@ -70,17 +95,17 @@ define(
 
                 //if ($("input[name*='"+name+"']").length && $("select[name*='country_id']").length) {
 
-                    // Clear timeout if exists.
-                    if (typeof timer !== 'undefined') {
-                        clearTimeout(timer);
-                    }
+                // Clear timeout if exists.
+                if (typeof timer !== 'undefined') {
+                    clearTimeout(timer);
+                }
 
-                    timer = setTimeout(
-                        function () {
-                            countryCode = $("select[name*='country_id']").val();
-                            valueUpdateNotifier.notifySubscribers();
-                        }, 500
-                    );
+                timer = setTimeout(
+                    function () {
+                        countryCode = $("select[name*='country_id']").val();
+                        valueUpdateNotifier.notifySubscribers();
+                    }, 500
+                );
 
                 //}
             }
@@ -122,8 +147,8 @@ define(
                 $.each(
                     fields, function () {
                         /**
-                    * Second street may not exist and is therefor not required and should only be observed.
-                    */
+                         * Second street may not exist and is therefor not required and should only be observed.
+                         */
                         if (!$(this).length && this !== "input[name*='street[1]']" && this !== "input[name*='street[2]']") {
                             allFieldsExists = false;
                             return false;
@@ -138,13 +163,23 @@ define(
                 /**
                  * Unfortunately Magento does not always fill all fields, so get them ourselves.
                  */
-                address.street = {
-                    0 : $("input[name*='street[0]']").val(),
-                    1 : $("input[name*='street[1]']").val(),
-                    2 : $("input[name*='street[2]']").val()
-                };
 
-                address.postcode   = $("input[name*='postcode']").val();
+
+                if ($("input[name*='postalCode']").length > 0) {
+                    address.postcode   = $("input[name*='postalCode']").val();
+                    address.housenumber   = $("input[name*='streetNumber']").val();
+                    address.housenumberaddition   = $("input[name*='strNumberAddition']").val();
+                } else {
+
+                    address.postcode   = $("input[name*='postcode']").val();
+
+                    address.street = {
+                        0 : $("input[name*='street[0]']").val(),
+                        1 : $("input[name*='street[1]']").val(),
+                        2 : $("input[name*='street[2]']").val()
+                    };
+                }
+
                 address.city   = $("input[name*='city']").val();
                 address.firstname  = $("input[name*='firstname']").val();
                 address.lastname   = $("input[name*='lastname']").val();
