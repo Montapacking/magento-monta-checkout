@@ -406,7 +406,7 @@ define(
 
                     setTimeout(
                         function () {
-                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").text("â‚¬ " + total_price);
+                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").html("&euro; " + total_price);
                         }, 250
                     );
 
@@ -490,7 +490,7 @@ define(
 
                     setTimeout(
                         function () {
-                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").text("â‚¬ " + total_price);
+                            $(".table-checkout-shipping-method").find("input:checked").parents(".row").find("span.price").html("&euro; " + total_price);
                         }, 250
                     );
 
