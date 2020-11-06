@@ -57,6 +57,7 @@
                     <comment><![CDATA[The base shipping costs used when there is no API connection.]]></comment>
                 </field>
 
+
                 <field id="logerrors" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
                     <label>Log errors</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -74,6 +75,12 @@
                     <label>Does have Montapacking have Leading stock </label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment><![CDATA[When selecting 'Yes' Montapacking will calculate the current stock, when selecting 'No' the Magento stock is leading]]></comment>
+                </field>
+
+                <field id="googleapikey" translate="label comment" type="text" sortOrder="12" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Google API key</label>
+                    <validate>required-entry</validate>
+                    <comment><![CDATA[Google API Key which is needed by our checkout]]></comment>
                 </field>
 
 

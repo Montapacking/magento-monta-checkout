@@ -2,12 +2,12 @@
     "name": "montapacking/montacheckout",
     "description": "Montapacking Checkout Extension",
     "require": {
-        "php": "~7.1|~7.2|~7.3",
+        "php": "~7.1|~7.2|~7.3|~7.4",
         "ext-json": "*"
     },
     "type": "magento2-module",
     "license": "CC-BY-NC-ND-3.0",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "minimum-stability": "stable",
     "authors": [
         {
