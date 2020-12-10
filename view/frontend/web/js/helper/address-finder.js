@@ -34,7 +34,11 @@ define(
                 "input[name*='strNumberAddition",
                 "input[name*='postalCode']",
                 "select[name*='country_id']",
-
+                "input[name*='street[0]']",
+                "input[name*='street[1]']",
+                "input[name*='street[2]']",
+                "input[name*='city']",
+                "input[name*='postcode']",
             ];
         } else {
             var fields = [
@@ -57,8 +61,14 @@ define(
 
         (function() {
             function checkState() {
-
-                if ($("input[name*='postalCode']").length > 0) {
+            	
+            	var countryCheck = "";
+            	if(typeof $("select[name*='country_id']").val() !== "undefined")
+            	{
+            		countryCheck = $("select[name*='country_id']").val();
+            	}
+            	
+                if ($("input[name*='postalCode']").length > 0 && countryCheck == "NL") {
 
                     if ($("input[name*='postalCode']").length > 0 && $("#montapacking-plugin").length) {
 
@@ -144,17 +154,23 @@ define(
                 }
 
                 allFieldsExists = true;
-                $.each(
-                    fields, function () {
-                        /**
-                         * Second street may not exist and is therefor not required and should only be observed.
-                         */
-                        if (!$(this).length && this !== "input[name*='street[1]']" && this !== "input[name*='street[2]']") {
-                            allFieldsExists = false;
-                            return false;
-                        }
-                    }
-                );
+                
+                if ($("input[name*='postalCode']").length > 0) {
+               	 allFieldsExists = true;
+               } else {
+	                $.each(
+	                    fields, function () {
+	                        /**
+	                         * Second street may not exist and is therefor not required and should only be observed.
+	                         */
+	                        if (!$(this).length && this !== "input[name*='street[1]']" && this !== "input[name*='street[2]']") {
+	                            allFieldsExists = false;
+	                            return false;
+	                        }
+	                    }
+	                );
+               }
+              
 
                 if (!allFieldsExists) {
                     return null;
@@ -164,8 +180,14 @@ define(
                  * Unfortunately Magento does not always fill all fields, so get them ourselves.
                  */
 
-
-                if ($("input[name*='postalCode']").length > 0) {
+                
+                var countryCheck = "";
+            	if(typeof $("select[name*='country_id']").val() !== "undefined")
+            	{
+            		countryCheck = $("select[name*='country_id']").val();
+            	}
+            	
+                if ($("input[name*='postalCode']").length > 0 && countryCheck == "NL") {
                     address.postcode   = $("input[name*='postalCode']").val();
                     address.housenumber   = $("input[name*='streetNumber']").val();
                     address.housenumberaddition   = $("input[name*='strNumberAddition']").val();
