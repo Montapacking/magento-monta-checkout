@@ -20,7 +20,7 @@
                 <active>0</active>
                 <model>Montapacking\MontaCheckout\Model\Carrier\Montapacking</model>
                 <name>Montapacking</name>
-                <price>0.00</price>
+                <price>9.95</price>
                 <title>Verzending via Montapacking</title>
             </montapacking>
         </carriers>
