@@ -30,15 +30,15 @@ define(
                         //console.log(checkoutConfig.quoteData.montapacking_montacheckout_data);
                         //console.log(checkedOptionDelivery);
                         //console.log(checkedOptionPickup);
-                        if (($('input.montapacking_delivery_option').length ||$('input.montapacking_delivery_option').length ) ) {
-                            if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || checkoutConfig.quoteData.montapacking_montacheckout_data === undefined) {
-                                this.errorValidationMessage(
-                                    $t('Please select a delivery option. If no options are visible, please make sure you\'ve entered your address information correctly.')
-                                );
 
-                                return false;
-                            }
+                        if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || checkoutConfig.quoteData.montapacking_montacheckout_data === undefined) {
+                            this.errorValidationMessage(
+                                $t('Please select a delivery option. If no options are visible, please make sure you\'ve entered your address information correctly.')
+                            );
+
+                            return false;
                         }
+
 
                         var shippingAddress = quote.shippingAddress();
 
