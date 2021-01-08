@@ -51,7 +51,7 @@
                 </field>
 
 
-                <field id="price" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="price" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Shipping Costs</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                     <comment><![CDATA[The base shipping costs used when there is no API connection.]]></comment>

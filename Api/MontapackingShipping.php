@@ -445,6 +445,90 @@ class MontapackingShipping
 
         curl_close($ch);
 
+        if ($result == null) {
+
+            sleep(3);
+            $ch = curl_init();
+
+            $this->_pass = htmlspecialchars_decode($this->_pass);
+
+            curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+
+            $result = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                $error_msg = curl_error($ch);
+                $logger = $this->_logger;
+                $context = ['source' => 'Montapacking Checkout'];
+                $logger->critical($error_msg . " (" . $url . ")", $context);
+                $result = null;
+            }
+
+            curl_close($ch);
+        }
+
+        if ($result == null) {
+
+            sleep(5);
+            $ch = curl_init();
+
+            $this->_pass = htmlspecialchars_decode($this->_pass);
+
+            curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+
+            $result = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                $error_msg = curl_error($ch);
+                $logger = $this->_logger;
+                $context = ['source' => 'Montapacking Checkout'];
+                $logger->critical($error_msg . " (" . $url . ")", $context);
+                $result = null;
+            }
+
+            curl_close($ch);
+        }
+
+        if ($result == null) {
+
+            sleep(10);
+            $ch = curl_init();
+
+            $this->_pass = htmlspecialchars_decode($this->_pass);
+
+            curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+
+            $result = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                $error_msg = curl_error($ch);
+                $logger = $this->_logger;
+                $context = ['source' => 'Montapacking Checkout'];
+                $logger->critical($error_msg . " (" . $url . ")", $context);
+                $result = null;
+            }
+
+            curl_close($ch);
+        }
+ 
         $result = json_decode($result);
 
         $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;

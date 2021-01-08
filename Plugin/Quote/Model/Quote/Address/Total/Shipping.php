@@ -25,9 +25,18 @@ class Shipping
         $address = $shipping->getAddress();
         $rates = $address->getAllShippingRates();
 
+
+
         if (!$rates) {
             return $result;
         }
+
+        if (empty($rates)) {
+            return $result;
+        }
+
+        $array = (array) $rates;
+
 
         $deliveryOption = $this->getDeliveryOption($address);
 
@@ -41,6 +50,10 @@ class Shipping
         $deliveryOptionDetails = $deliveryOption->details[0];
         $deliveryOptionAdditionalInfo = $deliveryOption->additional_info[0];
 
+        if ($deliveryOptionType != 'pickup' && $deliveryOptionType != 'delivery') {
+            return $result;
+        }
+
         if ($deliveryOptionType == 'pickup') {
 
             $fee = $deliveryOptionAdditionalInfo->total_price;
@@ -48,8 +61,9 @@ class Shipping
 
             $desc = explode("|", $deliveryOptionAdditionalInfo->description);
             $desc = $desc[0];
+        }
 
-        } else {
+        if ($deliveryOptionType == 'delivery') {
             $fee = $deliveryOptionAdditionalInfo->total_price;
             $method_title = $deliveryOptionAdditionalInfo->name;
 
