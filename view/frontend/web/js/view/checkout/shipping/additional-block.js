@@ -120,8 +120,10 @@ define(
 
                             var old_address = $("#old_address").val();
 
+
+                            // tijdelijke uitgezet op 08-01-2021
                             if (!address || JSON.stringify(address) == old_address) {
-                                return;
+                                //return;
                             }
 
                             $("#old_address").val(JSON.stringify(address));
@@ -137,11 +139,14 @@ define(
 
                             this.loadDeliveryJs(true);
 
+                            var selectedItem =  $(".table-checkout-shipping-method").find("input:checked");
+                            selectedItem.trigger("click");
 
                         }.bind(this)
                     );
 
                     self.loadPopup();
+
 
                     return this;
                 },

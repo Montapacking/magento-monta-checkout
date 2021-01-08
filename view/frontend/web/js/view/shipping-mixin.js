@@ -17,11 +17,13 @@ define(
                     validateShippingInformation: function () {
                         var originalResult = this._super();
 
-                        if (quote.shippingMethod().carrier_code !== 'montapacking') {
+                        if (quote.shippingMethod().carrier_code != 'montapacking') {
                             return originalResult;
                         }
 
+
                         var checkoutConfig = window.checkoutConfig;
+
                         // Returns undefined if no option is checked.
 
                         var checkedOptionDelivery = $('input.montapacking_delivery_option:checked').val();
@@ -31,7 +33,14 @@ define(
                         //console.log(checkedOptionDelivery);
                         //console.log(checkedOptionPickup);
 
-                        if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || checkoutConfig.quoteData.montapacking_montacheckout_data === undefined) {
+                        var hasData = true;
+
+                        if (checkoutConfig.quoteData.montapacking_montacheckout_data === undefined || checkoutConfig.quoteData.montapacking_montacheckout_data == "" || checkoutConfig.quoteData.montapacking_montacheckout_data == null || checkoutConfig.quoteData.montapacking_montacheckout_data == "null")
+                        {
+                            hasData = false;
+                        }
+
+                        if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || (hasData == false)) {
                             this.errorValidationMessage(
                                 $t('Please select a delivery option. If no options are visible, please make sure you\'ve entered your address information correctly.')
                             );
