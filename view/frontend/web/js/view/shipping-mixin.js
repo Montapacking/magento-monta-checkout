@@ -40,6 +40,20 @@ define(
                             hasData = false;
                         }
 
+                        // extra check
+                        if (checkoutConfig.quoteData.montapacking_montacheckout_data)
+                        {
+                            const obj = JSON.parse(checkoutConfig.quoteData.montapacking_montacheckout_data);
+
+                            if (obj.type != "delivery" && obj.type != "pickup") {
+                                hasData = false;
+                            }
+                        } else {
+                            hasData = false;
+                        }
+
+
+
                         if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || (hasData == false)) {
                             this.errorValidationMessage(
                                 $t('Please select a delivery option. If no options are visible, please make sure you\'ve entered your address information correctly.')
