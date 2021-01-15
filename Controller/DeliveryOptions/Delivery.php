@@ -270,8 +270,11 @@ class Delivery extends AbstractDeliveryOptions
             }
         }
 
+        ksort  ($items);
         $list = [];
         foreach ($items as $key => $values) {
+
+
             foreach ($values as $key_value => $value) {
                 $list[] = $value;
             }

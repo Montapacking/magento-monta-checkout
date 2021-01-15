@@ -71,9 +71,7 @@ define(
                 if ($("input[name*='postalCode']").length > 0 && countryCheck == "NL") {
 
                     if ($("input[name*='postalCode']").length > 0 && $("#montapacking-plugin").length) {
-
                         var success = true; // do something to check the state
-                        $("input[name*='postalCode']").trigger("change");
                     } else {
                         var success = false; // do something to check the state
                     }
@@ -81,9 +79,7 @@ define(
                 } else {
 
                     if ($("input[name*='postcode']").length > 0 && $("#montapacking-plugin").length) {
-
                         var success = true; // do something to check the state
-                        $("input[name*='postcode']").trigger("change");
                     } else {
                         var success = false; // do something to check the state
                     }
@@ -98,32 +94,25 @@ define(
         })();
 
 
-        $(document).on(
-            'change', fields.join(','), function () {
+        $(document).on('change', fields.join(','), function () {
 
-                var name = $(this).attr("name");
-
-                //if ($("input[name*='"+name+"']").length && $("select[name*='country_id']").length) {
-
-                // Clear timeout if exists.
-                if (typeof timer !== 'undefined') {
-                    clearTimeout(timer);
-                }
-
-                timer = setTimeout(
-                    function () {
-                        countryCode = $("select[name*='country_id']").val();
-                        valueUpdateNotifier.notifySubscribers();
-                    }, 500
-                );
-
-                //}
+            // Clear timeout if exists.
+            if (typeof timer !== 'undefined') {
+                clearTimeout(timer);
             }
-        );
+
+            timer = setTimeout(
+                function () {
+                    countryCode = $("select[name*='country_id']").val();
+                    valueUpdateNotifier.notifySubscribers();
+                }, 500
+            );
+        } );
 
         /**
          * Collect the needed information from the quote
          */
+
         return ko.computed(
             function () {
 

@@ -132,11 +132,11 @@ nomargin {
 }
 
 .montapacking-services .delivery-information {
-    display: block;
+    display: none;
 }
 
 .montapacking-services .delivery-option {
-    display: none;
+    display: block;
 }
 
 /* OVERALL PICKUP BLOCKS CSS */

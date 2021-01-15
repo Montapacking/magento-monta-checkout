@@ -50,7 +50,6 @@ define(
 
                     var url = new URL(window.location.href).toString();
 
-
                     var urlPrefix = '';
 
                     if (url.includes('/nl/')) {
@@ -91,20 +90,18 @@ define(
                         }, this
                     );
 
-
                     this.tabClasses = ko.computed(
                         function () {
                             return 'montapacking-tabs';
                         }, this
                     );
 
-
                     this._super().observe(
                         [
-                            'postcode',
                             'hasconnection',
-                            'country',
+                            'postcode',
                             'street',
+                            'country',
                             'deliveryServices',
                             'pickupPoints'
                         ]
@@ -120,10 +117,8 @@ define(
 
                             var old_address = $("#old_address").val();
 
-
-                            // tijdelijke uitgezet op 08-01-2021
                             if (!address || JSON.stringify(address) == old_address) {
-                                //return;
+                                return;
                             }
 
                             $("#old_address").val(JSON.stringify(address));
@@ -137,31 +132,33 @@ define(
                             this.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
                             this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
 
-                            this.loadDeliveryJs(true);
-
-                            var selectedItem =  $(".table-checkout-shipping-method").find("input:checked");
-                            selectedItem.trigger("click");
+                            self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', true, true);
 
                         }.bind(this)
                     );
 
                     self.loadPopup();
 
-
                     return this;
                 },
 
-                loadDeliveryJs: function (timeout = false) {
-                    if (true === timeout) {
-                        setTimeout(
-                            function () {
-                                self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', true);
-                            }, 3000
-                        );
+                checkState: function () {
+
+                    console.log("checkState");
+                    if ($(".loading-mask").is(":visible")) {
+                        var success = false; // do something to check the state
+
+
                     } else {
-                        self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', true);
+                        var success = true; // do something to check the state
+                        console.log("checkStateEnd");
+                        $(".montapacking-tab.montapacking-tab-delivery").trigger("click");
                     }
 
+                    if (!success) {
+                        console.log("checkStateReload");
+                        setTimeout(self.checkState(), 500);
+                    }
                 },
 
                 /**
@@ -284,35 +281,35 @@ define(
 
                 },
 
-                toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false) {
+                toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false, hideDeliverInfo = false) {
                     $(previousTab).removeClass('active');
                     $(currentTab).addClass('active');
                     $(previousContent).hide();
                     $(currentContent).fadeIn('slow');
 
-                    if (true === triggerClick) {
-                        if (currentTab == '.montapacking-tab-pickup') {
-                            $("input.selectshipment").val("pickup");
-                            $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
-                        } else {
-                            $("input.selectshipment").val("delivery");
-                            $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
+                    if (currentTab == '.montapacking-tab-pickup') {
+                        $("input.selectshipment").val("pickup");
+                        $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
+                    } else {
+                        $("input.selectshipment").val("delivery");
+                        $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
 
-                            if ($(".SameDayDelivery").length) {
-                                $(".havesameday").removeClass("displaynone");
-                            } else {
-                                $(".nothavesameday").removeClass("displaynone");
-                            }
+                        if(hideDeliverInfo == true) {
+                            $(".delivery-information").hide();
+                        }
+
+                        if ($(".SameDayDelivery").length) {
+                            $(".havesameday").removeClass("displaynone");
+                        } else {
+                            $(".nothavesameday").removeClass("displaynone");
                         }
                     }
-
                 },
 
                 showDeliveryOptions: function (informationTab, optionsTab) {
                     $(informationTab).hide();
                     $(optionsTab).fadeIn('slow');
                 },
-
 
                 selectShipper: function () {
 
@@ -344,8 +341,6 @@ define(
                     // set delivery information
                     $(".delivery-information").find(".montapacking-delivery-information-company").html(name);
                     $(".delivery-information").find(".montapacking-delivery-information-date").html(date_string);
-
-
 
                     if (date == '') {
                         $(".dateblock").css("display", "none");
@@ -394,10 +389,7 @@ define(
                         function (index, element) {
                             options.push($(element).val());
                         }
-                        //options.push();
                     );
-
-
 
                     $('.delivery-option input[type=checkbox]:checked').not(checked_boxes).attr('checked', false);
 
@@ -443,6 +435,12 @@ define(
 
                     pickupShop().parcelShopAddress(null);
 
+                    if ($(".SameDayDelivery").length) {
+                        $(".havesameday").removeClass("displaynone");
+                    } else {
+                        $(".nothavesameday").removeClass("displaynone");
+                    }
+
                     return true;
 
                 },
@@ -471,7 +469,6 @@ define(
                     var optionsvalues = $(this).parents(".pickup-option").find(".cropped_optionswithvalue").text();
                     var openingtimes_html = $(this).parents(".pickup-option").find(".table-container .table").clone().html();
                     var total_price = parseFloat(price);
-
 
                     // set pickup information
                     $(".pickup-information").find(".montapacking-pickup-information-company").html(company);
@@ -511,7 +508,6 @@ define(
                             postal: postal,
                             city: city,
                             description: description,
-                            country: country,
                             price: price,
                             country: country,
                             total_price: total_price_raw,
@@ -544,20 +540,9 @@ define(
                     $(this).parents(".montapacking-pickup-service").find('.open-business-hours').fadeIn('slow');
                 },
 
-
                 showPopup: function (sHtml) {
                     $("#modular-container").css("display", "table");
                     $("#modular-background").css("display", "block");
-                    /*
-                    $("body").prepend('<div id="modular-container"/>');
-                    $("body").prepend('<div id="modular-background"/>');
-
-                    $("#modular-container").append(
-                        '<div class="positioning">' + sHtml +
-                        '</div>'
-                    );
-                    */
-                    //ko.applyBindings(self, document.getElementById('modular-container'))
                 },
 
                 loadPopup: function (sHtml) {
@@ -590,9 +575,6 @@ define(
                 },
 
                 closePopup: function () {
-
-                    //var useLocator = $('#bh-sl-map-container');
-                    //useLocator.storeLocator('reset');
 
                     $("#modular-container").css("display", "none");
                     $("#modular-background").css("display", "none");
@@ -709,16 +691,9 @@ define(
                                 }, 3000);
 
                             }
-
-
-
                         }
                     );
-
-
-
                 },
-
             }
         );
     }
