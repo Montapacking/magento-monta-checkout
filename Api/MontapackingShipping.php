@@ -307,7 +307,7 @@ class MontapackingShipping
             ]
         );
 
-        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH'];
+        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH', 'DHLParcelConnectPickupPoint'];
 
         // Timeframes omzetten naar bruikbaar object
         $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products', '_allowedshippers']); //phpcs:ignore

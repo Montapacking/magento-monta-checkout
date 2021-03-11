@@ -245,21 +245,28 @@ nomargin {
 
 }
 
+
+.montapacking-container-logo.DHLParcelConnectPickupPoint,
 .montapacking-container-logo.DHLpallet,
 .montapacking-container-logo.DHLservicepunt,
 .montapacking-container-logo.SELSELBuspakje,
 .montapacking-container-logo.DHLParcelConnect,
+.montapacking-container-logo.DHLservicepuntGroot,
+.montapacking-container-logo.SELGroot,
 .montapacking-container-logo.SEL {
     background-image: url(../images/DHL.png) !important;
 }
 
 .montapacking-container-logo.DPD,
+.montapacking-container-logo.DPDPL,
 .montapacking-container-logo.DPDparcelstore{
     background-image: url(../images/DPD.png) !important;
 }
 
 .montapacking-container-logo.PAK,
-.montapacking-container-logo.PostNL {
+.montapacking-container-logo.PostNL,
+.montapacking-container-logo.PostNLGroot,
+{
     background-image: url(../images/PostNL.png) !important;
 }
 
@@ -271,12 +278,21 @@ nomargin {
     background-image: url(../images/Montapacking.png) !important;
 }
 
-.montapacking-container-logo.UPS {
+.montapacking-container-logo.UPS,
+.montapacking-container-logo.UPSAP,
+{
     background-image: url(../images/UPS.png) !important;
 }
 
 .montapacking-container-logo.Trunkrs {
     background-image: url(../images/Trunkrs.png) !important;
+}
+.montapacking-container-logo.BpackPickupPoint {
+    background-image: url(../images/Bpost.png) !important;
+}
+
+.montapacking-container-logo.LandmarkPickupPoint {
+    background-image: url(../images/Landmark.png) !important;
 }
 
 /* CONTAINER CONTENT */

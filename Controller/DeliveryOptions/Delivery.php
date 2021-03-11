@@ -353,11 +353,41 @@ class Delivery extends AbstractDeliveryOptions
             }
         }
 
+        if ($language == 'DE') {
+
+            $weeks = array();
+            $weeks['Monday'] = "montag";
+            $weeks['Tuesday'] = "dienstag";
+            $weeks['Wednesday'] = "mittwoch";
+            $weeks['Thursday'] = "donnerstag";
+            $weeks['Friday'] = "freitag";
+            $weeks['Saturday'] = "samstag";
+            $weeks['Sunday'] = "sonntag";
+
+            $months = array();
+            $months['January'] = "januar";
+            $months['February'] = "februar";
+            $months['March'] = "marz";
+            $months['April'] = "April";
+            $months['May'] = "mai";
+            $months['June'] = "juni";
+            $months['July'] = "juli";
+            $months['August'] = "august";
+            $months['September'] = "september";
+            $months['October'] = "oktober";
+            $months['November'] = "november ";
+            $months['December'] = "dezember";
+
+            if ($from > 0) {
+                $date_string = $weeks[date("l", strtotime($from))]." ". date("j", strtotime($from))." ". $months[date("F", strtotime($from))];
+            }
+        }
+
         $options = (object)[
             'code' => $option->code,
             'codes' => $option->codes,
             'type' => $frame->type,
-            'image' => $option->codes[0],
+            'image' => trim(implode(",", $option->codes)),
             'optionCodes' => $option->optioncodes,
             'name' => $option->description,
             'description_string' => $description,
