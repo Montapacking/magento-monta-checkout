@@ -66,7 +66,7 @@ abstract class AbstractDeliveryOptions extends Action
         );
     }
 
-    public function generateApi($request, $language, $logger = null)
+    public function generateApi($request, $language, $logger = null, $use_googlekey = false)
     {
 
         $street = $request->getParam('street') ? trim(implode(" ", $request->getParam('street'))) : "";
@@ -100,7 +100,12 @@ abstract class AbstractDeliveryOptions extends Action
         $webshop = $this->getCarrierConfig()->getWebshop();
         $username = $this->getCarrierConfig()->getUserName();
         $password = $this->getCarrierConfig()->getPassword();
-        $googleapikey = $this->getCarrierConfig()->getGoogleApiKey();
+
+        $googleapikey = null;
+        if ($use_googlekey) {
+            $googleapikey = $this->getCarrierConfig()->getGoogleApiKey();
+        }
+
         $leadingstockmontapacking = $this->getCarrierConfig()->getLeadingStockMontapacking();
 
         /**

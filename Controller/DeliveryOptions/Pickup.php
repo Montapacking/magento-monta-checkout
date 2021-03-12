@@ -73,7 +73,7 @@ class Pickup extends AbstractDeliveryOptions
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
         try {
-            $oApi = $this->generateApi($request, $language, $this->_logger);
+            $oApi = $this->generateApi($request, $language, $this->_logger, true);
 
             if ($language != 'NL' && $language != 'BE') {
                 $language = 'EN';
@@ -160,16 +160,23 @@ class Pickup extends AbstractDeliveryOptions
                         $marker_id++;
 
                         $extra_code = "";
+
+                        $arr = array();
                         foreach ($option->optionsWithValue as $key => $value) {
                             $extra_code  = $key."_".$value;
+                            if (trim($extra_code)) {
+                                $arr[] = $extra_code;
+                            }
                         }
+                        $extra_code = implode(",", $arr);
 
                         $options[$onr] = (object)[
                             'marker_id' => $marker_id,
                             'code' => $option->code,
                             'code_pickup' => $extra_code,
                             'codes' => $option->codes,
-                            'image' => $option->codes[0],
+                            'image' => trim(implode(",", $option->codes)),
+                            'image_replace' =>  trim(str_replace(",", "_", implode(",", $option->codes))),
                             'optionCodes' => json_encode((array)$option->optioncodes),
                             'optionsWithValue' => json_encode((array)$option->optionsWithValue),
                             'name' => $option->description,
@@ -265,16 +272,23 @@ class Pickup extends AbstractDeliveryOptions
                         $marker_id++;
 
                         $extra_code = "";
+
+                        $arr = array();
                         foreach ($option->optionsWithValue as $key => $value) {
                             $extra_code  = $key."_".$value;
+                            if (trim($extra_code)) {
+                                $arr[] = $extra_code;
+                            }
                         }
+                        $extra_code = implode(",", $arr);
 
                         $options[$onr] = (object)[
                             'marker_id' => $marker_id,
                             'code' => $option->code,
                             'code_pickup' => $extra_code,
                             'codes' => $option->codes,
-                            'image' => $option->codes[0],
+                            'image' => trim(implode(",", $option->codes)),
+                            'image_replace' =>  trim(str_replace(",", "_", implode(",", $option->codes))),
                             'optionCodes' => json_encode((array)$option->optioncodes),
                             'optionsWithValue' => json_encode((array)$option->optionsWithValue),
                             'name' => $option->description,

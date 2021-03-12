@@ -118,11 +118,12 @@
                         <span class="cropped_price montapacking-hidden" data-bind="text: price_raw"></span>
                         <span class="cropped_code montapacking-hidden" data-bind="text: code"></span>
                         <span class="cropped_image_class montapacking-hidden" data-bind="text: image"></span>
+                        <span class="cropped_image_class_replaced montapacking-hidden" data-bind="text: image_replace"></span>
                         <span class="cropped_type montapacking-hidden" data-bind="text: type"></span>
 
                         <div class="montapacking-container-header">
 
-                            <div class="montapacking-container-logo" data-bind="css: image"></div>
+                            <div class="montapacking-container-logo" data-bind="css: image_replace"></div>
 
                             <div class="montapacking-container-content">
                                 <p class="day" data-bind="text: date_string"></p>
@@ -283,7 +284,7 @@
 
                         <div class="montapacking-container-header">
 
-                            <div data-bind="css: image" class="montapacking-container-logo"></div>
+                            <div data-bind="css: image_replace" class="montapacking-container-logo"></div>
 
                             <div class="montapacking-container-content">
                                 <p data-bind="text: $parent.description.Company"></p>

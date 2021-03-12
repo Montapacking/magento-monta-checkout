@@ -4,6 +4,9 @@
         <css src="Montapacking_MontaCheckout::css/deliveryoptions.css"/>
     </head>
     <body>
+        <referenceContainer name="content">
+            <block name="content.montapacking" class="Montapacking\MontaCheckout\Block\Checkout" template="Montapacking_MontaCheckout::checkout.phtml" />
+        </referenceContainer>
         <referenceBlock name="checkout.root" >
             <arguments>
                 <argument name="jsLayout" xsi:type="array">

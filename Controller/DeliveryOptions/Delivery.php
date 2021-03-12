@@ -76,7 +76,7 @@ class Delivery extends AbstractDeliveryOptions
         }
 
         try {
-            $oApi = $this->generateApi($request, $language, $this->_logger);
+            $oApi = $this->generateApi($request, $language, $this->_logger, false);
 
             $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
 
@@ -388,6 +388,7 @@ class Delivery extends AbstractDeliveryOptions
             'codes' => $option->codes,
             'type' => $frame->type,
             'image' => trim(implode(",", $option->codes)),
+            'image_replace' =>  trim(str_replace(",", "_", implode(",", $option->codes))),
             'optionCodes' => $option->optioncodes,
             'name' => $option->description,
             'description_string' => $description,

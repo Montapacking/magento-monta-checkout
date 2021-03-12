@@ -123,6 +123,7 @@ class PickupPoint
                 'lng' => $details->Longitude,
                 'openingtimes' => json_encode($arr),
                 'image' => $details->ImageUrl,
+                'image_replace' => str_replace(",", "_", $details->ImageUrl)
             ];
 
         }

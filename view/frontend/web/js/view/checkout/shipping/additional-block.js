@@ -333,6 +333,7 @@ define(
                     var time_text = $(this).parents(".delivery-option").find(".cropped_time_text").text();
                     var price = $(this).parents(".delivery-option").find(".cropped_price").text();
                     var image_class = $(this).parents(".delivery-option").find(".cropped_image_class").text();
+                    var image_class_replaced = $(this).parents(".delivery-option").find(".cropped_image_class_replaced").text();
                     var short_code = image_class;
                     var checked_boxes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-options input[type=checkbox]:checked");
                     var option_codes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-optioncodes input[type=hidden]");
@@ -356,7 +357,7 @@ define(
                     $(".delivery-information").find(".montapacking-delivery-information-time").html(time_text);
 
                     //set image class
-                    $(".delivery-information").find(".montapacking-container-logo").removeClass().addClass("montapacking-container-logo").addClass(image_class);
+                    $(".delivery-information").find(".montapacking-container-logo").removeClass().addClass("montapacking-container-logo").addClass(image_class_replaced);
 
                     if (type == 'ShippingDay') {
                         $(".delivery-information").find(".delivered").addClass("displaynone");

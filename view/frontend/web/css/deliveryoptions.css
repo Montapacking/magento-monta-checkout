@@ -246,6 +246,7 @@ nomargin {
 }
 
 
+.montapacking-container-logo.SEL_SELBuspakje,
 .montapacking-container-logo.DHLParcelConnectPickupPoint,
 .montapacking-container-logo.DHLpallet,
 .montapacking-container-logo.DHLservicepunt,
@@ -266,6 +267,7 @@ nomargin {
 .montapacking-container-logo.PAK,
 .montapacking-container-logo.PostNL,
 .montapacking-container-logo.PostNLGroot,
+.montapacking-container-logo.PostNL_PostNLBuspakje
 {
     background-image: url(../images/PostNL.png) !important;
 }
