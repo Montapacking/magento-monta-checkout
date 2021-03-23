@@ -41,7 +41,7 @@
     width: 100% important;
 }
 
-nomargin {
+.nomargin {
     margin:0;
 }
 
@@ -267,7 +267,7 @@ nomargin {
 .montapacking-container-logo.PAK,
 .montapacking-container-logo.PostNL,
 .montapacking-container-logo.PostNLGroot,
-.montapacking-container-logo.PostNL_PostNLBuspakje
+.montapacking-container-logo.PostNL_PostNlBuspakje
 {
     background-image: url(../images/PostNL.png) !important;
 }
@@ -281,7 +281,7 @@ nomargin {
 }
 
 .montapacking-container-logo.UPS,
-.montapacking-container-logo.UPSAP,
+.montapacking-container-logo.UPSAP
 {
     background-image: url(../images/UPS.png) !important;
 }
