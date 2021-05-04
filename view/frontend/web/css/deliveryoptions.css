@@ -38,10 +38,10 @@
 }
 
 .display100 {
-    width: 100% !important;
+    width: 100% important;
 }
 
-.nomargin {
+nomargin {
     margin:0;
 }
 
@@ -281,7 +281,7 @@
 }
 
 .montapacking-container-logo.UPS,
-.montapacking-container-logo.UPSAP
+.montapacking-container-logo.UPSAP,
 {
     background-image: url(../images/UPS.png) !important;
 }
