@@ -21,26 +21,27 @@ define(
                             return originalResult;
                         }
 
+                        if ($("#hasconnection").val() == "n") {
+                            return originalResult;
+                        }
 
                         var checkoutConfig = window.checkoutConfig;
-
-                        // Returns undefined if no option is checked.
 
                         var checkedOptionDelivery = $('input.montapacking_delivery_option:checked').val();
                         var checkedOptionPickup = $('input.initialPickupRadio:checked').val();
 
-                        //console.log(checkoutConfig.quoteData.montapacking_montacheckout_data);
-                        //console.log(checkedOptionDelivery);
-                        //console.log(checkedOptionPickup);
-
                         var hasData = true;
+
+                        if (checkedOptionDelivery === undefined && checkedOptionPickup === undefined)
+                        {
+                            hasData = false;
+                        }
 
                         if (checkoutConfig.quoteData.montapacking_montacheckout_data === undefined || checkoutConfig.quoteData.montapacking_montacheckout_data == "" || checkoutConfig.quoteData.montapacking_montacheckout_data == null || checkoutConfig.quoteData.montapacking_montacheckout_data == "null")
                         {
                             hasData = false;
                         }
 
-                        // extra check
                         if (checkoutConfig.quoteData.montapacking_montacheckout_data)
                         {
                             const obj = JSON.parse(checkoutConfig.quoteData.montapacking_montacheckout_data);
@@ -52,16 +53,13 @@ define(
                             hasData = false;
                         }
 
-
-
-                        if ((checkedOptionDelivery === undefined && checkedOptionPickup === undefined) || (hasData == false)) {
+                        if (hasData == false) {
                             this.errorValidationMessage(
                                 $t('Please select a delivery option. If no options are visible, please make sure you\'ve entered your address information correctly.')
                             );
 
                             return false;
                         }
-
 
                         var shippingAddress = quote.shippingAddress();
 

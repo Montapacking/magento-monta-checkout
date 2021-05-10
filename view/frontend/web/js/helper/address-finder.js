@@ -61,13 +61,13 @@ define(
 
         (function() {
             function checkState() {
-            	
+
             	var countryCheck = "";
             	if(typeof $("select[name*='country_id']").val() !== "undefined")
             	{
             		countryCheck = $("select[name*='country_id']").val();
             	}
-            	
+
                 if ($("input[name*='postalCode']").length > 0 && countryCheck == "NL") {
 
                     if ($("input[name*='postalCode']").length > 0 && $("#montapacking-plugin").length) {
@@ -143,7 +143,7 @@ define(
                 }
 
                 allFieldsExists = true;
-                
+
                 if ($("input[name*='postalCode']").length > 0) {
                	 allFieldsExists = true;
                } else {
@@ -159,7 +159,7 @@ define(
 	                    }
 	                );
                }
-              
+
 
                 if (!allFieldsExists) {
                     return null;
@@ -169,13 +169,13 @@ define(
                  * Unfortunately Magento does not always fill all fields, so get them ourselves.
                  */
 
-                
+
                 var countryCheck = "";
             	if(typeof $("select[name*='country_id']").val() !== "undefined")
             	{
             		countryCheck = $("select[name*='country_id']").val();
             	}
-            	
+
                 if ($("input[name*='postalCode']").length > 0 && countryCheck == "NL") {
                     address.postcode   = $("input[name*='postalCode']").val();
                     address.housenumber   = $("input[name*='streetNumber']").val();

@@ -23,8 +23,6 @@ define(
         storeLocator
     ) {
 
-        console.log(storeLocator);
-
         'use strict';
 
         return Component.extend(
@@ -115,24 +113,49 @@ define(
                                 return;
                             }
 
-                            var old_address = $("#old_address").val();
-
-                            if (!address || JSON.stringify(address) == old_address) {
+                            if (!address || JSON.stringify(address) == $("#old_address").val()) {
                                 return;
                             }
 
-                            $("#old_address").val(JSON.stringify(address));
-
                             // Reset frontend storage before triggering any new calls.
+
                             this.deliveryFee(null);
                             this.pickupFee(null);
-                            this.hasconnection('true');
 
                             this.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
                             this.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
                             this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
 
-                            self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', true, true);
+                            self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true);
+
+                            var triggerFirstClickOnPageLoad = false;
+                            if ($("#old_address").val() == undefined)
+                            {
+                                triggerFirstClickOnPageLoad = true;
+                            }
+
+                            // fill old adress field
+                            var existCondition = setInterval(function() {
+                                if ($("#old_address").length) {
+                                    clearInterval(existCondition);
+                                    $("#old_address").val(JSON.stringify(address));
+
+                                    if (triggerFirstClickOnPageLoad)
+                                    {
+                                        // automate first option
+                                        var firstClick = setInterval(function() {
+                                            if ($(".montapacking-tab-delivery span").length) {
+                                                clearInterval(firstClick);
+                                                $(".montapacking-tab-delivery span").trigger("click");
+                                            }
+                                        }, 100); // check every 100ms
+                                    }
+                                }
+                            }, 100);
+
+
+
+
 
                         }.bind(this)
                     );
@@ -182,14 +205,18 @@ define(
                             }
                         }
                     ).done(
+
+
                         function (services) {
 
                             $("#montapacking_longitude").val(services.longitude);
                             $("#montapacking_latitude").val(services.latitude);
                             $("#montapacking_language").val(services.language);
 
+                            $("#hasconnection").val("y");
                             if (services.hasconnection == 'false') {
                                 this.hasconnection(null);
+                                $("#hasconnection").val("n");
                             }
 
                         }.bind(this)
@@ -251,6 +278,9 @@ define(
                             this.pickupServices(objectArray);
 
                             var counter = 0;
+
+                            // disable extra pickuppoints in view
+                            /*
                             $(".montapacking-pickup-service.pickup-option").each(
                                 function (index) {
                                     counter++;
@@ -262,7 +292,7 @@ define(
 
                                 }
                             );
-
+                            */
                         }.bind(this)
                     );
                 },
@@ -279,6 +309,8 @@ define(
                     // Do not refactor this.
                     checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(deliveryOption);
 
+                    console.log(deliveryOption);
+
                 },
 
                 toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false, hideDeliverInfo = false) {
@@ -287,21 +319,23 @@ define(
                     $(previousContent).hide();
                     $(currentContent).fadeIn('slow');
 
-                    if (currentTab == '.montapacking-tab-pickup') {
-                        $("input.selectshipment").val("pickup");
-                        $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
-                    } else {
-                        $("input.selectshipment").val("delivery");
-                        $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
-
-                        if(hideDeliverInfo == true) {
-                            $(".delivery-information").hide();
-                        }
-
-                        if ($(".SameDayDelivery").length) {
-                            $(".havesameday").removeClass("displaynone");
+                    if (triggerClick) {
+                        if (currentTab == '.montapacking-tab-pickup') {
+                            $("input.selectshipment").val("pickup");
+                            $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
                         } else {
-                            $(".nothavesameday").removeClass("displaynone");
+                            $("input.selectshipment").val("delivery");
+                            $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
+
+                            if (hideDeliverInfo == true) {
+                                $(".delivery-information").hide();
+                            }
+
+                            if ($(".SameDayDelivery").length) {
+                                $(".havesameday").removeClass("displaynone");
+                            } else {
+                                $(".nothavesameday").removeClass("displaynone");
+                            }
                         }
                     }
                 },
@@ -392,6 +426,7 @@ define(
                         }
                     );
 
+
                     $('.delivery-option input[type=checkbox]:checked').not(checked_boxes).attr('checked', false);
 
                     $(".delivery-information").fadeIn('slow');
@@ -430,6 +465,10 @@ define(
                             options: options,
                         }
                     );
+
+
+
+
 
                     self.setDeliveryOption('delivery', details, additional_info);
                     self.deliveryFee(total_price);
