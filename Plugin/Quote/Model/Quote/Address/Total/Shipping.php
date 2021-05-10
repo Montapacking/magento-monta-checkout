@@ -25,7 +25,7 @@ class Shipping
         $address = $shipping->getAddress();
         $rates = $address->getAllShippingRates();
 
-
+        $fee = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ScopeConfigInterface::class)->getValue('carriers/montapacking/price',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
         if (!$rates) {
             return $result;

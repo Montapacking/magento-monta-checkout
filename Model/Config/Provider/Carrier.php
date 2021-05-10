@@ -12,6 +12,7 @@ class Carrier extends AbstractConfigProvider
     const XPATH_CARRIER_LOGERRORS = 'carriers/montapacking/logerrors';
     const XPATH_CARRIER_DISABLEPICKUPPOINTS = 'carriers/montapacking/disablepickuppoints';
     const XPATH_CARRIER_LEADINGSTOCKMONTAPACKING = 'carriers/montapacking/leadingstockmontapacking';
+    const XPATH_CARRIER_PRICE = 'carriers/montapacking/price';
 
     /**
      * @return bool
@@ -75,5 +76,13 @@ class Carrier extends AbstractConfigProvider
     public function getLeadingStockMontapacking()
     {
         return $this->getConfigValue(self::XPATH_CARRIER_LEADINGSTOCKMONTAPACKING);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->getConfigValue(self::XPATH_CARRIER_PRICE);
     }
 }
