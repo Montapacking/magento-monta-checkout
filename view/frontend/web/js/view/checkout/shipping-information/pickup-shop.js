@@ -24,24 +24,14 @@ define(
                     var checkoutConfig = window.checkoutConfig;
                     var montapacking = checkoutConfig.quoteData.montapacking_montacheckout_data;
 
+
                     if (montapacking !== undefined) {
                         montapacking = JSON.parse(montapacking);
 
                         var delivery_information = montapacking.additional_info[0];
                         this.deliveryInformation(delivery_information);
 
-                        var delivery_options = montapacking.details[1];
-
-                        /*
-                         additional_info.push({
-                        code: code,
-                        name: name,
-                        date: date,
-                        time: time,
-                        price: price,
-                        total_price: total_price_raw,
-                        });
-                         */
+                        var delivery_options = montapacking.details[0].options;
 
                         var additional_info = [];
                         if ($("#montapacking_language").val() == 'NL' || $("#montapacking_language").val() == 'BE') {

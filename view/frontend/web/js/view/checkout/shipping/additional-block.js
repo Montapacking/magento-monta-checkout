@@ -167,19 +167,14 @@ define(
 
                 checkState: function () {
 
-                    console.log("checkState");
                     if ($(".loading-mask").is(":visible")) {
                         var success = false; // do something to check the state
-
-
                     } else {
                         var success = true; // do something to check the state
-                        console.log("checkStateEnd");
                         $(".montapacking-tab.montapacking-tab-delivery").trigger("click");
                     }
 
                     if (!success) {
-                        console.log("checkStateReload");
                         setTimeout(self.checkState(), 500);
                     }
                 },
@@ -309,8 +304,6 @@ define(
                     // Do not refactor this.
                     checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(deliveryOption);
 
-                    console.log(deliveryOption);
-
                 },
 
                 toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false, hideDeliverInfo = false) {
@@ -324,6 +317,7 @@ define(
                             $("input.selectshipment").val("pickup");
                             $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
                         } else {
+
                             $("input.selectshipment").val("delivery");
                             $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
 
@@ -634,8 +628,6 @@ define(
                             window.Handlebars = Handlebars;
 
                             var useLocator = $('#bh-sl-map-container');
-
-                            //console.log(useLocator.html());
 
                             var site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
                             /* Map */
