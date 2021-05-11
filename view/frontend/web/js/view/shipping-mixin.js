@@ -25,6 +25,11 @@ define(
                             return originalResult;
                         }
 
+
+                        if ($("#hasconnection").val() == "n") {
+                            return originalResult;
+                        }
+
                         var checkoutConfig = window.checkoutConfig;
 
                         var checkedOptionDelivery = $('input.montapacking_delivery_option:checked').val();
@@ -49,6 +54,26 @@ define(
                             if (obj.type != "delivery" && obj.type != "pickup") {
                                 hasData = false;
                             }
+
+                            if (obj.type == "pickup") {
+                                // check op packstation, dit is verplicht in duitsland
+                                var n = obj.additional_info[0].code_pickup.includes("_packStation");
+
+                                if (n) {
+                                    if ($("#DHLPCPostNummer").val().trim() == "") {
+                                        this.errorValidationMessage(
+                                            $t('Please select a postnumber. This is mandatory for pack stations')
+                                        );
+
+                                        return false;
+                                    } else {
+                                        obj.additional_info[0].code_pickup = obj.additional_info[0].code_pickup + ",DHLPCPostNummer_" + $("#DHLPCPostNummer").val().trim();
+                                        checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(obj);
+                                    }
+
+                                }
+                            }
+
                         } else {
                             hasData = false;
                         }

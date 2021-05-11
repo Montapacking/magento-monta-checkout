@@ -205,6 +205,9 @@
                         <p class="montapacking-pickup-information-description-distance italic"></p>
                         <p class="montapacking-pickup-information-description-street-housenumber"></p>
                         <p class="montapacking-pickup-information-description-postal-city-country"></p>
+                        <div id="PCPostNummer" class="displaynone">
+                            <span class="normal" data-bind="i18n: 'Post number'"></span> <input type="text" id="DHLPCPostNummer" name="DHLPCPostNummer" value="" style="width:125px; margin-left: 15px;">
+                        </div>
                         <p><a class="open-business-hours" data-bind="click: showBusinessHours.bind($element), i18n: 'Show business hours'"></a></p>
                     </div>
 
@@ -310,7 +313,7 @@
                                         <div class="cell" data-bind="text: Day"></div>
                                         <div class="cell">
                                             <div data-bind="foreach: OpeningTimes">
-                                                <span data-bind="text: From +' - '+To+$parent.TimeNotation"></span><br>
+                                                <span data-bind="text: From +' - '+To"></span><br>
                                             </div>
                                         </div>
                                     </div>

@@ -504,6 +504,18 @@ define(
                     var openingtimes_html = $(this).parents(".pickup-option").find(".table-container .table").clone().html();
                     var total_price = parseFloat(price);
 
+                    var n = code_pickup.includes("_packStation");
+
+                    if (n)
+                    {
+                        $("#PCPostNummer").removeClass("displaynone")
+                    }
+                    else
+                    {
+                        $("#PCPostNummer").val("");
+                        $("#PCPostNummer").addClass("displaynone")
+                    }
+
                     // set pickup information
                     $(".pickup-information").find(".montapacking-pickup-information-company").html(company);
                     $(".pickup-information").find(".montapacking-pickup-information-description-distance").html(description);
