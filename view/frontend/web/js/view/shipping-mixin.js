@@ -17,6 +17,10 @@ define(
                     validateShippingInformation: function () {
                         var originalResult = this._super();
 
+                        if(quote.shippingMethod() == null) {
+                            return false;
+                        }
+
                         if (quote.shippingMethod().carrier_code != 'montapacking') {
                             return originalResult;
                         }
@@ -24,12 +28,7 @@ define(
                         if ($("#hasconnection").val() == "n") {
                             return originalResult;
                         }
-
-
-                        if ($("#hasconnection").val() == "n") {
-                            return originalResult;
-                        }
-
+                        
                         var checkoutConfig = window.checkoutConfig;
 
                         var checkedOptionDelivery = $('input.montapacking_delivery_option:checked').val();
@@ -58,8 +57,9 @@ define(
                             if (obj.type == "pickup") {
                                 // check op packstation, dit is verplicht in duitsland
                                 var n = obj.additional_info[0].code_pickup.includes("_packStation");
+                                var m = obj.additional_info[0].code_pickup.includes("DHLPCPostNummer_");
 
-                                if (n) {
+                                if (n && !m) {
                                     if ($("#DHLPCPostNummer").val().trim() == "") {
                                         this.errorValidationMessage(
                                             $t('Please select a postnumber. This is mandatory for pack stations')
@@ -68,6 +68,7 @@ define(
                                         return false;
                                     } else {
                                         obj.additional_info[0].code_pickup = obj.additional_info[0].code_pickup + ",DHLPCPostNummer_" + $("#DHLPCPostNummer").val().trim();
+                                        console.log(obj);
                                         checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(obj);
                                     }
 

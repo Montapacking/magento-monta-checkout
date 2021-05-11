@@ -117,10 +117,12 @@ define(
                                 return;
                             }
 
-                            // Reset frontend storage before triggering any new calls.
+                            //console.log(JSON.stringify(address));
+                            //console.log($("#old_address").val());
 
                             this.deliveryFee(null);
                             this.pickupFee(null);
+
 
                             this.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
                             this.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
@@ -128,34 +130,13 @@ define(
 
                             self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true);
 
-                            var triggerFirstClickOnPageLoad = false;
-                            if ($("#old_address").val() == undefined)
-                            {
-                                triggerFirstClickOnPageLoad = true;
-                            }
-
                             // fill old adress field
                             var existCondition = setInterval(function() {
                                 if ($("#old_address").length) {
                                     clearInterval(existCondition);
                                     $("#old_address").val(JSON.stringify(address));
-
-                                    if (triggerFirstClickOnPageLoad)
-                                    {
-                                        // automate first option
-                                        var firstClick = setInterval(function() {
-                                            if ($(".montapacking-tab-delivery span").length) {
-                                                clearInterval(firstClick);
-                                                $(".montapacking-tab-delivery span").trigger("click");
-                                            }
-                                        }, 100); // check every 100ms
-                                    }
                                 }
                             }, 100);
-
-
-
-
 
                         }.bind(this)
                     );
@@ -307,6 +288,8 @@ define(
                 },
 
                 toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false, hideDeliverInfo = false) {
+
+
                     $(previousTab).removeClass('active');
                     $(currentTab).addClass('active');
                     $(previousContent).hide();
@@ -321,10 +304,6 @@ define(
                             $("input.selectshipment").val("delivery");
                             $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
 
-                            if (hideDeliverInfo == true) {
-                                $(".delivery-information").hide();
-                            }
-
                             if ($(".SameDayDelivery").length) {
                                 $(".havesameday").removeClass("displaynone");
                             } else {
@@ -332,6 +311,11 @@ define(
                             }
                         }
                     }
+
+                    if (hideDeliverInfo == true) {
+                        $(".delivery-information").hide();
+                    }
+
                 },
 
                 showDeliveryOptions: function (informationTab, optionsTab) {
@@ -459,10 +443,6 @@ define(
                             options: options,
                         }
                     );
-
-
-
-
 
                     self.setDeliveryOption('delivery', details, additional_info);
                     self.deliveryFee(total_price);
