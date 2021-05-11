@@ -508,12 +508,18 @@ define(
 
                     if (n)
                     {
-                        $("#PCPostNummer").removeClass("displaynone")
+                        $("#PCPostNummer").removeClass("displaynone");
+
+                        $(".open-business-hours").addClass("displaynone");
+                        $(".block-business-hours").addClass("displaynone");
                     }
                     else
                     {
                         $("#PCPostNummer").val("");
-                        $("#PCPostNummer").addClass("displaynone")
+                        $("#PCPostNummer").addClass("displaynone");
+
+                        $(".open-business-hours").removeClass("displaynone");
+                        $(".block-business-hours").removeClass("displaynone");
                     }
 
                     // set pickup information
