@@ -71,9 +71,10 @@ class LongLat extends AbstractDeliveryOptions
         $request = $this->getRequest();
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-        if ($language != 'NL' && $language != 'BE') {
+        if ($language != 'NL' && $language != 'BE' && $language != 'DE') {
             $language = 'EN';
         }
+
 
         try {
 

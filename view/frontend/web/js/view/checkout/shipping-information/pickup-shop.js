@@ -51,7 +51,23 @@ define(
 
                                 }
                             );
+                        } else if ($("#montapacking_language").val() == 'DE') {
 
+                            $(delivery_options).each(
+                                function (key, value) {
+
+                                    if (value == 'SignatureOnDelivery') {
+                                        additional_info.push("Auf Quittung unterschreiben");
+                                    } else if (value == 'NoNeighbour') {
+                                        additional_info.push("Nicht an die Nachbarn liefern");
+                                    } else if (value == 'EveningDelivery') {
+                                        additional_info.push("Lieferung am Abend");
+                                    } else {
+                                        additional_info.push(value);
+                                    }
+
+                                }
+                            );
                         } else {
                             $(delivery_options).each(
                                 function (key, value) {

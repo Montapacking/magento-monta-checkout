@@ -71,7 +71,7 @@ class Delivery extends AbstractDeliveryOptions
         $request = $this->getRequest();
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-        if ($language != 'NL' && $language != 'BE') {
+        if ($language != 'NL' && $language != 'BE' && $language != 'DE') {
             $language = 'EN';
         }
 
@@ -104,11 +104,16 @@ class Delivery extends AbstractDeliveryOptions
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
+        if ($language != 'NL' && $language != 'BE' && $language != 'DE') {
+            $language = 'EN';
+        }
+
         $hour_string = "h";
         if ($language == 'NL') {
-            //setlocale(LC_TIME, "nl_NL");
             $hour_string = " uur";
-
+        }
+        if ($language == 'DE') {
+            $hour_string = " Uhr";
         }
 
         ## Currency symbol
@@ -292,10 +297,12 @@ class Delivery extends AbstractDeliveryOptions
 
             foreach ($extra_values as $extra) {
 
+                $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
+
                 ## Extra optie toevoegen
                 $extras[] = (array)[
                     'code' => $extra->code,
-                    'name' => $extra->name,
+                    'name' => __($extra->code),
                     'price_currency' => $curr,
                     'price_string' => $curr . ' ' . number_format($extra->price, 2, ',', ''),
                     'price_raw' => number_format($extra->price, 2),
@@ -316,72 +323,13 @@ class Delivery extends AbstractDeliveryOptions
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-
         $date_string = "";
 
         if ($from > 0) {
-          $date_string = date("l", strtotime($from))." ". date("d", strtotime($from))." ". date("F", strtotime($from));
+          $date_string = __(date("l", strtotime($from)))." ". date("d", strtotime($from))." ". __(date("F", strtotime($from)));
         }
 
-        if ($language == 'NL') {
-
-            $weeks = array();
-            $weeks['Monday'] = "maandag";
-            $weeks['Tuesday'] = "dinsdag";
-            $weeks['Wednesday'] = "woensdag";
-            $weeks['Thursday'] = "donderdag";
-            $weeks['Friday'] = "vrijdag";
-            $weeks['Saturday'] = "zaterdag";
-            $weeks['Sunday'] = "zondag";
-
-            $months = array();
-            $months['January'] = "januari";
-            $months['February'] = "februari";
-            $months['March'] = "maart";
-            $months['April'] = "april";
-            $months['May'] = "mei";
-            $months['June'] = "juni";
-            $months['July'] = "juli";
-            $months['August'] = "augustus";
-            $months['September'] = "september";
-            $months['October'] = "oktober";
-            $months['November'] = "november ";
-            $months['December'] = "december";
-
-            if ($from > 0) {
-                $date_string = $weeks[date("l", strtotime($from))]." ". date("j", strtotime($from))." ". $months[date("F", strtotime($from))];
-            }
-        }
-
-        if ($language == 'DE') {
-
-            $weeks = array();
-            $weeks['Monday'] = "montag";
-            $weeks['Tuesday'] = "dienstag";
-            $weeks['Wednesday'] = "mittwoch";
-            $weeks['Thursday'] = "donnerstag";
-            $weeks['Friday'] = "freitag";
-            $weeks['Saturday'] = "samstag";
-            $weeks['Sunday'] = "sonntag";
-
-            $months = array();
-            $months['January'] = "januar";
-            $months['February'] = "februar";
-            $months['March'] = "marz";
-            $months['April'] = "April";
-            $months['May'] = "mai";
-            $months['June'] = "juni";
-            $months['July'] = "juli";
-            $months['August'] = "august";
-            $months['September'] = "september";
-            $months['October'] = "oktober";
-            $months['November'] = "november ";
-            $months['December'] = "dezember";
-
-            if ($from > 0) {
-                $date_string = $weeks[date("l", strtotime($from))]." ". date("j", strtotime($from))." ". $months[date("F", strtotime($from))];
-            }
-        }
+        $description = str_replace("PostNL Pakket", "PostNL", $description);
 
         $options = (object)[
             'code' => $option->code,

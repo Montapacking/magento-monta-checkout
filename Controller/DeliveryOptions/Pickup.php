@@ -70,14 +70,15 @@ class Pickup extends AbstractDeliveryOptions
     public function execute()
     {
         $request = $this->getRequest();
+
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
+
+        if ($language != 'NL' && $language != 'BE' && $language != 'DE') {
+            $language = 'EN';
+        }
 
         try {
             $oApi = $this->generateApi($request, $language, $this->_logger, true);
-
-            if ($language != 'NL' && $language != 'BE') {
-                $language = 'EN';
-            }
 
             $pickupoptions = $oApi->getPickupOptions();
 
@@ -104,10 +105,16 @@ class Pickup extends AbstractDeliveryOptions
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
+        if ($language != 'NL' && $language != 'BE' && $language != 'DE') {
+            $language = 'EN';
+        }
+
         $hour_string = "h";
         if ($language == 'NL') {
-            //setlocale(LC_TIME, "nl_NL");
             $hour_string = " uur";
+        }
+        if ($language == 'DE') {
+            $hour_string = " Uhr";
         }
 
         ## Currency symbol
