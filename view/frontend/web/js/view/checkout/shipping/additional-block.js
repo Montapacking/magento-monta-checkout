@@ -117,18 +117,17 @@ define(
                                 return;
                             }
 
-                            //console.log(JSON.stringify(address));
-                            //console.log($("#old_address").val());
-
                             this.deliveryFee(null);
                             this.pickupFee(null);
 
-
-                            this.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
-                            this.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
+                            this.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
+                            this.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
                             this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
 
                             self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true);
+
+
+
 
                             // fill old adress field
                             var existCondition = setInterval(function() {
@@ -163,7 +162,7 @@ define(
                 /**
                  * Retrieve LONG LAT
                  */
-                getLongLat: function (street, postcode, city, country, housenumber, housenumberaddition) {
+                getLongLat: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
 
                     $.ajax(
                         {
@@ -177,7 +176,8 @@ define(
                                 city: city,
                                 country: country,
                                 housenumber: housenumber,
-                                housenumberaddition: housenumberaddition
+                                housenumberaddition: housenumberaddition,
+                                longlat: longlat
                             }
                         }
                     ).done(
@@ -231,7 +231,7 @@ define(
                 /**
                  * Retrieve Delivery Options from Montapacking.
                  */
-                getPickupServices: function (street, postcode, city, country, housenumber, housenumberaddition) {
+                getPickupServices: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
 
                     $.ajax(
                         {
@@ -245,7 +245,8 @@ define(
                                 city: city,
                                 country: country,
                                 housenumber: housenumber,
-                                housenumberaddition: housenumberaddition
+                                housenumberaddition: housenumberaddition,
+                                longlat: longlat
                             }
                         }
                     ).done(
@@ -296,9 +297,16 @@ define(
                     $(currentContent).fadeIn('slow');
 
                     if (triggerClick) {
+
                         if (currentTab == '.montapacking-tab-pickup') {
                             $("input.selectshipment").val("pickup");
                             $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
+
+                            var address = JSON.parse($("#old_address").val());
+
+                            self.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
+                            self.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
+
                         } else {
 
                             $("input.selectshipment").val("delivery");

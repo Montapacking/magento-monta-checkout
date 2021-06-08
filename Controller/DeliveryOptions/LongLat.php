@@ -78,7 +78,12 @@ class LongLat extends AbstractDeliveryOptions
 
         try {
 
-            $oApi = $this->generateApi($request, $language, $this->_logger, true);
+            if (isset($_GET['longlat']) && $_GET['longlat'] == 'false') {
+                $oApi = $this->generateApi($request, $language, $this->_logger, false);
+            } else{
+                $oApi = $this->generateApi($request, $language, $this->_logger, true);
+            }
+
             $has_connection = $oApi->checkConnection();
 
             $arr = [];
