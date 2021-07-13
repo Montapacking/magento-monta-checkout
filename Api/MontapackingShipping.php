@@ -456,7 +456,7 @@ class MontapackingShipping
             curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 2);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
             curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 
