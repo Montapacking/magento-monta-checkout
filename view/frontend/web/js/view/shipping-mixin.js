@@ -28,56 +28,60 @@ define(
                         if ($("#hasconnection").val() == "n") {
                             return originalResult;
                         }
-                        
+
                         var checkoutConfig = window.checkoutConfig;
 
-                        var checkedOptionDelivery = $('input.montapacking_delivery_option:checked').val();
-                        var checkedOptionPickup = $('input.initialPickupRadio:checked').val();
 
-                        var hasData = true;
-
-                        if (checkedOptionDelivery === undefined && checkedOptionPickup === undefined)
+                        if($("input.montapacking_delivery_option").length == 0 && $("input.initialPickupRadio").length == 0)
                         {
-                            hasData = false;
+                            var hasData = true;
                         }
-
-                        if (checkoutConfig.quoteData.montapacking_montacheckout_data === undefined || checkoutConfig.quoteData.montapacking_montacheckout_data == "" || checkoutConfig.quoteData.montapacking_montacheckout_data == null || checkoutConfig.quoteData.montapacking_montacheckout_data == "null")
+                        else
                         {
-                            hasData = false;
-                        }
+                            var checkedOptionDelivery = $('input.montapacking_delivery_option:checked').val();
+                            var checkedOptionPickup = $('input.initialPickupRadio:checked').val();
 
-                        if (checkoutConfig.quoteData.montapacking_montacheckout_data)
-                        {
-                            const obj = JSON.parse(checkoutConfig.quoteData.montapacking_montacheckout_data);
+                            var hasData = true;
 
-                            if (obj.type != "delivery" && obj.type != "pickup") {
+                            if (checkedOptionDelivery === undefined && checkedOptionPickup === undefined) {
                                 hasData = false;
                             }
 
-                            if (obj.type == "pickup") {
-                                // check op packstation, dit is verplicht in duitsland
-                                var n = obj.additional_info[0].code_pickup.includes("_packStation");
-                                var m = obj.additional_info[0].code_pickup.includes("DHLPCPostNummer_");
-
-                                if (n && !m) {
-                                    if ($("#DHLPCPostNummer").val().trim() == "") {
-                                        this.errorValidationMessage(
-                                            $t('Please select a postnumber. This is mandatory for pack stations')
-                                        );
-
-                                        return false;
-                                    } else {
-                                        obj.additional_info[0].code_pickup = obj.additional_info[0].code_pickup + ",DHLPCPostNummer_" + $("#DHLPCPostNummer").val().trim();
-                                        console.log(obj);
-                                        checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(obj);
-                                    }
-
-                                }
+                            if (checkoutConfig.quoteData.montapacking_montacheckout_data === undefined || checkoutConfig.quoteData.montapacking_montacheckout_data == "" || checkoutConfig.quoteData.montapacking_montacheckout_data == null || checkoutConfig.quoteData.montapacking_montacheckout_data == "null") {
+                                hasData = false;
                             }
 
-                        } else {
-                            hasData = false;
+                            if (checkoutConfig.quoteData.montapacking_montacheckout_data) {
+                                const obj = JSON.parse(checkoutConfig.quoteData.montapacking_montacheckout_data);
+
+                                if (obj.type != "delivery" && obj.type != "pickup") {
+                                    hasData = false;
+                                }
+
+                                if (obj.type == "pickup") {
+                                    // check op packstation, dit is verplicht in duitsland
+                                    var n = obj.additional_info[0].code_pickup.includes("_packStation");
+                                    var m = obj.additional_info[0].code_pickup.includes("DHLPCPostNummer_");
+
+                                    if (n && !m) {
+                                        if ($("#DHLPCPostNummer").val().trim() == "") {
+                                            this.errorValidationMessage(
+                                                $t('Please select a postnumber. This is mandatory for pack stations')
+                                            );
+
+                                            return false;
+                                        } else {
+                                            obj.additional_info[0].code_pickup = obj.additional_info[0].code_pickup + ",DHLPCPostNummer_" + $("#DHLPCPostNummer").val().trim();
+                                            console.log(obj);
+                                            checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(obj);
+                                        }
+
+                                    }
+                                }
+
+                            }
                         }
+
 
                         if (hasData == false) {
                             this.errorValidationMessage(

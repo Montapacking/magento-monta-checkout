@@ -246,6 +246,10 @@ nomargin {
 }
 
 
+.montapacking-container-logo.Budbee{
+    background-image: url(../images/BudBee.png) !important;
+}
+
 .montapacking-container-logo.SEL_SELBuspakje,
 .montapacking-container-logo.DHLParcelConnectPickupPoint,
 .montapacking-container-logo.DHLpallet,

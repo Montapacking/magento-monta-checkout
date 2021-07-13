@@ -79,7 +79,7 @@ class LongLat extends AbstractDeliveryOptions
         try {
 
             $longlat = $request->getParam('longlat') ? trim($request->getParam('longlat')) : "";
-            
+
             if ($longlat == 'false') {
                 $oApi = $this->generateApi($request, $language, $this->_logger, false);
             } else{

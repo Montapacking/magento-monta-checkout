@@ -352,6 +352,7 @@ class Pickup extends AbstractDeliveryOptions
             }
 
         }
+
         return $items;
     }
 }

@@ -79,6 +79,7 @@ define(
                     }
 
                     this.urlPrefix = urlPrefix;
+
                     this.selectedMethod = ko.computed(
                         function () {
                             var method = quote.shippingMethod();
