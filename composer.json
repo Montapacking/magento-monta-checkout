@@ -1,0 +1,46 @@
+{
+    "name": "montapacking/montacheckout",
+    "description": "Montapacking Checkout Extension",
+    "require": {
+        "php": "~7.1|~7.2|~7.3|~7.4",
+        "ext-json": "*"
+    },
+    "type": "magento2-module",
+    "license": "CC-BY-NC-ND-3.0",
+    "version": "1.0.9",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Montapacking",
+            "email": "servicedesk@montapacking.nl",
+            "homepage": "https://www.montapacking.nl"
+        }
+    ],
+    "support": {
+        "email": "servicedesk@montapacking.nl"
+    },
+    "homepage": "https://www.montapacking.nl",
+    "keywords": [
+        "Montapacking",
+		"Montapacking Checkout",
+        "Official Montapacking extension",
+        "Magento 2"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Montapacking\\MontaCheckout\\": ""
+        }
+    },
+    "require-dev": {
+
+    },
+    "repositories": {
+        "magento": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    }
+}

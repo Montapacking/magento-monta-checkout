@@ -1,0 +1,345 @@
+<input type="hidden" id="montapacking_longitude" name="montapacking_longitude" value="">
+<input type="hidden" id="montapacking_latitude" name="montapacking_latitude" value="">
+<input type="hidden" id="montapacking_language" name="montapacking_language" value="">
+<input type="hidden" id="old_address" name="old_address" value="">
+<input type="hidden" id="hasconnection" name="hasconnection" value="y">
+
+<!-- ko if: hasconnection -->
+
+<div id="montapacking-plugin" class="montapacking-parent" data-bind="visible: selectedMethod() == 'montapacking_montapacking'">
+
+    <div data-bind="css: tabClasses()">
+
+        <!-- ko if: deliveryServices().length > 0 -->
+
+        <div
+            data-bind="click: toggleTab.bind($parent, '.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', true, false, false)"
+            class="montapacking-tab montapacking-tab-delivery active">
+            <span data-bind="i18n: 'Delivery'"></span>
+            <strong data-bind="text: deliveryFee"></strong>
+        </div>
+        <!-- /ko -->
+
+        <!-- ko if: pickupServices().length > 0 -->
+
+        <div
+            data-bind="click: toggleTab.bind($parent, '.montapacking-tab-delivery', '.montapacking-tab-pickup', '.delivery-services', '.pickup-services', true, false, true)"
+            class="montapacking-tab montapacking-tab-pickup">
+            <span data-bind="i18n: 'Pick-up'"></span>
+            <strong data-bind="text: pickupFee"></strong>
+        </div>
+
+        <!-- /ko -->
+
+    </div>
+
+
+    <div class="montapacking-services">
+
+        <div class="delivery-services">
+
+            <!-- ko if: deliveryServices().length > 0 -->
+
+            <div class="container montapacking-delivery-service delivery-information displaynone">
+
+                <div class="montapacking-container-header">
+
+
+                    <div class="montapacking-container-logo"></div>
+
+                    <div class="montapacking-container-content">
+
+                        <p>
+                            <span class="floatleft marginright delivered" data-bind="i18n: 'Your order will be delivered with'"></span>
+                            <span class="floatleft marginright shipped" data-bind="i18n: 'Your order will be shipped with'"></span>
+                            <span class="floatleft marginright montapacking-delivery-information-company">###</span>
+
+                            <span class="floatleft dateblock marginright"  data-bind="i18n: 'on'"></span>
+                            <span class="floatleft dateblock marginright montapacking-delivery-information-date">###</span>
+
+                            <span class="floatleft timeblock marginright" data-bind="i18n: 'between'"></span>
+                            <span class="floatleft timeblock marginright montapacking-delivery-information-time">###</span>
+
+                            <div class="clearboth"></div>
+                            <ul class="montapacking-delivery-information-options">
+
+                            </ul>
+                        </p>
+
+                        <a class="displaynone havesameday"href="javascript:;"
+                           data-bind="i18n: 'Want to deliver today or another day? Click here',click: showDeliveryOptions.bind($parent, '.delivery-information', '.delivery-option')"></a>
+
+                        <a class="displaynone nothavesameday"href="javascript:;"
+                           data-bind="i18n: 'Click here to choose a different delivery option',click: showDeliveryOptions.bind($parent, '.delivery-information', '.delivery-option')"></a>
+
+                    </div>
+
+                    <div class="montapacking-container-price">###</div>
+
+                    <div class="clearboth"></div>
+                </div>
+
+            </div>
+            <!-- /ko -->
+
+            <!-- ko ifnot: deliveryServices().length > 0 -->
+
+            <div class="container montapacking-delivery-service delivery-information">
+
+                <div class="montapacking-container-header">
+
+                    <div class="montapacking-container-logo"></div>
+
+                    <div class="montapacking-container-content display100">
+                        <p class="normal" data-bind="i18n: 'Choose a valid address before you can select a shipping method.'">
+                        </p>
+                    </div>
+                    <div class="clearboth"></div>
+                </div>
+
+            </div>
+
+            <!-- /ko -->
+
+            <!-- ko if: deliveryServices().length > 0 -->
+
+            <div data-bind="foreach: deliveryServices">
+
+                <div data-bind="foreach: options">
+                    <!-- ko -->
+
+                    <div data-bind="css: $parent.code" class="container montapacking-delivery-service delivery-option">
+
+                        <span class="cropped_name montapacking-hidden" data-bind="text: name"></span>
+                        <span class="cropped_date montapacking-hidden" data-bind="text: date"></span>
+                        <span class="cropped_date_text montapacking-hidden" data-bind="text: date_string"></span>
+                        <span class="cropped_time montapacking-hidden" data-bind="text: date_from_to"></span>
+                        <span class="cropped_time_text montapacking-hidden" data-bind="text: date_from_to_formatted"></span>
+                        <span class="cropped_price montapacking-hidden" data-bind="text: price_raw"></span>
+                        <span class="cropped_code montapacking-hidden" data-bind="text: code"></span>
+                        <span class="cropped_image_class montapacking-hidden" data-bind="text: image"></span>
+                        <span class="cropped_image_class_replaced montapacking-hidden" data-bind="text: image_replace"></span>
+                        <span class="cropped_type montapacking-hidden" data-bind="text: type"></span>
+
+                        <div class="montapacking-container-header">
+
+                            <div class="montapacking-container-logo" data-bind="css: image_replace"></div>
+
+                            <div class="montapacking-container-content">
+                                <p class="day" data-bind="text: date_string"></p>
+                                <p class="italic" data-bind="text: description_string"></p>
+                            </div>
+
+                            <div class="montapacking-container-price" data-bind="text: price_string"></div>
+                            <div class="clearboth"></div>
+                        </div>
+
+
+                        <!-- ko if: extras-->
+                        <div class="montapacking-container-delivery-options">
+
+                            <!-- ko if: extras.length > 0 -->
+                            <p class="normal" data-bind="i18n: 'Choose your desired additional options'"></p>
+                            <!-- /ko -->
+                            <div data-bind="foreach: extras">
+
+                                <div class="montapacking-delivery-option">
+                                    <input
+                                        data-bind="value: code, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +code + ']', id: $parent.code +code}"
+                                        type="checkbox"
+                                        class="radio"/>
+                                    <label data-bind="text: name, attr: {for: $parent.code +code}"></label>
+                                    <span class="delivery-fee" data-bind="text: price_string"></span>
+                                    <span class="delivery-fee-hidden montapacking-hidden" data-bind="text: price_raw"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /ko -->
+
+                        <!-- ko if: optionCodes-->
+                        <div class="montapacking-container-delivery-optioncodes">
+                            <div data-bind="foreach: optionCodes">
+
+                                <input
+                                    data-bind="value: $data, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +$data + ']', id: $parent.code +$data}"
+                                    type="hidden"
+                                    class="text"/>
+
+                            </div>
+
+                        </div>
+                        <!-- /ko -->
+
+
+                        <div class="montapacking-container-select-option montapacking-styled-radiobutton">
+                            <input
+                                data-bind="click: $parents[1].selectShipper.bind($element), checked: $parent.selectedShippers, , attr: {id: code, value: code}"
+                                type="radio" class="montapacking_delivery_option" class="radio"
+                                name="montapacking[shipper]"/>
+                            <label data-bind="attr: {for: code}, i18n: 'Select delivery option'"></label>
+                        </div>
+
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+
+            <!-- /ko -->
+
+
+        </div>
+
+        <div class="pickup-services">
+
+            <!-- ko if: pickupServices().length > 0 -->
+
+            <div class="container montapacking-pickup-service pickup-information displaynone">
+
+                <div class="montapacking-container-header">
+
+                    <div class="montapacking-container-logo"></div>
+
+                    <div class="montapacking-container-content">
+                        <p class="montapacking-pickup-information-company"></p>
+                        <p class="montapacking-pickup-information-description-distance italic"></p>
+                        <p class="montapacking-pickup-information-description-street-housenumber"></p>
+                        <p class="montapacking-pickup-information-description-postal-city-country"></p>
+                        <div id="PCPostNummer" class="displaynone">
+                            <span class="normal" data-bind="i18n: 'Post number'"></span> <input type="text" id="DHLPCPostNummer" name="DHLPCPostNummer" value="" style="width:125px; margin-left: 15px;">
+                        </div>
+                        <p><a class="open-business-hours" data-bind="click: showBusinessHours.bind($element), i18n: 'Show business hours'"></a></p>
+                    </div>
+
+                    <div class="montapacking-container-price"></div>
+                    <div class="clearboth"></div>
+                </div>
+
+                <div class="table-container">
+                    <a class="close" data-bind="click: closeBusinessHours.bind($element), i18n: 'Close'" ></a>
+                    <div class="table">
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- /ko -->
+
+            <!-- ko ifnot: pickupServices().length > 0 -->
+
+            <div class="container montapacking-pickup-service pickup-information displayblock">
+
+                <div class="montapacking-container-header">
+
+                    <!--<div class="montapacking-container-logo TBQ"></div>-->
+
+                    <div class="montapacking-container-content display100">
+
+                        <p class="normal" data-bind="i18n: 'Unfortunately, no pick-up points could be found.'"></p>
+                    </div>
+                    <div class="clearboth"></div>
+                </div>
+
+            </div>
+
+            <!-- /ko -->
+
+
+            <!-- ko if: pickupServices().length > 0 -->
+
+            <div class="container montapacking-pickup-service pickup-information">
+
+                <a href="javascript:;"
+                   data-bind="i18n: 'Select another pick-up point near you below or click here to choose another pick-up point', click: openStoreLocator.bind($parent)"></a>
+            </div>
+
+            <!-- /ko -->
+
+
+            <!-- ko if: pickupServices().length > 0 -->
+            <div data-bind="foreach: pickupServices">
+
+                <div data-bind="foreach: options">
+
+                    <!-- ko -->
+
+                    <div data-bind="attr: {'data-markerid': marker_id}" class="container montapacking-pickup-service pickup-option">
+
+                        <span class="cropped_shipper montapacking-hidden" data-bind="text: image"></span>
+                        <span class="cropped_distance montapacking-hidden" data-bind="text: $parent.description.DistanceMeters"></span>
+                        <span class="cropped_company montapacking-hidden" data-bind="text: $parent.description.Company "></span>
+                        <span class="cropped_street montapacking-hidden" data-bind="text: $parent.description.Street "></span>
+                        <span class="cropped_housenumber montapacking-hidden" data-bind="text: $parent.description.HouseNumber "></span>
+                        <span class="cropped_postal montapacking-hidden" data-bind="text: $parent.description.PostalCode "></span>
+                        <span class="cropped_city montapacking-hidden" data-bind="text: $parent.description.City "></span>
+                        <span class="cropped_description montapacking-hidden" data-bind="text: description_string "></span>
+                        <span class="cropped_description_storelocator montapacking-hidden" data-bind="text: description_string_storelocator "></span>
+                        <span class="cropped_country montapacking-hidden" data-bind="text: $parent.description.CountryCode "></span>
+                        <span class="cropped_price montapacking-hidden" data-bind="text: price_raw"></span>
+                        <span class="cropped_code montapacking-hidden" data-bind="text: code"></span>
+                        <span class="cropped_image_class montapacking-hidden" data-bind="text: image"></span>
+                        <span class="cropped_lng montapacking-hidden" data-bind="text: $parent.description.Longitude "></span>
+                        <span class="cropped_lat montapacking-hidden" data-bind="text: $parent.description.Latitude "></span>
+                        <span class="cropped_optioncodes montapacking-hidden" data-bind="text: optionCodes"></span>
+                        <span class="cropped_optionswithvalue montapacking-hidden" data-bind="text: optionsWithValue"></span>
+                        <span class="cropped_codepickup montapacking-hidden" data-bind="text: code_pickup"></span>
+
+
+                        <div class="montapacking-container-header">
+
+                            <div data-bind="css: image_replace" class="montapacking-container-logo"></div>
+
+                            <div class="montapacking-container-content">
+                                <p data-bind="text: $parent.description.Company"></p>
+                                <p class="italic" data-bind="text: description_string"></p>
+                                <p class="normal" data-bind="text: $parent.description.Company +' '+$parent.description.HouseNumber"></p>
+                                <p class="normal" data-bind="text: $parent.description.PostalCode +' '+$parent.description.City+' ('+$parent.description.CountryCode+')'">></p>
+
+                                <p><a class="open-business-hours" data-bind="click: $parents[1].showBusinessHours.bind($element), i18n: 'Show business hours'"></a></p>
+                            </div>
+                            <!-- ko if: $parent.description.OpeningTimes-->
+                            <div class="montapacking-container-price" data-bind="text: price_string"></div>
+                            <!-- /ko -->
+                            <div class="clearboth"></div>
+                        </div>
+                        <!-- ko if: $parent.description.OpeningTimes-->
+                        <div class="table-container block-business-hours">
+                            <a class="close" data-bind="click: $parents[1].closeBusinessHours.bind($element), i18n: 'Close'"></a>
+                            <div class="table">
+
+                                <div data-bind="foreach: $parent.description.OpeningTimes">
+                                    <!-- ko -->
+                                    <div class="row">
+                                        <div class="cell" data-bind="text: Day"></div>
+                                        <div class="cell">
+                                            <div data-bind="foreach: OpeningTimes">
+                                                <span data-bind="text: From +' - '+To"></span><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /ko -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /ko -->
+
+
+                        <div class="montapacking-container-select-option montapacking-styled-radiobutton">
+                            <input data-bind="value: code, attr: {id: code}, click: $parents[1].selectPickUp.bind($element), checked: $parent.selectedShippers" type="radio"
+                                   class="radio initialPickupRadio" name="montapacking[pickup]"/>
+                            <label data-bind="attr: {for: code}, i18n: 'Select pick-up point'" ></label>
+                        </div>
+
+                    </div>
+
+                    <!-- /ko -->
+                </div>
+            </div>
+            <!-- /ko -->
+
+        </div>
+    </div>
+</div>
+
+<!-- /ko -->

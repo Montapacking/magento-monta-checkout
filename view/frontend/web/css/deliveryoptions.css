@@ -1,0 +1,1048 @@
+/* SHIPPING METHODS TABLE */
+
+#montapacking-plugin a {
+    color: #005293 !important;
+    text-decoration: none !important;
+}
+
+#montapacking-plugin a:hover {
+    text-decoration: underline !important;
+}
+
+.marginleft {
+    margin-right: 4px;
+}
+
+.marginright {
+    margin-right: 4px;
+}
+
+.floatleft {
+    float: left;
+}
+
+.floatright {
+    float: left;
+}
+
+.clearboth {
+    clear:both;
+}
+
+.displayblock {
+    display:block !important;
+}
+
+.displaynone {
+    display:none;
+}
+
+.display100 {
+    width: 100% important;
+}
+
+nomargin {
+    margin:0;
+}
+
+
+@media screen and (max-width: 412px) {
+    #montapacking-plugin {
+        font-size: 12px !important;
+    }
+
+    p {
+        margin-bottom: 0.6rem !important;
+    }
+
+    .montapacking-container-content .italic {
+        font-size: 11px !important;
+    }
+
+}
+
+/*
+#label_method_montapacking_montapacking:before {
+    float: left;
+    width: 30px;
+    height: 25px;
+    content: ' ';
+    background-image: url(../images/Montapacking.png) !important;
+    background-position: 0 2px;
+    background-repeat: no-repeat;
+    background-size: auto 20px;
+    margin-top: -4px;
+}
+*/
+/* GLOBAL CONTAINER CSS */
+
+.montapacking-parent {
+    display: inline-block;
+    width: 100%;
+    /*max-width: 500px*/
+}
+
+.montapacking-parent * {
+    box-sizing: border-box;
+}
+
+.montapacking-parent .container {
+    padding: 10px 15px;
+    border: 1px solid #D4D9E3;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: white;
+    position: relative;
+    display: block;
+    color: #27324C;
+    float: left;
+    width: 100%;
+    clear: both;
+}
+
+.montapacking-parent label {
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 30px;
+    position: relative;
+
+}
+
+.montapacking-parent label:hover {
+    text-decoration: none !important;
+}
+
+.montapacking-hidden {
+    display:none;
+}
+
+.montapacking-bold {
+    font-weight: 700;
+}
+
+.checkout-index-index .methods-shipping .actions-toolbar {
+    clear: both;
+}
+
+/* OVERALL DELIVERY BLOCKS CSS */
+
+.montapacking-services .delivery-services {
+    display: block;
+   /* display: none; /*for testing pickup*/
+}
+
+.montapacking-services .delivery-information {
+    display: none;
+}
+
+.montapacking-services .delivery-option {
+    display: block;
+}
+
+/* OVERALL PICKUP BLOCKS CSS */
+
+.montapacking-services .pickup-services {
+    display: none;
+}
+
+.montapacking-services .pickup-information {
+    display: none;
+}
+
+.montapacking-services .pickup-option {
+    display: none;
+}
+
+.montapacking-services .overruleshow {
+    display: block !important;
+}
+
+@media screen and (max-width: 600px) {
+    .monta-more-pickup-points {
+        display:none !important;
+    }
+    .monta-shipment-pickup.active {
+        margin-top: 0px; !important;
+    }
+}
+
+
+
+/* MENU TABS */
+
+.montapacking-parent .montapacking-tab {
+    float: left;
+    width: 50%;
+    cursor: pointer;
+    padding: 20px;
+    color: #27324C;
+    border: 1px solid #D4D9E3;
+    margin-bottom: 10px;
+    background: white;
+    text-align: center;
+    max-width: 250px;
+}
+
+.montapacking-parent .montapacking-tab:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.montapacking-parent .montapacking-tab:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.montapacking-parent .montapacking-tab:not(.active):hover {
+    background: #F0F3FF;
+}
+
+.montapacking-parent .montapacking-tab.active {
+    font-weight: 700;
+    color: #fff;
+    background: #01B5E2;
+    border: 1px solid #0393DB;
+}
+
+.montapacking-parent .montapacking-tab strong {
+    display: none;
+}
+
+.montapacking-parent .montapacking-tab.active strong {
+    color: #FBC000;
+    display: inline-block;
+}
+
+
+@media screen and (max-width: 380px) {
+    .montapacking-parent .montapacking-tab {
+        width: 100%;
+    }
+
+    .montapacking-parent .montapacking-tab:nth-child(1) {
+        border-radius: 5px 5px 0 0;
+        margin-bottom: 0;
+    }
+
+    .montapacking-parent .montapacking-tab:nth-child(2) {
+        border-radius: 0 0 5px 5px;
+    }
+}
+
+/* CONTAINER LOGOS */
+
+.montapacking-container-logo {
+    width: 50px;
+    height: 50px;
+
+    float: left;
+    content: ' ';
+
+    background-position: 0 0px;
+    background-repeat: no-repeat;
+    background-size: auto 50px;
+    margin-right: 15px;;
+
+}
+
+
+.montapacking-container-logo.Budbee{
+    background-image: url(../images/BudBee.png) !important;
+}
+
+.montapacking-container-logo.SEL_SELBuspakje,
+.montapacking-container-logo.DHLParcelConnectPickupPoint,
+.montapacking-container-logo.DHLpallet,
+.montapacking-container-logo.DHLservicepunt,
+.montapacking-container-logo.SELSELBuspakje,
+.montapacking-container-logo.DHLParcelConnect,
+.montapacking-container-logo.DHLservicepuntGroot,
+.montapacking-container-logo.SELGroot,
+.montapacking-container-logo.SEL {
+    background-image: url(../images/DHL.png) !important;
+}
+
+.montapacking-container-logo.DPD,
+.montapacking-container-logo.DPDPL,
+.montapacking-container-logo.DPDparcelstore{
+    background-image: url(../images/DPD.png) !important;
+}
+
+.montapacking-container-logo.PAK,
+.montapacking-container-logo.PostNL,
+.montapacking-container-logo.PostNLGroot,
+.montapacking-container-logo.PostNL_PostNlBuspakje
+{
+    background-image: url(../images/PostNL.png) !important;
+}
+
+.montapacking-container-logo.RED {
+    background-image: url(../images/RED.png) !important;
+}
+
+.montapacking-container-logo.TBQ {
+    background-image: url(../images/Montapacking.png) !important;
+}
+
+.montapacking-container-logo.UPS,
+.montapacking-container-logo.UPSAP
+{
+    background-image: url(../images/UPS.png) !important;
+}
+
+.montapacking-container-logo.Trunkrs {
+    background-image: url(../images/Trunkrs.png) !important;
+}
+.montapacking-container-logo.BpackPickupPoint {
+    background-image: url(../images/Bpost.png) !important;
+}
+
+.montapacking-container-logo.LandmarkPickupPoint {
+    background-image: url(../images/Landmark.png) !important;
+}
+
+/* CONTAINER CONTENT */
+
+.montapacking-container-content {
+    position: relative;
+    float: left;
+    width: calc(100% - 120px);
+}
+
+.montapacking-container-content  p {
+    font-weight: 700;
+}
+
+.montapacking-container-content  .italic {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.montapacking-container-content  .normal {
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* CONTAINER PRICE */
+
+.montapacking-container-price {
+    float: left;
+    width: 55px;
+    text-align: right;
+}
+
+
+/* CONTAINER DELIVERY OPTIONS */
+
+.montapacking-container-delivery-options {
+    margin-left: 65px;
+}
+
+.montapacking-parent .montapacking-container-delivery-options label {
+    font-weight: 400;
+}
+
+.montapacking-parent .montapacking-container-delivery-options label:hover {
+    text-decoration: underline;
+}
+
+/* CONTAINER SELECT OPTION */
+
+
+.montapacking-container-select-option {
+    margin-left: 65px;
+    margin-top: 10px;
+}
+
+
+/* RADIO BUTTON STYLING */
+
+.montapacking-styled-radiobutton input {
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: -9999px;
+}
+
+.montapacking-styled-radiobutton input + label {
+    margin: 0;
+    padding: 3px 6px 3px 6px;
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    border: solid 1px #0393DB;
+    font-weight: 700;
+    text-align: center;
+    background-color: #01B5E2;
+    color: #FFF;
+}
+
+.montapacking-styled-radiobutton input + label {
+    border-radius: 5px;
+}
+
+.montapacking-styled-radiobutton input:hover + label {
+    border-color: #01B5E2;
+    background-color: #0393DB;
+    color: #FFF;
+
+}
+
+.montapacking-styled-radiobutton input:checked + label {
+    background-color: #0393DB;
+    color: #FFF;
+    border-color: #0393DB;
+    z-index: 1;
+}
+
+/* BUSINESS HOURS PICKUP SHOP */
+
+.montapacking-pickup-service .table-container {
+    float: left;
+    width: 100%;
+    display: none;
+    background: #fff;
+    position: relative;
+    border: 1px solid #d4d9e3;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.montapacking-pickup-service .table-container .table {
+    display: table;
+    width: 100%;
+}
+
+.montapacking-pickup-service .table-container .table .row {
+    display: table-row;
+    line-height: 23px;
+}
+
+.montapacking-pickup-service .table-container .table .row .cell {
+    display: table-cell;
+}
+
+.montapacking-pickup-service .table-container .table .row .cell:first-child {
+   width: 150px;
+}
+
+.montapacking-pickup-service .open-business-hours {
+    padding-left: 25px;
+    margin-top: 5px;
+    cursor: pointer;
+    color: #0393DB;
+    float: left;
+    width: 100%;
+
+    background-position: 0 0px;
+    background-repeat: no-repeat;
+    background-size: auto 16px;
+    background-image: url(../images/Openingtimes.png) !important;
+}
+
+
+.montapacking-pickup-service .open-business-hours:hover {
+    color: #0393DB;
+}
+
+.montapacking-pickup-service .close {
+    color: #01B5E2;
+    position: absolute;
+    top: -25px;
+    right: -10px;
+    cursor: pointer;
+}
+
+.montapacking-pickup-service .close:after {
+    content: '';
+    background: url(../images/close.svg);
+    padding: 4px 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.montapacking-pickup-service .close:hover {
+    color: #0393DB;
+    text-decoration: none;
+}
+
+.montapacking-pickup-service .close:hover:after {
+    background: url(../images/close_hover.svg);
+    padding: 4px 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+@media screen and (max-width: 440px) {
+    .montapacking-pickup-service .close {
+        position: relative;
+        float: right;
+        margin-bottom: 10px;
+        right: unset;
+        top: unset;
+        margin-right: -5px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .montapacking-pickup-service .table-container .table .row .cell:nth-child(2) {
+        text-align: right;
+    }
+}
+
+/* STORE LOCATOR */
+
+#modular-background {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    /*display: block;*/
+    display: none;
+    background-color: #000000;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    z-index: 1500;
+    top:0px;
+    left:0px;
+}
+
+#modular-container {
+    /*display: table;*/
+    display: none;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    z-index: 1501;
+    top:0px;
+    left:0px;
+
+}
+
+#modular-container .positioning {
+    display: table-cell;
+    vertical-align: middle;
+
+}
+
+#modular-container .positioning .container{
+    margin: 0 auto;
+    width: 1024px;
+}
+
+@media screen and (max-width: 1023px) {
+    #modular-container .positioning .container{
+        width: 100%
+    }
+}
+
+
+
+/* #page-header it just included for the examples */
+#page-header {
+    display: block;
+    float: left;
+    max-width: 800px;
+}
+
+#page-header .bh-sl-title {
+    color: #797874;
+    font: normal 20px/1.4 Arial, Helvetica, sans-serif;
+}
+
+@media (min-width: 1024px) {
+    #page-header .bh-sl-title {
+        font-size: 30px;
+    }
+}
+
+/* Infowindow Roboto font override */
+.gm-style div, .gm-style span, .gm-style label, .gm-style a {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 20px;
+}
+
+/* InfoBubble font size */
+.bh-sl-window {
+    font-size: 13px;
+}
+
+.bh-sl-error {
+    clear: both;
+    color: #ae2118;
+    float: left;
+    font-weight: bold;
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* Avoid image issues with Google Maps and CSS resets */
+.bh-sl-map-container img {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    max-height: none !important;
+    max-width: none !important;
+}
+
+.bh-sl-container {
+    box-sizing: border-box;
+    color: #555;
+    float: left;
+    font: normal 14px/1.4 Arial, Helvetica, sans-serif;
+    padding: 0 15px;
+    width: 100%;
+    background-color: #ffffff;
+    line-height: 20px;
+    /* Avoid issues with Google Maps and CSS frameworks */
+}
+
+.bh-sl-container > * {
+    box-sizing: content-box !important;
+}
+
+.bh-sl-container .bh-sl-form-container {
+    clear: left;
+    float: left;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.bh-sl-container .form-input {
+    float: left;
+    margin-top: 3px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .bh-sl-container .form-input {
+        width: auto;
+    }
+}
+
+.bh-sl-container .form-input label {
+    display: block;
+    font-weight: bold;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .bh-sl-container .form-input label {
+        display: inline-block;
+        width: auto;
+    }
+}
+
+.bh-sl-container .form-input input, .bh-sl-container .form-input select {
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: normal 14px/1.4 Arial, Helvetica, sans-serif;
+    margin: 15px 0;
+    padding: 6px 12px;
+    width: 100%;
+    -webkit-border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+    .bh-sl-container .form-input input, .bh-sl-container .form-input select {
+        width: auto;
+        margin: 0 15px 0 10px;
+    }
+}
+
+.bh-sl-container .loc-alt-dist {
+    display: none;
+}
+
+.bh-sl-container button {
+    background: #00447a;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    float: left;
+    font: bold 14px/1.4 Arial, Helvetica, sans-serif;
+    margin-top: 3px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    -webkit-border-radius: 4px;
+}
+
+.bh-sl-container .bh-sl-loading {
+    background: url(../img/ajax-loader.gif) no-repeat;
+    float: left;
+    margin: 4px 0 0 10px;
+    height: 16px;
+    width: 16px;
+}
+
+.bh-sl-container .bh-sl-filters-container {
+    clear: both;
+    float: left;
+    margin: 15px 0 0 0;
+    width: 100%;
+}
+
+.bh-sl-container .bh-sl-filters-container .bh-sl-filters {
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bh-sl-container .bh-sl-filters-container .bh-sl-filters li {
+    /*clear: left;*/
+    display: block;
+    float: left;
+    margin: 5px 0;
+    margin-right: 25px;
+
+}
+
+.bh-sl-container .bh-sl-filters-container .bh-sl-filters li label {
+    display: inline;
+    vertical-align: text-bottom;
+}
+
+.bh-sl-container .bh-sl-filters-container .bh-sl-filters li input {
+    display: block;
+    float: left;
+    margin-right: 8px;
+}
+
+.bh-sl-container .bh-sl-filters-container .bh-sl-filters li select {
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: normal 14px/1.4 Arial, Helvetica, sans-serif;
+    padding: 6px 12px;
+    -webkit-border-radius: 4px;
+}
+
+.bh-sl-container .bh-sl-filters-container .select-item{
+    float: left;
+    background: #00447a;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font: bold 14px/1.4 Arial, Helvetica, sans-serif;
+    margin-top: 0px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    -webkit-border-radius: 4px;
+    margin-right:25px;
+
+}
+
+
+.bh-sl-container .bh-sl-map-container {
+    clear: left;
+    float: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.bh-sl-container .bh-sl-map-container a {
+    color: #005293;
+    text-decoration: none;
+}
+
+.bh-sl-container .bh-sl-map-container a:active, .bh-sl-container .bh-sl-map-container a:focus, .bh-sl-container .bh-sl-map-container a:hover {
+    text-decoration: underline;
+}
+
+.bh-sl-container .bh-sl-loc-list {
+    font-size: 13px;
+    height: 530px;
+    overflow-x: auto;
+    width: 100%;
+    position:relative;
+}
+
+
+@media (min-width: 1024px) {
+    .bh-sl-container .bh-sl-loc-list {
+        width: 35%;
+    }
+}
+
+.bh-sl-container .bh-sl-loc-list ul {
+    display: block;
+    clear: left;
+    float: left;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bh-sl-container .bh-sl-loc-list ul li {
+
+    border: 1px solid #fff;
+    /* Adding this to prevent moving li elements when adding the list-focus class*/
+    box-sizing: border-box;
+    clear: left;
+    cursor: pointer;
+    display: block;
+    float: left;
+    width: 100%;
+}
+
+.bh-sl-container .bh-sl-loc-list ul li:nth-child(odd) {
+    background: rgb(238, 238, 238) none repeat scroll 0% 0%;
+}
+
+.bh-sl-container .bh-sl-loc-list .list-label {
+    display: block;
+    float: left;
+    padding: 10px 5px 0px 10px;
+    text-align: center;
+    width: auto;
+    min-width: 13px;
+}
+
+.bh-sl-container .bh-sl-loc-list .list-details {
+    float: left;
+    margin-left: 6px;
+    width: 80%;
+}
+
+
+.bh-sl-container .bh-sl-loc-list .list-price {
+    right:20px;
+    position:absolute;
+    text-align:right;
+    padding: 10px 5px 0px 10px;
+}
+
+.bh-sl-container .bh-sl-loc-list .list-details .list-content {
+    padding: 10px;
+}
+
+.bh-sl-container .bh-sl-loc-list .list-details .loc-dist {
+    color: #8e8e8e;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.bh-sl-container .bh-sl-loc-list .list-focus {
+    border: 1px solid rgba(0, 82, 147, 0.4);
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-close-directions-container {
+    height: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-close-directions-container .bh-sl-close-icon {
+    right: 6px;
+    top: 0;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-directions-panel {
+    margin: 0 2%;
+    /* Avoid issues with table-layout */
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-directions-panel table {
+    table-layout: auto;
+    width: 100%;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-directions-panel table, .bh-sl-container .bh-sl-loc-list .bh-sl-directions-panel td {
+    vertical-align: middle;
+    border-collapse: separate;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-directions-panel td {
+    padding: 1px;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-directions-panel .adp-placemark {
+    margin: 10px 0;
+    border: 1px solid #c0c0c0;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-directions-panel .adp-marker {
+    padding: 3px;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-noresults-title {
+    font-weight: bold;
+    margin: 15px;
+}
+
+.bh-sl-container .bh-sl-loc-list .bh-sl-noresults-desc {
+    margin: 0 15px;
+}
+
+.bh-sl-container .loc-name {
+    /* Picked up by both list and infowindows */
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.bh-sl-container .bh-sl-map {
+    float: left;
+    height: 530px;
+    width: 100%;
+}
+
+@media screen and (max-width: 1023px) {
+    .bh-sl-container .bh-sl-map {
+        height: 350px;
+        margin-bottom: 15px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .bh-sl-container .bh-sl-map {
+        height: 230px;
+        margin-bottom: 15px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .bh-sl-container .bh-sl-map {
+        width: 65%;
+    }
+}
+
+.bh-sl-container .bh-sl-pagination-container {
+    clear: both;
+}
+
+.bh-sl-container .bh-sl-pagination-container ol {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.bh-sl-container .bh-sl-pagination-container ol li {
+    color: #005293;
+    cursor: pointer;
+    display: inline-block;
+    font: bold 14px Arial, Helvetica, sans-serif;
+    padding: 10px;
+}
+
+.bh-sl-container .bh-sl-pagination-container ol .bh-sl-current {
+    color: #555;
+    cursor: auto;
+    text-decoration: none;
+}
+
+/* Modal window */
+.bh-sl-overlay {
+    background: url(../img/overlay-bg.png) repeat;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+}
+
+.bh-sl-overlay .bh-sl-modal-window {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #656565;
+    position: absolute;
+    left: 50%;
+    margin-left: -460px;
+    /* width divided by 2 */
+    margin-top: 60px;
+    height: 620px;
+    width: 920px;
+    z-index: 10010;
+}
+
+.bh-sl-overlay .bh-sl-modal-window .bh-sl-map-container {
+    margin-top: 50px;
+    /* increase map container margin */
+}
+
+.bh-sl-overlay .bh-sl-modal-window .bh-sl-modal-content {
+    float: left;
+    padding: 0 1%;
+    /* there's already a margin on the top of the map-container div */
+    width: 98%;
+}
+
+.bh-sl-overlay .bh-sl-modal-window .bh-sl-close-icon {
+    right: 22px;
+    top: 13px;
+}
+
+.bh-sl-close-icon {
+    cursor: pointer;
+    height: 24px;
+    position: absolute;
+    width: 24px;
+}
+
+.bh-sl-close-icon:after, .bh-sl-close-icon:before {
+    background: #ccc;
+    content: '';
+    display: block;
+    height: 24px;
+    margin: -3px 0 0 -1px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    right: 3px;
+    top: 3px;
+    width: 3px;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.bh-sl-close-icon:hover:after, .bh-sl-close-icon:hover:before {
+    background: #b3b3b3;
+}
+
+.bh-sl-close-icon:before {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.gm-svpc {
+    display: none !important;
+}
+
+.gmnoprint {
+    display: none !important;
+}
+
+.bh-sl-container .loc-openingtimes p {
+    /* Picked up by both list and infowindows */
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bototm: 6px;
+}
+
+.bh-sl-container .loc-openingtimes .row .cell:first-child  {
+    /* Picked up by both list and infowindows */
+    font-weight:bold;
+    width: 40%;
+}
+
+.bh-sl-container .loc-openingtimes .row .cell:last-child  {
+    /* Picked up by both list and infowindows */
+    margin-bottom:10px;
+}
+
