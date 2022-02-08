@@ -119,7 +119,19 @@ abstract class AbstractDeliveryOptions extends Action
         $oApi->setLogger($logger);
         $oApi->setCarrierConfig($this->getCarrierConfig());
         $oApi->setAddress($street, $housenumber, $housenumberaddition, $postcode, $city, $state, $country);
-        $oApi->setOrder($cart->getQuote()->getSubtotalInclTax() > 0 ? $cart->getQuote()->getSubtotalInclTax() : $cart->getQuote()->getSubtotal(), $cart->getQuote()->getSubtotal()); //phpcs:ignore
+
+
+        $priceIncl = $cart->getQuote()->getSubtotal();
+        $priceExcl = $cart->getQuote()->getSubtotal();
+
+        if ($cart->getQuote()->getSubtotalInclTax() > 0) {
+            $priceIncl = $cart->getQuote()->getSubtotalInclTax();
+        } else if ($cart->getQuote()->getShippingAddress()->getSubtotalInclTax() > 0) {
+            $priceIncl = $cart->getQuote()->getShippingAddress()->getSubtotalInclTax();
+            $priceExcl = $cart->getQuote()->getShippingAddress()->getSubtotal();
+        }
+
+        $oApi->setOrder($priceIncl, $priceExcl); //phpcs:ignore
 
         $items = $cart->getQuote()->getAllVisibleItems();
 
