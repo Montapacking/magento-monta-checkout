@@ -46,6 +46,21 @@ define(
 
                 initObservable: function () {
 
+
+                    //one step checkout solution, update buttons and quantity change are not working, so we are gonna hide this options
+                    require([
+                    'jquery',
+                    'Magento_Ui/js/lib/view/utils/dom-observer',
+                    ], function ($,$do) {
+                        $(document).ready(function(){
+                            $do.get('.product-item-details .details-qty', function(elem){
+                                $(elem).removeClass('visible');
+                                $('.product-item-details .qtybuttons .remove').css('display', 'none');
+                                $('.product-item-details .qtybuttons .add').css('display', 'none');
+                            });
+                        });
+                    });
+
                     self = this;
 
                     var url = new URL(window.location.href).toString();
