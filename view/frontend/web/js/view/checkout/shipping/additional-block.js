@@ -54,7 +54,8 @@ define(
                     ], function ($,$do) {
                         $(document).ready(function(){
                             $do.get('.product-item-details .details-qty', function(elem){
-                                $(elem).removeClass('visible');
+                                //$(elem).removeClass('visible');
+                                $(elem).find("input").attr('readonly', true);
                                 $('.product-item-details .qtybuttons .remove').css('display', 'none');
                                 $('.product-item-details .qtybuttons .add').css('display', 'none');
                             });

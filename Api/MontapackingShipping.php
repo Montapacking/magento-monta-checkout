@@ -252,6 +252,7 @@ class MontapackingShipping
      */
     public function checkStock($sku)
     {
+
         $url = "https://api.montapacking.nl/rest/v5/product/" . $sku . "/stock";
 
         $this->_pass = htmlspecialchars_decode($this->_pass);
@@ -269,7 +270,10 @@ class MontapackingShipping
         curl_close($ch);
         $result = json_decode($result);
 
-        if (null !== $result && $result->Message == 'Zero products found with sku ' . $sku) {
+
+        if (null !== $result && property_exists($result, 'Message') && $result->Message == 'Zero products found with sku ' . $sku) {
+            return false;
+        } else if (null !== $result && property_exists($result, 'Stock') && $result->Stock->StockAvailable <= 0) {
             return false;
         } else {
             return true;

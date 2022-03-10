@@ -148,7 +148,14 @@ abstract class AbstractDeliveryOptions extends Action
                 }
             } else {
                 $stockItem = $item->getProduct()->getExtensionAttributes()->getStockItem();
-                if ($stockItem->getQty() <= 0) {
+
+                //print $stockItem->getQty()."-".$item->getQty();
+                //exit;
+                //echo "<pre>";print_r($item->debug());
+
+                if ($stockItem->getQty() <= 0 || $stockItem->getQty() < $item->getQty()) {
+
+
                     $bAllProductsAvailable = false;
                     break;
                 }
