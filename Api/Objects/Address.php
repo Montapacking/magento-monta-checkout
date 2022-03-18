@@ -82,27 +82,25 @@ class Address
     public function setLongLat()
     {
         // Get lat and long by address
-
-        if (!trim($this->street)) {
-            $address = $this->postalcode . ' ' . $this->countrycode . ''; // Google HQ
-
-            $prepAddr = str_replace('  ', ' ', $address);
-            $prepAddr = str_replace(' ', '+', $prepAddr);
-            $google_maps_url = "https://maps.google.com/maps/api/geocode/json?language=". $this->countrycode."&address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
-
-
-        } else {
-            $address = $this->street . ' ' . $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode . ''; // Google HQ
-
-            $prepAddr = str_replace('  ', ' ', $address);
-            $prepAddr = str_replace(' ', '+', $prepAddr);
-            $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
-
-        }
-
+        $address = $this->street . ' ' . $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode; // Google HQ
+        $prepAddr = str_replace('  ', ' ', $address);
+        $prepAddr = str_replace(' ', '+', $prepAddr);
+        $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=".$this->googleapikey; //phpcs:ignore
 
         try {
-            $geocode = file_get_contents($google_maps_url);
+
+            $url = $google_maps_url;
+            $ch = curl_init();
+            $timeout = 1;
+
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+
+            $geocode = curl_exec($ch);
+            curl_close($ch);
+
 
             $output = json_decode($geocode);
 
@@ -120,6 +118,9 @@ class Address
             $latitude = 0;
             $longitude = 0;
         }
+
+        //$latitude = 0;
+        //$longitude = 0;
 
         $this->longitude = $longitude;
         $this->latitude = $latitude;
