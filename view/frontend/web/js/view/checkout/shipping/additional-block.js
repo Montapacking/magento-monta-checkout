@@ -641,7 +641,8 @@ define(
                         '<div class="positioning">'+html+'</div>'
                     );
 
-                    ko.applyBindings(self, document.getElementById('modular-container'))
+                    ko.applyBindings(self, document.getElementById('modular-container'));
+
                 },
 
                 closePopup: function () {
@@ -653,6 +654,8 @@ define(
                 },
 
                 openStoreLocator: function () {
+
+                    $('body').trigger('processStart');
 
                     require(
                         ['Handlebars',
@@ -746,8 +749,6 @@ define(
                                     callbackNotify: function (notifyText) {
 
                                     },
-
-
                                 };
 
                                 setTimeout(function(){
@@ -755,6 +756,7 @@ define(
 
                                     var html = $("#storelocator_container").html();
                                     self.showPopup(html);
+                                    $('body').trigger('processStop');
 
                                 }, 3000);
 

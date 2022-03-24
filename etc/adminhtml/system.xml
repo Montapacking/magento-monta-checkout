@@ -17,7 +17,7 @@
     <system>
         <section id="carriers">
             <group id="montapacking" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Montapacking</label>
+                <label>Monta</label>
 
                 <field id="active" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
@@ -33,30 +33,29 @@
                 </field>
 
                 <field id="webshop" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
-                    <label>Montapacking - Webshop</label>
+                    <label>Monta - Webshop</label>
                     <validate>required-entry</validate>
                     <comment><![CDATA[The name of the webshop in Monta Portal. Name can be found <a target="_new" href="https://montaportal.nl/Home/CustomerSettings#CheckoutOptions">here</a>.]]></comment>
                 </field>
+
                 <field id="username" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
-                    <label>Montapacking - Username</label>
+                    <label>Monta - Username</label>
                     <validate>required-entry</validate>
-                    <comment><![CDATA[The username of Monta REST API provided by Montapacking.]]></comment>
+                    <comment><![CDATA[The username of Monta REST API provided by Monta.]]></comment>
 
                 </field>
 
                 <field id="password" translate="label" type="password" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
-                    <label>Montapacking - Password</label>
+                    <label>Monta - Password</label>
                     <validate>required-entry</validate>
-                    <comment><![CDATA[The password of Monta REST API provided by Montapacking.]]></comment>
+                    <comment><![CDATA[The password of Monta REST API provided by Monta.]]></comment>
                 </field>
-
 
                 <field id="price" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Shipping Costs</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                     <comment><![CDATA[The base shipping costs used when there is no API connection.]]></comment>
                 </field>
-
 
                 <field id="logerrors" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
                     <label>Log errors</label>
@@ -70,21 +69,25 @@
                     <comment><![CDATA[When disabled no pickup points are shown]]></comment>
                 </field>
 
-
                 <field id="leadingstockmontapacking" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
-                    <label>Does have Montapacking have Leading stock </label>
+                    <label>Does Monta have the leading stock</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[When selecting 'Yes' Montapacking will calculate the current stock, when selecting 'No' the Magento stock is leading]]></comment>
+                    <comment><![CDATA[If this option is active, the stock, sizes and weights of the SKUs are checked with the data known in the Montaportal.When selecting 'No' the Magento stock is leading]]></comment>
                 </field>
 
-                <field id="googleapikey" translate="label comment" type="text" sortOrder="12" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                <field id="disabledeliverydays" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
+                    <label>Disable delivery days</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[When disabled no delivery days are shown]]></comment>
+                </field>
+
+                <field id="googleapikey" translate="label comment" type="text" sortOrder="14" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
                     <label>Google API key</label>
                     <validate>required-entry</validate>
                     <comment><![CDATA[Google API Key which is needed by our checkout]]></comment>
                 </field>
 
-
-                <field id="sort_order" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                 </field>
 

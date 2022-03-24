@@ -311,7 +311,7 @@ class MontapackingShipping
             ]
         );
 
-        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH', 'DHLParcelConnectPickupPoint'];
+        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH', 'DHLParcelConnectPickupPoint', 'UPSAP'];
 
         // Timeframes omzetten naar bruikbaar object
         $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products', '_allowedshippers']); //phpcs:ignore
@@ -428,6 +428,8 @@ class MontapackingShipping
         $ch = curl_init();
 
         $this->_pass = htmlspecialchars_decode($this->_pass);
+
+        //print $url . '?' . $request; exit;
 
         curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
         curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
