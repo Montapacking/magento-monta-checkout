@@ -142,11 +142,14 @@ abstract class AbstractDeliveryOptions extends Action
 
             if ($leadingstockmontapacking) {
                 //$oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight')); //phpcs:ignore
-                $oApi->addProduct($item->getSku(), $item->getQty()); //phpcs:ignore
 
-                if (false === $oApi->checkStock($item->getSku())) {
-                    $bAllProductsAvailable = false;
-                    break;
+                if (!$disabledeliverydays) {
+                    $oApi->addProduct($item->getSku(), $item->getQty()); //phpcs:ignore
+
+                    if (false === $oApi->checkStock($item->getSku())) {
+                        $bAllProductsAvailable = false;
+                        break;
+                    }
                 }
 
             } else {
