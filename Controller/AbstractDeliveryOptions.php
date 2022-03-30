@@ -145,11 +145,12 @@ abstract class AbstractDeliveryOptions extends Action
 
                 if (!$disabledeliverydays) {
                     $oApi->addProduct($item->getSku(), $item->getQty()); //phpcs:ignore
-
-                    if (false === $oApi->checkStock($item->getSku())) {
-                        $bAllProductsAvailable = false;
-                        break;
-                    }
+                    // we let our api calculate the stock with the added products, so we set the stock on false
+                    $bAllProductsAvailable = false;
+                    //if (false === $oApi->checkStock($item->getSku())) {
+                    //    $bAllProductsAvailable = false;
+                    //    break;
+                    //}
                 }
 
             } else {
