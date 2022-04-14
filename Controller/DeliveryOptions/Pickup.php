@@ -78,16 +78,7 @@ class Pickup extends AbstractDeliveryOptions
         }
 
         try {
-            $longlat = $request->getParam('longlat') ? trim($request->getParam('longlat')) : "";
-
-            if ($longlat == 'false') {
-                $oApi = $this->generateApi($request, $language, $this->_logger, false);
-
-            } else{
-                $oApi = $this->generateApi($request, $language, $this->_logger, true);
-
-            }
-
+            $oApi = $this->generateApi($request, $language, $this->_logger, true);
 
             $pickupoptions = $oApi->getPickupOptions();
 
