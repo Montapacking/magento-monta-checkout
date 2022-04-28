@@ -245,6 +245,14 @@ nomargin {
 
 }
 
+.montapacking-container-logo.GLS,
+.montapacking-container-logo.GLSPickupPoint{
+    background-image: url(../images/GLS.png) !important;
+}
+
+.montapacking-container-logo.FedEx{
+    background-image: url(../images/FedEx.png) !important;
+}
 
 .montapacking-container-logo.Budbee{
     background-image: url(../images/BudBee.png) !important;
