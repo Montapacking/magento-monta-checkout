@@ -280,7 +280,8 @@ nomargin {
 .montapacking-container-logo.PAK,
 .montapacking-container-logo.PostNL,
 .montapacking-container-logo.PostNLGroot,
-.montapacking-container-logo.PostNL_PostNlBuspakje
+.montapacking-container-logo.PostNL_PostNlBuspakje,
+.montapacking-container-logo.PostNLPakjesTracked
 {
     background-image: url(../images/PostNL.png) !important;
 }
