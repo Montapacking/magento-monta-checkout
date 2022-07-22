@@ -21,10 +21,11 @@ abstract class AbstractDeliveryOptions extends Action
      * @param Context $context
      */
     public function __construct(
-        Context $context,
-        CarrierConfig $carrierConfig,
+        Context                      $context,
+        CarrierConfig                $carrierConfig,
         \Magento\Checkout\Model\Cart $cart
-    ) {
+    )
+    {
         $this->carrierConfig = $carrierConfig;
 
         $this->cart = $cart;
@@ -49,7 +50,7 @@ abstract class AbstractDeliveryOptions extends Action
 
     /**
      * @param string $data
-     * @param null   $code
+     * @param null $code
      *
      * @return mixed
      */
@@ -68,14 +69,13 @@ abstract class AbstractDeliveryOptions extends Action
 
     public function generateApi($request, $language, $logger = null, $use_googlekey = false)
     {
-
         $street = $request->getParam('street') ? trim(implode(" ", $request->getParam('street'))) : "";
         $postcode = $request->getParam('postcode') ? trim($request->getParam('postcode')) : "";
         $city = $request->getParam('city') ? trim($request->getParam('city')) : "";
         $country = $request->getParam('country') ? trim($request->getParam('country')) : "";
 
-        $housenumber =  $request->getParam('housenumber') ? trim($request->getParam('housenumber')) : "";
-        $housenumberaddition =  $request->getParam('housenumberaddition') ? trim($request->getParam('housenumberaddition')) : "";
+        $housenumber = $request->getParam('housenumber') ? trim($request->getParam('housenumber')) : "";
+        $housenumberaddition = $request->getParam('housenumberaddition') ? trim($request->getParam('housenumberaddition')) : "";
         $state = '';
 
         $postcode = str_replace(" ", "", $postcode);
@@ -141,16 +141,20 @@ abstract class AbstractDeliveryOptions extends Action
         foreach ($items as $item) {
 
             if ($leadingstockmontapacking) {
+
                 //$oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight')); //phpcs:ignore
 
                 if (!$disabledeliverydays) {
                     $oApi->addProduct($item->getSku(), $item->getQty()); //phpcs:ignore
+
                     // we let our api calculate the stock with the added products, so we set the stock on false
                     $bAllProductsAvailable = false;
+
                     //if (false === $oApi->checkStock($item->getSku())) {
                     //    $bAllProductsAvailable = false;
                     //    break;
                     //}
+
                 }
 
             } else {

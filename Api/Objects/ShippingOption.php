@@ -237,7 +237,9 @@ class ShippingOption
      */
     public function setDate($date)
     {
-        $this->date = date('Y-m-d H:i:s', strtotime($date));
+        if ($date != null) {
+            $this->date = date('Y-m-d H:i:s', strtotime($date));
+        }
     }
 
     /**

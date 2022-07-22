@@ -2,10 +2,10 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="quote_address" resource="checkout" engine="innodb" comment="Sales Flat Quote Address">
-        <column xsi:type="text" name="montapacking_montacheckout_data" nullable="true" comment="Montapacking Data"/>
+        <column xsi:type="text" name="montapacking_montacheckout_data" nullable="true" comment="Monta Data"/>
     </table>
 
     <table name="sales_order" resource="sales" engine="innodb" comment="Sales Flat Order">
-        <column xsi:type="text" name="montapacking_montacheckout_data" nullable="true" comment="Montapacking Data"/>
+        <column xsi:type="text" name="montapacking_montacheckout_data" nullable="true" comment="Monta Data"/>
     </table>
 </schema>

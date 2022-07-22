@@ -30,22 +30,23 @@ class Index extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Montapacking\MontaCheckout\Helper\Data $logDataHelper,
         array $data = [],
-        Request $request
+        Request $request = null
     ) {
 
         $this->request = $request;
         $this->logDataHelper = $logDataHelper;
         parent::__construct($context, $data);
+        if ($this->request != null) {
+            $params = $this->request->getParams();
 
-        $params = $this->request->getParams();
+            if (isset($params['clear'])) {
+                $file_name = $this->logDataHelper->getPath() . DIRECTORY_SEPARATOR . $this->getFileName();
 
-        if (isset($params['clear'])) {
-            $file_name = $this->logDataHelper->getPath().DIRECTORY_SEPARATOR.$this->getFileName();
+                if (file_exists($file_name)) {
+                    file_put_contents($file_name, '');
+                }
 
-            if (file_exists($file_name)) {
-                file_put_contents($file_name, '');
             }
-
         }
     }
 

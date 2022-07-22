@@ -72,7 +72,12 @@ class Address
         $this->setCity($city);
         $this->setState($state);
         $this->setCountry($countrycode);
-        $this->setGoogleApiKey(trim($googleapikey));
+
+        if ($googleapikey != null)
+        {
+            $this->setGoogleApiKey(trim($googleapikey));
+        }
+
         $this->setLongLat();
     }
 
@@ -85,7 +90,8 @@ class Address
         $address = $this->street . ' ' . $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode; // Google HQ
         $prepAddr = str_replace('  ', ' ', $address);
         $prepAddr = str_replace(' ', '+', $prepAddr);
-        $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=".$this->googleapikey; //phpcs:ignore
+        $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
+
 
         try {
 

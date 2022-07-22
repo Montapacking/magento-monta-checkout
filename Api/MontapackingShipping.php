@@ -429,7 +429,6 @@ class MontapackingShipping
 
         $this->_pass = htmlspecialchars_decode($this->_pass);
 
-        //print $url . '?' . $request; exit;
 
         curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
         curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
@@ -487,11 +486,11 @@ class MontapackingShipping
 
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;
-            $context = ['source' => 'Montapacking Checkout'];
-            $logger->critical("Webshop was unable to connect to Montapacking REST api. Please check your username and password. Otherwise please contact Montapacking (" . $url . ")", $context); //phpcs:ignore
+            $context = ['source' => 'Monta Checkout'];
+            $logger->critical("Webshop was unable to connect to Monta REST api. Please check your username and password. Otherwise please contact Montapacking (" . $url . ")", $context); //phpcs:ignore
         } elseif (null !== $this->_logger) {
             $logger = $this->_logger;
-            $context = ['source' => 'Montapacking Checkout'];
+            $context = ['source' => 'Monta Checkout'];
             $logger->notice("Connection logged (" . $url . ")", $context);
         }
 

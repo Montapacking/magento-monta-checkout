@@ -8,8 +8,8 @@ use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Montapacking\MontaCheckout\Controller\AbstractDeliveryOptions;
 
 use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
-
-use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
+use \DateTime;
+use \IntlDateFormatter;
 
 /**
  * Class Pickup
@@ -177,6 +177,8 @@ class Pickup extends AbstractDeliveryOptions
                         }
                         $extra_code = implode(",", $arr);
 
+                        $dt = date_create($from);
+
                         $options[$onr] = (object)[
                             'marker_id' => $marker_id,
                             'code' => $option->code,
@@ -196,7 +198,7 @@ class Pickup extends AbstractDeliveryOptions
                             'from' => date('H:i', strtotime($from)),
                             'to' => date('H:i', strtotime($to)),
                             'date' => date("d-m-Y", strtotime($from)),
-                            'date_string' => strftime('%A %e %B %Y', strtotime($from)),
+                            'date_string' => $this->formatLanguage($dt, 'd F Y',$language),
                             'date_from_to' => date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)),
                             'date_from_to_formatted' => date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string //phpcs:ignore
 
@@ -345,5 +347,36 @@ class Pickup extends AbstractDeliveryOptions
         }
 
         return $items;
+    }
+
+    function formatLanguage(DateTime $dt,string $format,string $language = 'en') : string {
+        $curTz = $dt->getTimezone();
+        if($curTz->getName() === 'Z'){
+            //INTL don't know Z
+            $curTz = new DateTimeZone('UTC');
+        }
+
+        $formatPattern = strtr($format,array(
+            'D' => '{#1}',
+            'l' => '{#2}',
+            'M' => '{#3}',
+            'F' => '{#4}',
+        ));
+        $strDate = $dt->format($formatPattern);
+        $regEx = '~\{#\d\}~';
+        while(preg_match($regEx,$strDate,$match)) {
+            $IntlFormat = strtr($match[0],array(
+                '{#1}' => 'E',
+                '{#2}' => 'EEEE',
+                '{#3}' => 'MMM',
+                '{#4}' => 'MMMM',
+            ));
+            $fmt = datefmt_create( $language ,IntlDateFormatter::FULL, IntlDateFormatter::FULL,
+                $curTz, IntlDateFormatter::GREGORIAN, $IntlFormat);
+            $replace = $fmt ? datefmt_format( $fmt ,$dt) : "???";
+            $strDate = str_replace($match[0], $replace, $strDate);
+        }
+
+        return $strDate;
     }
 }

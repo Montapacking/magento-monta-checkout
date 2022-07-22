@@ -1,5 +1,5 @@
-# Montapacking Checkout for Magento 2
-Magento plugin to integrate the Montapacking shipping options
+# Monta Checkout for Magento 2
+Magento plugin to integrate the Monta shipping options
 
 
 ## Installation without using Composer
@@ -16,17 +16,17 @@ After installation, run:
 4. `bin/magento cache:flush`
 
 ## Configuration
-The options can be found in Stores > Configuration > Sales > Shipping Methods > Montapacking.
+The options can be found in Stores > Configuration > Sales > Shipping Methods > Monta.
 
 ### API credentials
-To use this module you need API credentials provided by Montapacking ('Montapacking webshop', 'Montapacking webshop', 'Montapacking - Password').
+To use this module you need API credentials provided by Monta ('Monta webshop', 'Monta webshop', 'Monta - Password').
 
 ## Google API
 Specify a valid Google Maps API key here. A key can be created here: https://developers.google.com/maps/documentation/javascript/get-api-key.
 This key is needed for the map with pick-up points.
  
 ## Shipping Costs
-The base shipping costs used when there is a possible connection error with the Montapacking API.
+The base shipping costs used when there is a possible connection error with the Monta API.
 
 
 

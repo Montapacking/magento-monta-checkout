@@ -2,7 +2,7 @@
     "name": "montapacking/montacheckout",
     "description": "Monta Checkout Extension",
     "require": {
-        "php": "~7.1|~7.2|~7.3|~7.4",
+        "php": "~7.1|~7.2|~7.3|~7.4|~8.1",
         "ext-json": "*"
     },
     "type": "magento2-module",
@@ -11,7 +11,7 @@
     "minimum-stability": "stable",
     "authors": [
         {
-            "name": "Montapacking",
+            "name": "Monta",
             "email": "servicedesk@monta.nl",
             "homepage": "https://www.monta.nl"
         }
@@ -23,7 +23,7 @@
     "keywords": [
         "Monta",
 		"Monta Checkout",
-        "Official Montapacking extension",
+        "Official Monta extension",
         "Magento 2"
     ],
     "autoload": {

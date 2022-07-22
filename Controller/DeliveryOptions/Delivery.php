@@ -37,18 +37,19 @@ class Delivery extends AbstractDeliveryOptions
     /**
      * Services constructor.
      *
-     * @param Context       $context
-     * @param Session       $checkoutSession
+     * @param Context $context
+     * @param Session $checkoutSession
      * @param CarrierConfig $carrierConfig
      */
     public function __construct(
-        Context $context,
-        Session $checkoutSession,
-        LocaleResolver $localeResolver,
-        CarrierConfig $carrierConfig,
+        Context                                   $context,
+        Session                                   $checkoutSession,
+        LocaleResolver                            $localeResolver,
+        CarrierConfig                             $carrierConfig,
         \Montapacking\MontaCheckout\Logger\Logger $logger,
-        \Magento\Checkout\Model\Cart $cart
-    ) {
+        \Magento\Checkout\Model\Cart              $cart
+    )
+    {
         $this->_logger = $logger;
 
         $this->checkoutSession = $checkoutSession;
@@ -144,7 +145,7 @@ class Delivery extends AbstractDeliveryOptions
                         if (date('H:i', strtotime($from)) != '00:00') {
                             $description[] = date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string; //phpcs:ignore
                         }
-                        if (trim($frame->code) && null !== $frame->code) {
+                        if ($frame->code != null && trim($frame->code)) {
                             $frame->code_desc = __($frame->code);
                             $description[] = $frame->code_desc;
                         }
@@ -159,7 +160,7 @@ class Delivery extends AbstractDeliveryOptions
                             $description[] = $option->description;
                         }
 
-                        if (trim($frame->code) && null !== $frame->code) {
+                        if ($frame->code != null && trim($frame->code)) {
                             $description[] = $frame->code;
                         }
 
@@ -168,24 +169,27 @@ class Delivery extends AbstractDeliveryOptions
 
                     if ($frame->type == 'Unknown') {
 
-                        if (strtotime($option->date) > 0) {
+                        if (isset($option->date) && strtotime($option->date) > 0) {
                             $from = date("Y-m-d", strtotime($option->date));
                             $to = date("Y-m-d", strtotime($option->date));
                         } elseif ($option->code == 'RED_ShippingDayUnknown') {
                             $from = date('d-m-Y', time());
                             $to = $from = date('d-m-Y', time());
-                        }elseif ($option->code == 'Trunkrs_ShippingDayUnknown') {
+                        } elseif ($option->code == 'Trunkrs_ShippingDayUnknown') {
                             $from = date('d-m-Y', time());
                             $to = $from = date('d-m-Y', time());
                         }
 
-                        $date = date("Y-m-d", strtotime($from));
+                        if (isset($from)) {
+                            $date = date("Y-m-d", strtotime($from));
+                        }
+
 
                         if (trim($option->description)) {
                             $description[] = $option->description;
                         }
 
-                        if (trim($frame->code) && null !== $frame->code) {
+                        if ($frame->code != null && trim($frame->code)) {
                             $description[] = $frame->code;
                         }
 
@@ -210,8 +214,8 @@ class Delivery extends AbstractDeliveryOptions
 
                         $items[$date][] = (object)[
                             'code' => $frame->code,
-                            'date' => date('d-m-Y', strtotime($from)),
-                            'time' => $time, //phpcs:ignore
+                            'date' => $from != null && strtotime($from) > 0 ? date('d-m-Y', strtotime($from)) : "",
+                            'time' => $time != null ? $time : "", //phpcs:ignore
                             'description' => $frame->description,
                             'price_currency' => $curr,
                             'options' => $options
@@ -222,7 +226,7 @@ class Delivery extends AbstractDeliveryOptions
             }
         }
 
-        ksort  ($items);
+        ksort($items);
         $list = [];
         foreach ($items as $key => $values) {
 
@@ -264,16 +268,14 @@ class Delivery extends AbstractDeliveryOptions
 
     public function calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string)
     {
-        if (date("Y-m-d", strtotime($from)) == date("Y-m-d") && $frame->code != 'SameDayDelivery') {
+        if ($from != null && (date("Y-m-d", strtotime($from)) == date("Y-m-d") && $frame->code != 'SameDayDelivery')) {
             return null;
         }
 
-        $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
-
         $date_string = "";
 
-        if ($from > 0) {
-            $date_string = __(date("l", strtotime($from)))." ". date("d", strtotime($from))." ". __(date("F", strtotime($from)));
+        if ($from != null && strtotime($from) > 0) {
+            $date_string = __(date("l", strtotime($from))) . " " . date("d", strtotime($from)) . " " . __(date("F", strtotime($from)));
         }
 
         $description = str_replace("PostNL Pakket", "PostNL", $description);
@@ -283,7 +285,7 @@ class Delivery extends AbstractDeliveryOptions
             'codes' => $option->codes,
             'type' => $frame->type,
             'image' => trim(implode(",", $option->codes)),
-            'image_replace' =>  trim(str_replace(",", "_", implode(",", $option->codes))),
+            'image_replace' => trim(str_replace(",", "_", implode(",", $option->codes))),
             'optionCodes' => $option->optioncodes,
             'name' => $option->description,
             'description_string' => $description,
@@ -291,12 +293,12 @@ class Delivery extends AbstractDeliveryOptions
             'price_string' => $curr . ' ' . number_format($option->price, 2, ',', ''),
             'price_raw' => number_format($option->price, 2),
             'price_formatted' => number_format($option->price, 2, ',', ''),
-            'from' => date('H:i', strtotime($from)),
-            'to' => date('H:i', strtotime($to)),
-            'date' =>  strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
+            'from' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) : "",
+            'to' => $to != null && strtotime($to) > 0 ? date('H:i', strtotime($to)) : "",
+            'date' => $from != null && strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
             'date_string' => $date_string,
-            'date_from_to' => strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
-            'date_from_to_formatted' => strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
+            'date_from_to' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
+            'date_from_to_formatted' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
             'extras' => $extras,
         ];
 

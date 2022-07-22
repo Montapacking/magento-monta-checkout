@@ -1,15 +1,15 @@
 <?php
 /**
- * Montapacking B.V.
+ * Monta B.V.
  *
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  *
- * @category  Montapacking
+ * @category  Monta
  * @package   Montapacking_MontaCheckout
- * @copyright 2020 Montapacking B.V.
+ * @copyright 2020 Monta B.V.
  */
 
 \Magento\Framework\Component\ComponentRegistrar::register(
