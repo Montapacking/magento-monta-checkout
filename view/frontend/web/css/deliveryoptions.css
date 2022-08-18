@@ -748,6 +748,10 @@ nomargin {
 
 }
 
+.bh-sl-container .bh-sl-filters-container .select-item.close-item
+{
+    float: right;
+}
 
 .bh-sl-container .bh-sl-map-container {
     clear: left;

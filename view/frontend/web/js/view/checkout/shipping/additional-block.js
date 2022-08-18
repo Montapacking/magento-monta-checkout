@@ -625,6 +625,7 @@ define(
                         "        <div class=\"bh-sl-container\">\n" +
                         "            <div class=\"bh-sl-filters-container\">\n" +
                         "                <button href=\"javascript:;\" data-bind=\"click: closePopup, i18n: 'Use selection'\" class=\"select-item displaynone\"></button>\n" +
+                        "                <button type=\"button\" href=\"javascript:;\" data-bind=\"click: closePopup, i18n: 'x'\" class=\"select-item close-item\"></button>\n" + 
                         "                <ul id=\"category-filters\" class=\"bh-sl-filters\"></ul>\n" +
                         "            </div>\n" +
                         "            <div id=\"bh-sl-map-container\" class=\"bh-sl-map-container\">\n" +
