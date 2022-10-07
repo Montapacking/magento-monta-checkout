@@ -32,7 +32,7 @@
                     <label>Method Name</label>
                 </field>
 
-                <field id="webshop" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                <field id="webshop" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
                     <label>Monta - Webshop</label>
                     <validate>required-entry</validate>
                     <comment><![CDATA[The name of the webshop in Monta Portal. Name can be found <a target="_new" href="https://montaportal.nl/Home/CustomerSettings#CheckoutOptions">here</a>.]]></comment>
