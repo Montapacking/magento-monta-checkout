@@ -32,7 +32,27 @@
         <!-- /ko -->
 
     </div>
+     
+    <div data-bind="foreach: standardDeliveryServices" class="clearboth">
+        <div data-bind="template: {name: 'deliveryServices-template' }"></div>
+    </div>
 
+    <div style="position:relative;" class="clearboth"> 
+        <button style="position: absolute; top:20px;left:2px"  type="button" data-bind="click: moveLeft"><</button>
+        <button style="position: absolute; top:20px;right:2px"  type="button" data-bind="click: moveRight">></button>
+        <div style="display: block;  overflow-x: hidden; clear: left;margin-left: 60px;margin-right: 60px;"  id="slider">
+            <div id="slider-content">
+                <ol data-bind="foreach: daysForSelect" style="display: table">
+                    <li class="montapacking-tab day" style="display: table-cell;" data-bind="click: $parent.getfilterDeliveryServices.bind($parent,$element)">  
+                            <!-- Donderdag -->
+                            <!-- <p style="display: none" data-bind="text: date_string"></p>               -->
+                            <p data-bind="text: day"></p>              
+                            <p data-bind="text: day_string"></p>              
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
 
     <div class="montapacking-services">
 
@@ -101,9 +121,13 @@
 
             <!-- /ko -->
 
+            <div data-bind="foreach: filteredDeliverServices" class="clearboth">
+                <div data-bind="template: {name: 'deliveryServices-template' }"></div>
+            </div>
+
             <!-- ko if: deliveryServices().length > 0 -->
 
-            <div data-bind="foreach: deliveryServices">
+            <script type="text/html" id="deliveryServices-template">
 
                 <div data-bind="foreach: options">
                     <!-- ko -->
@@ -183,7 +207,7 @@
                     </div>
                     <!-- /ko -->
                 </div>
-            </div>
+            </script>
 
             <!-- /ko -->
 
