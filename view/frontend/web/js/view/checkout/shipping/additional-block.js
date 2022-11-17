@@ -272,13 +272,12 @@ define(
                     var distinctFilteredItems = [];
                     
                     //search all shipping options with delivery date, so the dates can be used for the datepicker 
-                    var filteredItems  = objectArray.filter(timeframe => timeframe.options[0].from !== "" || 
-                    timeframe.options[0].type !== "Unknown").map(time => 
+                    var filteredItems  = objectArray.filter(timeframe => timeframe.options[0].type !== "Unknown").map(option => 
                         { return { 
-                            "date":time.options[0].date, 
-                            "day":time.options[0].date_string.split(' ')[0],
+                            "date":option.options[0].date, 
+                            "day":option.options[0].date_string.split(' ')[0],
                             "day_string":  
-                        time.options[0].date_string.split(' ')[1].concat(' ', time.options[0].date_string.split(' ')[2]) }}); 
+                        option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]) }}); 
                         
                     // filter all duplicates
                     $.each(filteredItems, function (index, item) {
@@ -375,12 +374,16 @@ define(
                 },
 
                 getfilterDeliveryServicesByDate: function(date) { 
-                    self.setFiltered(date); 
+                    self.setfilterDeliveryServicesByDate(date); 
                 },
 
-                setFiltered: function(date){
+                setfilterDeliveryServicesByDate: function(date){
                     var objects = this.deliveryServices;
-                    this.filteredDeliveryServices(objects.filter(timeframe => timeframe.options[0].date === date.date)); 
+                    var objectsFiltered = objects.filter(timeframe => timeframe.options[0].date === date.date)
+                    var objectsSorted=  objectsFiltered.sort((a, b) =>  
+                         parseInt(parseFloat(a.options[0].price_raw)) - parseInt(parseFloat(b.options[0].price_raw))
+                    )
+                    this.filteredDeliveryServices(objectsSorted); 
                 },
 
                 moveLeft: function(){
