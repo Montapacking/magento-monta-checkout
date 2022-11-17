@@ -33,15 +33,38 @@
 
     </div>
      
-    <div data-bind="foreach: standardDeliveryServices" class="clearboth">
+    <!-- ko if: standardDeliveryServices().length > 0 -->
+
+    <div data-bind="foreach: standardDeliveryServices" class="clearboth" id="standard-delivery-services">
         <div data-bind="template: {name: 'deliveryServices-template' }"></div>
+    </div> 
+
+     <!-- /ko -->
+    
+    <!-- ko if: filteredDeliveryServices().length > 0 -->
+
+    <div id="date-picker">
+        <button class="date-picker-button left" type="button" data-bind="click: moveLeft"><</button>
+        <button class="date-picker-button right"type="button" data-bind="click: moveRight">></button>
+        <div id="slider">
+            <div id="slider-content">
+                <ol data-bind="foreach: daysForSelect">
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">  
+                        <p data-bind="text: day"></p>              
+                        <p data-bind="text: day_string"></p>              
+                    </li>
+                </ol>
+            </div>
+        </div>
     </div>
+
+     <!-- /ko -->
 
     <div class="montapacking-services">
 
         <div class="delivery-services">
 
-            <!-- ko if: deliveryServices().length > 0 -->
+            <!-- ko if: filteredDeliveryServices().length > 0 -->
 
             <div class="container montapacking-delivery-service delivery-information displaynone">
 
@@ -85,7 +108,7 @@
             </div>
             <!-- /ko -->
 
-            <!-- ko ifnot: deliveryServices().length > 0 -->
+            <!-- ko ifnot: filteredDeliveryServices().length > 0 -->
 
             <div class="container montapacking-delivery-service delivery-information">
 
@@ -103,8 +126,13 @@
             </div>
 
             <!-- /ko -->
+            
+            <!-- ko if: filteredDeliveryServices().length > 0 -->
+            <div data-bind="foreach: filteredDeliveryServices" class="clearboth">
+                <div data-bind="template: {name: 'deliveryServices-template' }"></div>
+            </div>
 
-            <!-- ko if: deliveryServices().length > 0 -->
+            <!-- /ko -->
 
             <script type="text/html" id="deliveryServices-template">
 
@@ -188,7 +216,6 @@
                 </div>
             </script>
 
-            <!-- /ko -->
 
 
         </div>

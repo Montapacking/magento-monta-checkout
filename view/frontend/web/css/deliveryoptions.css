@@ -29,6 +29,42 @@
     clear:both;
 }
 
+#date-picker{
+    position:relative;
+    clear: both;
+}
+
+.date-picker-button {
+    position: absolute; 
+    top:20px;
+}
+
+#slider {
+    display: block;  
+    overflow-x: hidden; 
+    clear: left;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+#slider-content ol {
+    display: table;
+}
+
+
+#slider-content li {
+    display: table-cell;
+}
+
+
+.date-picker-button.left {
+    left:2px
+}
+
+.date-picker-button.right {
+    right:2px
+}
+
 .displayblock {
     display:block !important;
 }
@@ -162,7 +198,7 @@ nomargin {
         display:none !important;
     }
     .monta-shipment-pickup.active {
-        margin-top: 0px; !important;
+        margin-top: 0px !important;
     }
 }
 
@@ -213,6 +249,11 @@ nomargin {
     display: inline-block;
 }
 
+.montapacking-parent .montapacking-tab.day {
+    width: 140px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
 
 @media screen and (max-width: 380px) {
     .montapacking-parent .montapacking-tab {
@@ -1046,7 +1087,7 @@ nomargin {
     /* Picked up by both list and infowindows */
     font-weight: bold;
     margin-top: 6px;
-    margin-bototm: 6px;
+    margin-bottom: 6px;
 }
 
 .bh-sl-container .loc-openingtimes .row .cell:first-child  {
