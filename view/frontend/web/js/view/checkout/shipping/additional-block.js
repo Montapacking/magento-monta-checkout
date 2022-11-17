@@ -389,9 +389,9 @@ define(
                     }
 
                     $("#slider").animate({
-                        scrollLeft: this.position - 1000
+                        scrollLeft: this.position - 500
                     }, 500);
-                    this.position -= 1000;
+                    this.position -= 500;
                 },
 
                 moveRight: function(){
@@ -400,9 +400,9 @@ define(
                     }
 
                     $("#slider").animate({
-                        scrollLeft: this.position + 1000
+                        scrollLeft: this.position + 500
                     }, 500);
-                    this.position += 1000;
+                    this.position += 500;
                 },
 
                 toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false, hideDeliverInfo = false) {
