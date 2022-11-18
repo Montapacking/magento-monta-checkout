@@ -36,6 +36,9 @@ define(
                     hasconnection: 'true',
                     urlPrefix: '',
                     deliveryServices: ko.observableArray([]),
+                    standardDeliveryServices: ko.observableArray([]),
+                    filteredDeliveryServices: ko.observableArray([]),
+                    daysForSelect: ko.observableArray([]),
                     pickupServices: ko.observableArray([]),
                     deliveryFee: ko.observable(),
                     pickupFee: ko.observable(),
@@ -120,6 +123,9 @@ define(
                             'street',
                             'country',
                             'deliveryServices',
+                            'filteredDeliveryServices',
+                            'standardDeliveryServices',
+                            'daysForSelect',
                             'pickupPoints'
                         ]
                     );
@@ -243,8 +249,57 @@ define(
                             const objectArray = Object.values(services);
                             this.deliveryServices(objectArray);
 
+                            var filteredDeliveryServicesList = objectArray.filter(timeframe =>  timeframe.options[0].type !== 'Unknown');
+                            if(filteredDeliveryServicesList.length > 0){
+                                var distinctFilteredItems = self.initDatePicker(objectArray);                                     
+                                this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe => 
+                                    timeframe.options[0].date === distinctFilteredItems[0].date));
+
+                                // set width of date picker by number of list items 
+                                var width = $("ol li").length;
+                                $("#slider-content").width(width * 110); 
+                            }
+
+                            this.standardDeliveryServices(objectArray.filter(timeframe => 
+                                timeframe.options[0].from === "" &&  
+                                timeframe.options[0].type === 'Unknown'));  
+
                         }.bind(this)
                     );
+                },
+                
+                initDatePicker: function(objectArray){
+                    var distinctFilteredItems = [];
+                    
+                    //search all shipping options with delivery date, so the dates can be used for the datepicker 
+                    var filteredItems  = objectArray.filter(timeframe => timeframe.options[0].type !== "Unknown").map(option => 
+                        { return { 
+                            "date":option.options[0].date, 
+                            "day":option.options[0].date_string.split(' ')[0],
+                            "day_string":  
+                        option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]) }}); 
+                        
+                    // filter all duplicates
+                    $.each(filteredItems, function (index, item) {
+                        var alreadyAdded = false;
+                        var i;
+                        for (i in distinctFilteredItems) {
+                            if (distinctFilteredItems[i].date == item.date) {
+                                alreadyAdded = true;
+                            }
+                        } 
+                        if (!alreadyAdded) {
+                            distinctFilteredItems.push(item);
+                        }
+                        //show max 10 days in date picker
+                        if(distinctFilteredItems.length == 10) {
+                            return false;
+                        }
+                    });
+
+                    this.daysForSelect(distinctFilteredItems);
+                   
+                    return distinctFilteredItems;
                 },
 
                 /**
@@ -318,6 +373,41 @@ define(
 
                 },
 
+                getfilterDeliveryServicesByDate: function(date) { 
+                    self.setfilterDeliveryServicesByDate(date); 
+                },
+
+                setfilterDeliveryServicesByDate: function(date){
+                    var objects = this.deliveryServices;
+                    var objectsFiltered = objects.filter(timeframe => timeframe.options[0].date === date.date)
+                    var objectsSorted=  objectsFiltered.sort((a, b) =>  
+                         parseInt(parseFloat(a.options[0].price_raw)) - parseInt(parseFloat(b.options[0].price_raw))
+                    )
+                    this.filteredDeliveryServices(objectsSorted); 
+                },
+
+                moveLeft: function(){
+                    if(this.position == null){
+                        this.position =  $("#slider").children().position().left;
+                    }
+
+                    $("#slider").animate({
+                        scrollLeft: this.position - 500
+                    }, 500);
+                    this.position -= 500;
+                },
+
+                moveRight: function(){
+                    if(this.position == null){
+                        this.position =  $("#slider").children().position().left;
+                    }
+
+                    $("#slider").animate({
+                        scrollLeft: this.position + 500
+                    }, 500);
+                    this.position += 500;
+                },
+
                 toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false, hideDeliverInfo = false) {
 
 
@@ -331,7 +421,8 @@ define(
                         if (currentTab == '.montapacking-tab-pickup') {
                             $("input.selectshipment").val("pickup");
                             $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
-
+                            $("#date-picker").hide()
+                            $("#standard-delivery-services").hide()
                             var address = JSON.parse($("#old_address").val());
 
                             self.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
@@ -341,6 +432,7 @@ define(
 
                             $("input.selectshipment").val("delivery");
                             $(".delivery-option:not(.SameDayDelivery):first").find("input[class=montapacking_delivery_option]").trigger("click");
+                            $("#standard-delivery-services").show()
 
                             if ($(".SameDayDelivery").length) {
                                 $(".havesameday").removeClass("displaynone");
@@ -359,12 +451,13 @@ define(
                 showDeliveryOptions: function (informationTab, optionsTab) {
                     $(informationTab).hide();
                     $(optionsTab).fadeIn('slow');
+                    $("#date-picker").show();
                 },
 
                 selectShipper: function () {
 
                     $(".delivery-information").hide();
-
+                    $("#date-picker").hide();
                     // set vars
 
                     var code = $(this).val();
