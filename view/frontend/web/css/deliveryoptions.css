@@ -51,11 +51,9 @@
     display: table;
 }
 
-
 #slider-content li {
     display: table-cell;
 }
-
 
 .date-picker-button.left {
     left:2px
@@ -80,7 +78,6 @@
 nomargin {
     margin:0;
 }
-
 
 @media screen and (max-width: 412px) {
     #montapacking-plugin {
