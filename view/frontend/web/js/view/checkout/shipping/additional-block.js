@@ -254,10 +254,12 @@ define(
                                 var distinctFilteredItems = self.initDatePicker(objectArray);                                     
                                 this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe => 
                                     timeframe.options[0].date === distinctFilteredItems[0].date));
-
+                                
                                 // set width of date picker by number of list items 
                                 var width = $("ol li").length;
                                 $("#slider-content").width(width * 110); 
+
+                                $('#slider-content ol li:first-child').addClass("selected_day"); 
                             }
 
                             this.standardDeliveryServices(objectArray.filter(timeframe => 
@@ -373,7 +375,11 @@ define(
 
                 },
 
-                getfilterDeliveryServicesByDate: function(date) { 
+                getfilterDeliveryServicesByDate: function(date, event) {
+                    $('#slider-content ol li').removeClass("selected_day");
+                    var target = $(event.target).closest(".day");
+                    target.addClass("selected_day");
+
                     self.setfilterDeliveryServicesByDate(date); 
                 },
 

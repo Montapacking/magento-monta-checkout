@@ -36,7 +36,9 @@
 
 .date-picker-button {
     position: absolute; 
-    top:20px;
+    height: 100px;
+    background: #d3d3d380;
+    border:none;
 }
 
 #slider {
@@ -250,6 +252,13 @@ nomargin {
     width: 140px;
     border-radius: 10px;
     margin-right: 10px;
+}
+
+.montapacking-parent .montapacking-tab.day.selected_day {
+    background-color: #1979c3;
+    border:  none;
+    color: white;
+    box-shadow: 1px 1px 10px -4px grey;
 }
 
 @media screen and (max-width: 380px) {
