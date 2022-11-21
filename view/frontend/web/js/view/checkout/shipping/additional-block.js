@@ -379,7 +379,7 @@ define(
                     $('#slider-content ol li').removeClass("selected_day");
                     var target = $(event.target).closest(".day");
                     target.addClass("selected_day");
-
+                    
                     self.setfilterDeliveryServicesByDate(date); 
                 },
 
