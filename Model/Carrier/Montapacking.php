@@ -16,6 +16,7 @@ namespace Montapacking\MontaCheckout\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Checkout\Model\Session;
 
 class Montapacking extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -48,6 +49,8 @@ class Montapacking extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
 
     protected $_request;
 
+    protected $_checkoutSession;
+
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
@@ -56,12 +59,14 @@ class Montapacking extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Psr\Log\LoggerInterface $customLogger,
         \Magento\Framework\App\RequestInterface $request,
+        \Magento\Checkout\Model\Session $checkoutSession,
         array $data = []
     ) {
         $this->_request = $request;
         $this->_customLogger = $customLogger;
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
+        $this->_checkoutSession = $checkoutSession;
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
     }
 
@@ -118,8 +123,19 @@ class Montapacking extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
             }
         }
 
-        $method->setPrice($amount);
-        $method->setCost($amount);
+        // Get boolean value for toggled free shipping 
+        $freeShipping = $request->getFreeShipping();
+
+        if ($request->getFreeShipping()) {
+            $method->setPrice(0);
+            $method->setCost(0);
+            $this->_checkoutSession->setFreeShipping(true);
+
+        } else {
+            $method->setPrice($amount);
+            $method->setCost($amount);
+            $this->_checkoutSession->setFreeShipping(false);
+        }
 
         $result->append($method);
 

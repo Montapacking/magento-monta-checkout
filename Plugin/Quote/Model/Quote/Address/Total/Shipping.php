@@ -9,12 +9,20 @@ use Montapacking\MontaCheckout\Model\Config\Provider\Carrier;
 
 class Shipping
 {
+    protected $_checkoutSession;
+
+    public function __construct(
+        \Magento\Checkout\Model\Session             $checkoutSession,
+    ) {
+        $this->_checkoutSession = $checkoutSession;
+    }
+
     /**
      * @param                       $subject
      * @param                       $result
-     * @param Quote $quote
+     * @param Quote                 $quote
      * @param ShippingAssignmentApi $shippingAssignment
-     * @param QuoteAddressTotal $total
+     * @param QuoteAddressTotal     $total
      *
      * @return void|mixed
      */
@@ -109,7 +117,6 @@ class Shipping
 
     private function adjustTotals($name, $code, $address, $total, $fee, $description)
     {
-
         $total->setTotalAmount($code, $fee);
         $total->setBaseTotalAmount($code, $fee);
         $total->setBaseShippingAmount($fee);
@@ -118,5 +125,21 @@ class Shipping
         $total->setShippingMethodTitle($name . ' - ' . $description);
 
         $address->setShippingDescription($name . ' - ' . $description);
+
+        $freeShippingAvailable = $this->getFreeShipping();
+        if($freeShippingAvailable){
+            $total->setBaseShippingAmount(0);
+            $total->setShippingAmount(0);
+
+            $total->setBaseShippingDiscountAmount($fee);
+            $total->setShippingDiscountAmount($fee);
+            $total->setDiscountAmount($fee);
+            $total->setBaseDiscountAmount($fee);
+        }
+    }
+
+    private function getFreeShipping() 
+    {
+        return $this->_checkoutSession->getFreeShipping();
     }
 }
