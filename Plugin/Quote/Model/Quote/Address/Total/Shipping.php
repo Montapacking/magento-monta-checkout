@@ -12,7 +12,7 @@ class Shipping
     protected $_checkoutSession;
 
     public function __construct(
-        \Magento\Checkout\Model\Session             $checkoutSession,
+        \Magento\Checkout\Model\Session             $checkoutSession
     ) {
         $this->_checkoutSession = $checkoutSession;
     }

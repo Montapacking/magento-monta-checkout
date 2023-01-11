@@ -34,6 +34,8 @@ class Delivery extends AbstractDeliveryOptions
      */
     public $cart;
 
+    private $isFreeShippingApplicable;
+
     /**
      * Services constructor.
      *
@@ -55,6 +57,8 @@ class Delivery extends AbstractDeliveryOptions
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
         $this->cart = $cart;
+
+        $this->getFreeShipping();
 
         parent::__construct(
             $context,
@@ -250,16 +254,29 @@ class Delivery extends AbstractDeliveryOptions
 
                 $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-                ## Extra optie toevoegen
-                $extras[] = (array)[
-                    'code' => $extra->code,
-                    'name' => __($extra->code),
-                    'price_currency' => $curr,
-                    'price_string' => $curr . ' ' . number_format($extra->price, 2, ',', ''),
-                    'price_raw' => number_format($extra->price, 2),
-                    'price_formatted' => number_format($extra->price, 2, ',', ''),
-                ];
-
+                if($this->isFreeShippingApplicable)
+                {
+                    ## Extra optie toevoegen
+                    $extras[] = (array)[
+                        'code' => $extra->code,
+                        'name' => __($extra->code),
+                        'price_currency' => $curr,
+                        'price_string' => $curr . ' ' . number_format(0, 2, ',', ''),
+                        'price_raw' => number_format(0, 2),
+                        'price_formatted' => number_format(0, 2, ',', ''),
+                    ];
+                } else 
+                {
+                    ## Extra optie toevoegen
+                    $extras[] = (array)[
+                        'code' => $extra->code,
+                        'name' => __($extra->code),
+                        'price_currency' => $curr,
+                        'price_string' => $curr . ' ' . number_format($extra->price, 2, ',', ''),
+                        'price_raw' => number_format($extra->price, 2),
+                        'price_formatted' => number_format($extra->price, 2, ',', ''),
+                    ];
+                }
             }
         }
 
@@ -280,28 +297,57 @@ class Delivery extends AbstractDeliveryOptions
 
         $description = str_replace("PostNL Pakket", "PostNL", $description);
 
-        $options = (object)[
-            'code' => $option->code,
-            'codes' => $option->codes,
-            'type' => $frame->type,
-            'image' => trim(implode(",", $option->codes)),
-            'image_replace' => trim(str_replace(",", "_", implode(",", $option->codes))),
-            'optionCodes' => $option->optioncodes,
-            'name' => $option->description,
-            'description_string' => $description,
-            'price_currency' => $curr,
-            'price_string' => $curr . ' ' . number_format($option->price, 2, ',', ''),
-            'price_raw' => number_format($option->price, 2),
-            'price_formatted' => number_format($option->price, 2, ',', ''),
-            'from' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) : "",
-            'to' => $to != null && strtotime($to) > 0 ? date('H:i', strtotime($to)) : "",
-            'date' => $from != null && strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
-            'date_string' => $date_string,
-            'date_from_to' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
-            'date_from_to_formatted' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
-            'extras' => $extras,
-        ];
+        if ($this->isFreeShippingApplicable) {
+            $options = (object)[
+                'code' => $option->code,
+                'codes' => $option->codes,
+                'type' => $frame->type,
+                'image' => trim(implode(",", $option->codes)),
+                'image_replace' => trim(str_replace(",", "_", implode(",", $option->codes))),
+                'optionCodes' => $option->optioncodes,
+                'name' => $option->description,
+                'description_string' => $description,
+                'price_currency' => $curr,
+                'price_string' => $curr . ' ' . number_format(0, 2, ',', ''),
+                'price_raw' => number_format(0, 2),
+                'price_formatted' => number_format(0, 2, ',', ''),
+                'from' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) : "",
+                'to' => $to != null && strtotime($to) > 0 ? date('H:i', strtotime($to)) : "",
+                'date' => $from != null && strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
+                'date_string' => $date_string,
+                'date_from_to' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
+                'date_from_to_formatted' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
+                'extras' => $extras,
+            ];
+        } else {
+            $options = (object)[
+                'code' => $option->code,
+                'codes' => $option->codes,
+                'type' => $frame->type,
+                'image' => trim(implode(",", $option->codes)),
+                'image_replace' => trim(str_replace(",", "_", implode(",", $option->codes))),
+                'optionCodes' => $option->optioncodes,
+                'name' => $option->description,
+                'description_string' => $description,
+                'price_currency' => $curr,
+                'price_string' => $curr . ' ' . number_format($option->price, 2, ',', ''),
+                'price_raw' => number_format($option->price, 2),
+                'price_formatted' => number_format($option->price, 2, ',', ''),
+                'from' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) : "",
+                'to' => $to != null && strtotime($to) > 0 ? date('H:i', strtotime($to)) : "",
+                'date' => $from != null && strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
+                'date_string' => $date_string,
+                'date_from_to' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
+                'date_from_to_formatted' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
+                'extras' => $extras,
+            ];
+        }
 
         return $options;
+    }
+
+    private function getFreeShipping() 
+    {
+        $this->isFreeShippingApplicable = $this->checkoutSession->getFreeShipping();
     }
 }
