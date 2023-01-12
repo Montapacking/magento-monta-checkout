@@ -125,17 +125,6 @@ class Shipping
         $total->setShippingMethodTitle($name . ' - ' . $description);
 
         $address->setShippingDescription($name . ' - ' . $description);
-
-        $freeShippingAvailable = $this->getFreeShipping();
-        if($freeShippingAvailable){
-            $total->setBaseShippingAmount(0);
-            $total->setShippingAmount(0);
-
-            $total->setBaseShippingDiscountAmount($fee);
-            $total->setShippingDiscountAmount($fee);
-            $total->setDiscountAmount($fee);
-            $total->setBaseDiscountAmount($fee);
-        }
     }
 
     private function getFreeShipping() 
