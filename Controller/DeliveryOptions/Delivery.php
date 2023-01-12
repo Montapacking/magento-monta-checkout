@@ -254,29 +254,15 @@ class Delivery extends AbstractDeliveryOptions
 
                 $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
-                if($this->isFreeShippingApplicable)
-                {
-                    ## Extra optie toevoegen
-                    $extras[] = (array)[
-                        'code' => $extra->code,
-                        'name' => __($extra->code),
-                        'price_currency' => $curr,
-                        'price_string' => $curr . ' ' . number_format(0, 2, ',', ''),
-                        'price_raw' => number_format(0, 2),
-                        'price_formatted' => number_format(0, 2, ',', ''),
-                    ];
-                } else 
-                {
-                    ## Extra optie toevoegen
-                    $extras[] = (array)[
-                        'code' => $extra->code,
-                        'name' => __($extra->code),
-                        'price_currency' => $curr,
-                        'price_string' => $curr . ' ' . number_format($extra->price, 2, ',', ''),
-                        'price_raw' => number_format($extra->price, 2),
-                        'price_formatted' => number_format($extra->price, 2, ',', ''),
-                    ];
-                }
+                ## Extra optie toevoegen
+                $extras[] = (array)[
+                    'code' => $extra->code,
+                    'name' => __($extra->code),
+                    'price_currency' => $curr,
+                    'price_string' => $curr . ' ' . number_format($extra->price, 2, ',', ''),
+                    'price_raw' => number_format($extra->price, 2),
+                    'price_formatted' => number_format($extra->price, 2, ',', ''),
+                ];
             }
         }
 
