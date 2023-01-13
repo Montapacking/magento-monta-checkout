@@ -479,9 +479,10 @@ class MontapackingShipping
         }
 
 
-
-        $result = json_decode($result);
-
+        if (isset($result)) {
+            $result = json_decode($result);
+        }
+        
         $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;
 
         if (null !== $this->_logger && null === $result) {
