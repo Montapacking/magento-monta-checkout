@@ -332,6 +332,8 @@ define(
 
                             var counter = 0;
 
+                            document.getElementById("pickUpInformationContainer").style.display = "none"; 
+
                             // disable extra pickuppoints in view
                             /*
                             $(".montapacking-pickup-service.pickup-option").each(
@@ -749,6 +751,7 @@ define(
 
                     $("#modular-container").css("display", "none");
                     $("#modular-background").css("display", "none");
+                    document.getElementById("pickUpInformationContainer").style.display = "block"; 
                     return false;
 
                 },
