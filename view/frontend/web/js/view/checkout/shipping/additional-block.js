@@ -3,26 +3,16 @@ define(
         'jquery',
         'uiComponent',
         'ko',
-        'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/quote',
         'Montapacking_MontaCheckout/js/helper/address-finder',
         'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
-        'Handlebars',
-        'google',
-        'storeLocator',
-        'Magento_Checkout/js/model/shipping-rate-registry'
     ], function (
         $,
         Component,
         ko,
-        priceUtils,
         quote,
         AddressFinder,
         pickupShop,
-        Handlebars,
-        google,
-        storeLocator,
-        rateRegistry
     ) {
 
         'use strict';
@@ -43,13 +33,9 @@ define(
                     deliveryFee: ko.observable(),
                     pickupFee: ko.observable(),
                     selectedShippers: ko.observable(),
-                    selectedPickup: ko.observable(),
-
+                    selectedPickup: ko.observable()
                 },
-
                 initObservable: function () {
-
-
                     //one step checkout solution, update buttons and quantity change are not working, so we are gonna hide this options
                     require([
                     'jquery',
