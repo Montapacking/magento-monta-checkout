@@ -9,8 +9,6 @@ use Montapacking\MontaCheckout\Controller\AbstractDeliveryOptions;
 
 use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 
-use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
-
 /**
  * Class Delivery
  *

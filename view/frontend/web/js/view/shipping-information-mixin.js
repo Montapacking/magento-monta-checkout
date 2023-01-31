@@ -1,19 +1,11 @@
 define(
     [
-        'uiComponent',
-        'jquery',
-        'ko',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/model/sidebar',
         'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop'
     ], function (
-        uiComponent,
-        $,
-        ko,
         quote,
         stepNavigator,
-        sidebar,
         pickupShop
     ) {
         'use strict';

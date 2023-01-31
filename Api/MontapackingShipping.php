@@ -7,6 +7,7 @@ use Montapacking\MontaCheckout\Api\Objects\Order as MontaCheckout_Order;
 use Montapacking\MontaCheckout\Api\Objects\Product as MontaCheckout_Product;
 use Montapacking\MontaCheckout\Api\Objects\TimeFrame as MontaCheckout_TimeFrame;
 use Montapacking\MontaCheckout\Api\Objects\TimeFrame as MontaCheckout_PickupPoint;
+use GuzzleHttp\Client;
 
 /**
  * Class MontapackingShipping
@@ -252,23 +253,21 @@ class MontapackingShipping
      */
     public function checkStock($sku)
     {
-
-        $url = "https://api.montapacking.nl/rest/v5/product/" . $sku . "/stock";
-
+        $url = "https://api.montapacking.nl/rest/v5/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
-        $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => $url,
+            // You can set any number of default request options.
+            'timeout'  => 2.0,
+            'headers'=>[
+                'Authorization'=> 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
+            ]
+        ]);
 
-        $result = curl_exec($ch);
-        curl_close($ch);
-        $result = json_decode($result);
+        $response = $client->get("product/" . $sku . "/stock");
+        $result = json_decode($response->getBody(), true);
 
 
         if (null !== $result && property_exists($result, 'Message') && $result->Message == 'Zero products found with sku ' . $sku) {
@@ -421,66 +420,42 @@ class MontapackingShipping
 
         }
 
-        $method = strtolower($method);
-
-        $url = "https://api.montapacking.nl/rest/v5/" . $method;
-
-        $ch = curl_init();
-
+        $url = "https://api.montapacking.nl/rest/v5/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
 
+        $client = new Client([
+            'base_uri' => $url,
+            'timeout'  => 2.0,
+            'headers'=>[
+                'Authorization'=> 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
+            ]
+        ]);
 
-        curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+        $method = strtolower($method);
+        $response = $client->get($method . '?' . $request);
+        $result = json_decode($response->getBody());
 
-        $result = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            $error_msg = curl_error($ch);
+        if ($response->getStatusCode() != 200) {
+            $error_msg = $response->getReasonPhrase() . ' : ' . $response->getBody();
             $logger = $this->_logger;
             $context = ['source' => 'Montapacking Checkout'];
             $logger->critical($error_msg . " (" . $url . ")", $context);
             $result = null;
         }
 
-        curl_close($ch);
-
         if ($result == null) {
 
             sleep(1);
-            $ch = curl_init();
+            $response = $client->get($method . '?' . $request);
 
-            $this->_pass = htmlspecialchars_decode($this->_pass);
-
-            curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-            curl_setopt($ch, CURLOPT_VERBOSE, true);
-            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-
-            $result = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-                $error_msg = curl_error($ch);
+            if ($response->getStatusCode() != 200) {
+                $error_msg = $response->getReasonPhrase() . ' : ' . $response->getBody();
                 $logger = $this->_logger;
                 $context = ['source' => 'Montapacking Checkout'];
                 $logger->critical($error_msg . " (" . $url . ")", $context);
                 $result = null;
             }
-
-            curl_close($ch);
         }
-
-
-
-        $result = json_decode($result);
 
         $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;
 

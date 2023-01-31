@@ -4,7 +4,6 @@ namespace Montapacking\MontaCheckout\Plugin\Quote\Model;
 
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Montapacking\MontaCheckout\Model\Config\Provider\Carrier;
 
 class QuoteManagement
 {
