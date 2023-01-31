@@ -2,19 +2,32 @@
 
 namespace Montapacking\MontaCheckout\Plugin\Quote\Model\Quote\Address\Total;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface as ShippingAssignmentApi;
 use Magento\Quote\Model\Quote\Address\Total as QuoteAddressTotal;
-use Montapacking\MontaCheckout\Model\Config\Provider\Carrier;
 
 class Shipping
 {
+    private $scopeConfig;
+
+    /**
+     * Shipping constructor.
+     *
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig
+    )
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
+
     /**
      * @param                       $subject
      * @param                       $result
-     * @param Quote $quote
+     * @param Quote                 $quote
      * @param ShippingAssignmentApi $shippingAssignment
-     * @param QuoteAddressTotal $total
+     * @param QuoteAddressTotal     $total
      *
      * @return void|mixed
      */
@@ -25,7 +38,7 @@ class Shipping
         $address = $shipping->getAddress();
         $rates = $address->getAllShippingRates();
 
-        $fee = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ScopeConfigInterface::class)->getValue('carriers/montapacking/price',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $fee = $this->scopeConfig->getValue('carriers/montapacking/price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
         if (!$rates) {
             return $result;
@@ -35,16 +48,12 @@ class Shipping
             return $result;
         }
 
-        $array = (array) $rates;
-
 
         $deliveryOption = $this->getDeliveryOption($address);
 
         if (!$deliveryOption) {
             return $result;
         }
-
-        $method = $shipping->getMethod();
 
         $deliveryOptionType = $deliveryOption->type;
         $deliveryOptionDetails = $deliveryOption->details[0];
