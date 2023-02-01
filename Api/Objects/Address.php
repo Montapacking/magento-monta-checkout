@@ -1,6 +1,7 @@
 <?php
 
 namespace Montapacking\MontaCheckout\Api\Objects;
+use GuzzleHttp\Client;
 
 /**
  * Class Address
@@ -94,21 +95,13 @@ class Address
 
 
         try {
+            $client = new Client([
+                'timeout'  => 1.0
+            ]);
 
-            $url = $google_maps_url;
-            $ch = curl_init();
-            $timeout = 1;
+            $response = $client->get($google_maps_url);
 
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-
-            $geocode = curl_exec($ch);
-            curl_close($ch);
-
-
-            $output = json_decode($geocode);
+            $output = json_decode($response->getBody());
 
             $result = end($output->results);
 
@@ -124,9 +117,6 @@ class Address
             $latitude = 0;
             $longitude = 0;
         }
-
-        //$latitude = 0;
-        //$longitude = 0;
 
         $this->longitude = $longitude;
         $this->latitude = $latitude;
