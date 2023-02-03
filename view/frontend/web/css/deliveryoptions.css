@@ -338,6 +338,18 @@ nomargin {
     background-image: url(../images/Montapacking.png) !important;
 }
 
+.montapacking-container-logo.Izipack {
+    background-image: url(../images/Izipack.png) !important;
+}
+
+.montapacking-container-logo.Seabourne {
+    background-image: url(../images/Seabourne.png) !important;
+}
+
+.montapacking-container-logo.DeutschePost {
+    background-image: url(../images/DeutschePost.png) !important;
+}
+
 .montapacking-container-logo.UPS,
 .montapacking-container-logo.UPSAP
 {
