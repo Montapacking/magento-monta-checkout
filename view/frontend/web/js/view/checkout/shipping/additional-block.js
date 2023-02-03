@@ -350,7 +350,7 @@ define(
                 // Do not refactor this.
                 checkoutConfig.quoteData.montapacking_montacheckout_data = JSON.stringify(deliveryOption);
 
-                if(type == 'delivery') {
+                if (type == 'delivery') {
                     window.sessionStorage.setItem('recent_delivery_shipper', JSON.stringify(deliveryOption))
                 }
 
@@ -371,6 +371,7 @@ define(
                 $('#slider-content ol li').removeClass("selected_day");
                 var target = $(event.target).closest(".day");
                 target.addClass("selected_day");
+                target[0].scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
 
                 self.setfilterDeliveryServicesByDate(date);
             },
@@ -385,30 +386,27 @@ define(
             },
 
             moveLeft: function () {
-                if (this.position == null) {
-                    this.position = $("#slider").children().position().left;
-                }
-
-                $("#slider").animate({
-                    scrollLeft: this.position - 500
-                }, 500);
-                this.position -= 500;
+                var movementCalc = Math.floor(Math.min(500 * (window.innerWidth / 700), 500))
+                var slider = document.getElementById('slider')
+                slider.scrollTo({
+                    top: 0,
+                    left: Math.max(slider.scrollLeft - movementCalc, 0),
+                    behavior: 'smooth'
+                });
             },
 
             moveRight: function () {
-                if (this.position == null) {
-                    this.position = $("#slider").children().position().left;
-                }
+                var movementCalc = Math.floor(Math.min(500 * (window.innerWidth / 700), 500))                
+                var slider = document.getElementById('slider')
 
-                $("#slider").animate({
-                    scrollLeft: this.position + 500
-                }, 500);
-                this.position += 500;
+                slider.scrollTo({
+                    top: 0,
+                    left: Math.min(slider.scrollLeft + movementCalc, document.getElementById('slider-content').scrollWidth),
+                    behavior: 'smooth'
+                });
             },
 
             toggleTab: function (previousTab, currentTab, previousContent, currentContent, triggerClick = false, hideDeliverInfo = false) {
-
-
                 $(previousTab).removeClass('active');
                 $(currentTab).addClass('active');
                 $(previousContent).hide();
@@ -431,15 +429,15 @@ define(
                         $("input.selectshipment").val("delivery");
 
                         var mostRecentShipperData = window.sessionStorage.getItem('recent_delivery_shipper')
-                        if(mostRecentShipperData != ''){
+                        if (mostRecentShipperData != '') {
                             var lastSelectedShipper = JSON.parse(mostRecentShipperData).additional_info[0].code
                             $(".delivery-option:not(.SameDayDelivery)").find("input[value=" + lastSelectedShipper + "]").trigger("click");
                         } else {
-                             $('#date-picker').show()
+                            $('#date-picker').show()
                         }
 
                         $("#standard-delivery-services").show()
-                        
+
                         if ($(".SameDayDelivery").length) {
                             $(".havesameday").removeClass("displaynone");
                         } else {
@@ -806,7 +804,7 @@ define(
                                         }
                                     }
                                 );
-                                
+
                                 var config = {
                                     //'debug': true,
                                     'pagination': false,

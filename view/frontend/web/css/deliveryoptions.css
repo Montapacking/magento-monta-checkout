@@ -43,11 +43,20 @@
 
 #slider {
     display: block;  
-    overflow-x: hidden; 
+    overflow-x: scroll; 
     clear: left;
     margin-left: 60px;
     margin-right: 60px;
 }
+
+#slider::-webkit-scrollbar {
+    display: none;
+  }
+  
+  #slider {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
 #slider-content ol {
     display: table;
