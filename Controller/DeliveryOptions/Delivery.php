@@ -278,12 +278,18 @@ class Delivery extends AbstractDeliveryOptions
 
         $description = str_replace("PostNL Pakket", "PostNL", $description);
 
+        if(count($option->codes) > 1){
+            $image_code = 'DEF';
+        } else {
+            $image_code = trim(str_replace(",", "_", implode(",", $option->codes)));
+        }
+
         $options = (object)[
             'code' => $option->code,
             'codes' => $option->codes,
             'type' => $frame->type,
             'image' => trim(implode(",", $option->codes)),
-            'image_replace' => trim(str_replace(",", "_", implode(",", $option->codes))),
+            'image_replace' => trim($image_code),
             'optionCodes' => $option->optioncodes,
             'name' => $option->description,
             'description_string' => $description,

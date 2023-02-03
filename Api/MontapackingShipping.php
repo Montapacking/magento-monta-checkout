@@ -5,6 +5,7 @@ namespace Montapacking\MontaCheckout\Api;
 use Montapacking\MontaCheckout\Api\Objects\Address as MontaCheckout_Address;
 use Montapacking\MontaCheckout\Api\Objects\Order as MontaCheckout_Order;
 use Montapacking\MontaCheckout\Api\Objects\Product as MontaCheckout_Product;
+use Montapacking\MontaCheckout\Api\Objects\Shipper;
 use Montapacking\MontaCheckout\Api\Objects\TimeFrame as MontaCheckout_TimeFrame;
 use Montapacking\MontaCheckout\Api\Objects\TimeFrame as MontaCheckout_PickupPoint;
 use GuzzleHttp\Client;
@@ -228,7 +229,7 @@ class MontapackingShipping
 
                     foreach ($origin->ShipperOptions as $shipper) {
 
-                        $shippers[] = new MontaCheckout_Shipper(
+                        $shippers[] = new Shipper(
                             $shipper->ShipperDescription,
                             $shipper->ShipperCode
                         );
