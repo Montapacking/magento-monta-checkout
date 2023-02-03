@@ -132,8 +132,7 @@ define(
                         this.pickupFee(null);
 
                         this.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
-                        this.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
-                        this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition);
+                        this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
 
                         self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true);
 
@@ -213,7 +212,7 @@ define(
             /**
              * Retrieve Delivery Options from Montapacking.
              */
-            getDeliveryServices: function (street, postcode, city, country, housenumber, housenumberaddition) {
+            getDeliveryServices: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
 
                 $.ajax(
                     {
@@ -227,12 +226,13 @@ define(
                             city: city,
                             country: country,
                             housenumber: housenumber,
-                            housenumberaddition: housenumberaddition
+                            housenumberaddition: housenumberaddition,
+                            longlat: longlat
                         }
                     }
                 ).done(
                     function (services) {
-                        const objectArray = Object.values(services);
+                        const objectArray = Object.values(services[0]);
                         this.deliveryServices(objectArray);
 
                         var filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].type !== 'Unknown');
@@ -252,6 +252,7 @@ define(
                             timeframe.options[0].from === "" &&
                             timeframe.options[0].type === 'Unknown'));
 
+                        this.pickupServices(Object.values(services[1]));
                     }.bind(this)
                 );
             },
@@ -290,52 +291,6 @@ define(
                 this.daysForSelect(distinctFilteredItems);
 
                 return distinctFilteredItems;
-            },
-
-            /**
-             * Retrieve Delivery Options from Montapacking.
-             */
-            getPickupServices: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
-
-                $.ajax(
-                    {
-                        method: 'GET',
-                        url: this.urlPrefix + '/montacheckout/deliveryoptions/pickup',
-                        type: 'jsonp',
-                        showLoader: true,
-                        data: {
-                            street: street,
-                            postcode: postcode,
-                            city: city,
-                            country: country,
-                            housenumber: housenumber,
-                            housenumberaddition: housenumberaddition,
-                            longlat: longlat
-                        }
-                    }
-                ).done(
-                    function (services) {
-                        const objectArray = Object.values(services);
-                        this.pickupServices(objectArray);
-
-                        var counter = 0;
-
-                        // disable extra pickuppoints in view
-                        /*
-                        $(".montapacking-pickup-service.pickup-option").each(
-                            function (index) {
-                                counter++;
-                                $(this).addClass("overruleshow");
-
-                                if (counter == 3) {
-                                    return false;
-                                }
-
-                            }
-                        );
-                        */
-                    }.bind(this)
-                );
             },
 
             setDeliveryOption: function (type, details, additional_info) {
@@ -422,7 +377,6 @@ define(
                         var address = JSON.parse($("#old_address").val());
 
                         self.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
-                        //self.getPickupServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
 
                     } else {
 

@@ -82,7 +82,6 @@ class MontapackingShipping
      */
     public function __construct($origin, $user, $pass, $googlekey, $language, $test = false)
     {
-        $this->origin = $origin;
         $this->_user = $user;
         $this->_pass = $pass;
         $this->_googlekey = $googlekey;
@@ -170,7 +169,7 @@ class MontapackingShipping
             $city,
             $state,
             $countrycode,
-            $this->_googlekey
+                $this->_googlekey
         );
     }
 
@@ -183,7 +182,7 @@ class MontapackingShipping
         if (is_array($shippers)) {
             $this->_shippers = $shippers;
         } else {
-            $this->shippers[] = $shippers;
+            $this->_shippers[] = $shippers;
         }
     }
 
@@ -230,8 +229,8 @@ class MontapackingShipping
                     foreach ($origin->ShipperOptions as $shipper) {
 
                         $shippers[] = new Shipper(
-                            $shipper->ShipperDescription,
-                            $shipper->ShipperCode
+                                $shipper->ShipperDescription,
+                                $shipper->ShipperCode
                         );
 
                     }
@@ -261,9 +260,9 @@ class MontapackingShipping
             // Base URI is used with relative requests
             'base_uri' => $url,
             // You can set any number of default request options.
-            'timeout'  => 2.0,
-            'headers'=>[
-                'Authorization'=> 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
+            'timeout' => 2.0,
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
             ]
         ]);
 
@@ -289,52 +288,6 @@ class MontapackingShipping
      *
      * @return array
      */
-    public function getPickupOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false) //phpcs:ignore
-    {
-
-        if ($this->_carrierConfig->getDisablePickupPoints()) {
-            return [];
-        }
-
-        $pickups = [];
-
-        $this->_basic = array_merge(
-            $this->_basic,
-            [
-                'OnlyPickupPoints' => 'true',
-                //'MaxNumberOfPickupPoints' => 3,
-                'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
-                'MaiboxShipperMandatory' => $mailbox,
-                'TrackingMandatory' => $trackingonly,
-                'InsuranceRequired' => $insurance,
-                'ShipmentFitsThroughDutchMailbox' => $mailboxfit,
-            ]
-        );
-
-        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH', 'DHLParcelConnectPickupPoint', 'UPSAP', 'GLSPickupPoint'];
-
-        // Timeframes omzetten naar bruikbaar object
-        $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products', '_allowedshippers']); //phpcs:ignore
-        if (isset($result->Timeframes)) {
-
-            // Shippers omzetten naar shipper object
-            foreach ($result->Timeframes as $timeframe) {
-
-                $pickups[] = new MontaCheckout_PickupPoint(
-                    $timeframe->From,
-                    $timeframe->To,
-                    $timeframe->TypeCode,
-                    $timeframe->PickupPointDetails,
-                    $timeframe->ShippingOptions,
-                    $timeframe->FromToTypeCode
-                );
-
-            }
-
-        }
-
-        return $pickups;
-    }
 
     /**
      * @param bool $onstock
@@ -350,7 +303,6 @@ class MontapackingShipping
         $timeframes = [];
 
         if (trim($this->address->postalcode) && (trim($this->address->housenumber) || trim($this->address->street))) {
-
             // Basis gegevens uitbreiden met shipping option specifieke data
             $this->_basic = array_merge(
                 $this->_basic,
@@ -358,35 +310,61 @@ class MontapackingShipping
                     'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
                     'MailboxShipperMandatory' => $mailbox,
                     'TrackingMandatory' => $trackingonly,
-                    'MaxNumberOfPickupPoints' => 0,
                     'InsuranceRequired' => $insurance,
                     'ShipmentFitsThroughDutchMailbox' => $mailboxfit,
                 ]
             );
 
+            if ($this->_carrierConfig->getDisablePickupPoints()) {
+                $this->_basic = array_merge(
+                    $this->_basic,
+                    [
+                        'MaxNumberOfPickupPoints' => 0
+                    ]
+                );
+            }
+
             // Timeframes omzetten naar bruikbaar object
             $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products']);
 
             if (isset($result->Timeframes)) {
-
                 // Shippers omzetten naar shipper object
                 foreach ($result->Timeframes as $timeframe) {
-
-                    $timeframes[] = new MontaCheckout_TimeFrame(
-                        $timeframe->From,
-                        $timeframe->To,
-                        $timeframe->TypeCode,
-                        $timeframe->TypeDescription,
-                        $timeframe->ShippingOptions,
-                        $timeframe->FromToTypeCode
-                    );
-
+                    if (!$timeframe->IsPickupPoint) {
+                        $timeframes[] = new MontaCheckout_TimeFrame(
+                                $timeframe->From,
+                                $timeframe->To,
+                                $timeframe->TypeCode,
+                                $timeframe->TypeDescription,
+                                $timeframe->ShippingOptions,
+                                $timeframe->FromToTypeCode
+                        );
+                    }
                 }
 
             }
         }
 
-        return $timeframes;
+        $pickups = [];
+
+        if (isset($result->Timeframes)) {
+            // Shippers omzetten naar shipper object
+            foreach ($result->Timeframes as $timeframe) {
+                if ($timeframe->IsPickupPoint) {
+                    $pickups[] = new MontaCheckout_PickupPoint(
+                            $timeframe->From,
+                            $timeframe->To,
+                            $timeframe->TypeCode,
+                            $timeframe->PickupPointDetails,
+                            $timeframe->ShippingOptions,
+                            $timeframe->FromToTypeCode
+                    );
+                }
+            }
+
+        }
+
+        return [$timeframes, $pickups];
     }
 
     /**
@@ -426,9 +404,9 @@ class MontapackingShipping
 
         $client = new Client([
             'base_uri' => $url,
-            'timeout'  => 2.0,
-            'headers'=>[
-                'Authorization'=> 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
+            'timeout' => 2.0,
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
             ]
         ]);
 
