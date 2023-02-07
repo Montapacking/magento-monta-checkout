@@ -96,8 +96,8 @@ class Delivery extends AbstractDeliveryOptions
 
             $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
 
-            $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions[0]);
-            $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions[1]);
+            $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions']);
+            $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions']);
 
             return $this->jsonResponse([$shippingoptions_formatted, $pickupoptions_formatted]);
 

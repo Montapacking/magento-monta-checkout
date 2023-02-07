@@ -111,7 +111,6 @@ class LongLat extends AbstractDeliveryOptions
             $arr['hasconnection'] = 'false';
             $arr['googleapikey'] = $this->getCarrierConfig()->getGoogleApiKey();
 
-
             $context = ['source' => 'Montapacking Checkout'];
             $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context); //phpcs:ignore
 

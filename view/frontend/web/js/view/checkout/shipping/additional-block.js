@@ -116,7 +116,6 @@ define(
                     ]
                 );
 
-
                 AddressFinder.subscribe(
                     function (address) {
 
@@ -128,16 +127,17 @@ define(
                             return;
                         }
 
+                        $("#montapacking_longitude").val("");
+                        $("#montapacking_latitude").val("");
+                        $("#montapacking_addresschangedsincelastmapload").val('true');
+                        $("#montapacking_addresschangedsincelastlonglatcall").val('true');
+
                         this.deliveryFee(null);
                         this.pickupFee(null);
 
-                        this.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
                         this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
 
-                        self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true);
-
-
-
+                        self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true, this.addressChanged);
 
                         // fill old adress field
                         var existCondition = setInterval(function () {
@@ -153,20 +153,6 @@ define(
                 self.loadPopup();
 
                 return this;
-            },
-
-            checkState: function () {
-
-                if ($(".loading-mask").is(":visible")) {
-                    var success = false; // do something to check the state
-                } else {
-                    var success = true; // do something to check the state
-                    $(".montapacking-tab.montapacking-tab-delivery").trigger("click");
-                }
-
-                if (!success) {
-                    setTimeout(self.checkState(), 500);
-                }
             },
 
             /**
@@ -191,8 +177,6 @@ define(
                         }
                     }
                 ).done(
-
-
                     function (services) {
 
                         $("#montapacking_longitude").val(services.longitude);
@@ -376,7 +360,10 @@ define(
                         $("#standard-delivery-services").hide()
                         var address = JSON.parse($("#old_address").val());
 
-                        self.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
+                        if($("#montapacking_addresschangedsincelastlonglatcall").val() == 'true' || $("#montapacking_latitude").val() == "" || $("#montapacking_longitude").val() == ""){
+                            self.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
+                            $("#montapacking_addresschangedsincelastlonglatcall").val('false');
+                        }
 
                     } else {
 
@@ -799,15 +786,27 @@ define(
                                         var html = $("#storelocator_container").html();
                                         self.showPopup(html);
                                         $('body').trigger('processStop');
+                                    },
+                                    callbackFormVals: function () {
+                                        var html = $("#storelocator_container").html();
+                                        self.showPopup(html);
+                                        $('body').trigger('processStop');
                                     }
                                 };
                                 if (!useLocator.data('plugin_storeLocator')) {
                                     useLocator.storeLocator(config);
+                                } else if ($("#montapacking_addresschangedsincelastmapload").val() == 'true') {
+                                    useLocator.data('plugin_storeLocator').settings.dataRaw = JSON.stringify(markers, null, 2);
+                                    useLocator.data('plugin_storeLocator').settings.defaultLat = $("#montapacking_latitude").val();
+                                    useLocator.data('plugin_storeLocator').settings.defaultLng = $("#montapacking_longitude").val();
+                                    useLocator.data('plugin_storeLocator').mapping();
+                                    useLocator.data('plugin_storeLocator').mapReload();
                                 } else {
                                     var html = $("#storelocator_container").html();
                                     self.showPopup(html);
                                     $('body').trigger('processStop');
                                 }
+                                $("#montapacking_addresschangedsincelastmapload").val('false');
                             }
                         }
                 );

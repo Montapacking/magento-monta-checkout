@@ -301,6 +301,7 @@ class MontapackingShipping
     public function getShippingOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false) //phpcs:ignore
     {
         $timeframes = [];
+        $pickups = [];
 
         if (trim($this->address->postalcode) && (trim($this->address->housenumber) || trim($this->address->street))) {
             // Basis gegevens uitbreiden met shipping option specifieke data
@@ -339,19 +340,8 @@ class MontapackingShipping
                                 $timeframe->ShippingOptions,
                                 $timeframe->FromToTypeCode
                         );
-                    }
-                }
-
-            }
-        }
-
-        $pickups = [];
-
-        if (isset($result->Timeframes)) {
-            // Shippers omzetten naar shipper object
-            foreach ($result->Timeframes as $timeframe) {
-                if ($timeframe->IsPickupPoint) {
-                    $pickups[] = new MontaCheckout_PickupPoint(
+                    } else {
+                        $pickups[] = new MontaCheckout_PickupPoint(
                             $timeframe->From,
                             $timeframe->To,
                             $timeframe->TypeCode,
@@ -359,12 +349,13 @@ class MontapackingShipping
                             $timeframe->ShippingOptions,
                             $timeframe->FromToTypeCode
                     );
+                    }
                 }
-            }
 
+            }
         }
 
-        return [$timeframes, $pickups];
+        return ['DeliveryOptions' => $timeframes, 'PickupOptions' => $pickups];
     }
 
     /**
