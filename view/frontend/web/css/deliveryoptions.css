@@ -379,6 +379,10 @@ nomargin {
 .montapacking-container-logo.DEF {
     background-image: url(../images/DEF.png) !important;
 }
+    
+.montapacking-container-logo.Cycloon {
+    background-image: url(../images/Cycloon.png) !important;
+}
 
 /* CONTAINER CONTENT */
 
