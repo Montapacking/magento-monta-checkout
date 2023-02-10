@@ -370,7 +370,7 @@ define(
                         $("input.selectshipment").val("delivery");
 
                         var mostRecentShipperData = window.sessionStorage.getItem('recent_delivery_shipper')
-                        if (mostRecentShipperData != '') {
+                        if (mostRecentShipperData && mostRecentShipperData != '') {
                             var lastSelectedShipper = JSON.parse(mostRecentShipperData).additional_info[0].code
                             $(".delivery-option:not(.SameDayDelivery)").find("input[value=" + lastSelectedShipper + "]").trigger("click");
                         } else {
