@@ -3,7 +3,6 @@
 namespace Montapacking\MontaCheckout\Plugin;
 
 use Magento\Sales\Api\Data\OrderExtensionFactory;
-use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;

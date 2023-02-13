@@ -112,8 +112,6 @@ abstract class AbstractDeliveryOptions extends Action
         /**
          * Retrieve Order Information
          */
-
-        //$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $cart = $this->getCart();
 
         $oApi = new MontpackingApi($webshop, $username, $password, $googleapikey, $language);

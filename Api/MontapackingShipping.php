@@ -5,8 +5,10 @@ namespace Montapacking\MontaCheckout\Api;
 use Montapacking\MontaCheckout\Api\Objects\Address as MontaCheckout_Address;
 use Montapacking\MontaCheckout\Api\Objects\Order as MontaCheckout_Order;
 use Montapacking\MontaCheckout\Api\Objects\Product as MontaCheckout_Product;
+use Montapacking\MontaCheckout\Api\Objects\Shipper;
 use Montapacking\MontaCheckout\Api\Objects\TimeFrame as MontaCheckout_TimeFrame;
 use Montapacking\MontaCheckout\Api\Objects\TimeFrame as MontaCheckout_PickupPoint;
+use GuzzleHttp\Client;
 
 /**
  * Class MontapackingShipping
@@ -80,7 +82,6 @@ class MontapackingShipping
      */
     public function __construct($origin, $user, $pass, $googlekey, $language, $test = false)
     {
-        $this->origin = $origin;
         $this->_user = $user;
         $this->_pass = $pass;
         $this->_googlekey = $googlekey;
@@ -168,7 +169,7 @@ class MontapackingShipping
             $city,
             $state,
             $countrycode,
-            $this->_googlekey
+                $this->_googlekey
         );
     }
 
@@ -181,7 +182,7 @@ class MontapackingShipping
         if (is_array($shippers)) {
             $this->_shippers = $shippers;
         } else {
-            $this->shippers[] = $shippers;
+            $this->_shippers[] = $shippers;
         }
     }
 
@@ -227,9 +228,9 @@ class MontapackingShipping
 
                     foreach ($origin->ShipperOptions as $shipper) {
 
-                        $shippers[] = new MontaCheckout_Shipper(
-                            $shipper->ShipperDescription,
-                            $shipper->ShipperCode
+                        $shippers[] = new Shipper(
+                                $shipper->ShipperDescription,
+                                $shipper->ShipperCode
                         );
 
                     }
@@ -252,23 +253,21 @@ class MontapackingShipping
      */
     public function checkStock($sku)
     {
-
-        $url = "https://api.montapacking.nl/rest/v5/product/" . $sku . "/stock";
-
+        $url = "https://api.montapacking.nl/rest/v5/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
-        $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => $url,
+            // You can set any number of default request options.
+            'timeout' => 2.0,
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
+            ]
+        ]);
 
-        $result = curl_exec($ch);
-        curl_close($ch);
-        $result = json_decode($result);
+        $response = $client->get("product/" . $sku . "/stock");
+        $result = json_decode($response->getBody(), true);
 
 
         if (null !== $result && property_exists($result, 'Message') && $result->Message == 'Zero products found with sku ' . $sku) {
@@ -289,52 +288,6 @@ class MontapackingShipping
      *
      * @return array
      */
-    public function getPickupOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false) //phpcs:ignore
-    {
-
-        if ($this->_carrierConfig->getDisablePickupPoints()) {
-            return [];
-        }
-
-        $pickups = [];
-
-        $this->_basic = array_merge(
-            $this->_basic,
-            [
-                'OnlyPickupPoints' => 'true',
-                //'MaxNumberOfPickupPoints' => 3,
-                'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
-                'MaiboxShipperMandatory' => $mailbox,
-                'TrackingMandatory' => $trackingonly,
-                'InsuranceRequired' => $insurance,
-                'ShipmentFitsThroughDutchMailbox' => $mailboxfit,
-            ]
-        );
-
-        $this->_allowedshippers = ['PAK', 'DHLservicepunt', 'DPDparcelstore', 'AFH', 'DHLParcelConnectPickupPoint', 'UPSAP', 'GLSPickupPoint'];
-
-        // Timeframes omzetten naar bruikbaar object
-        $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products', '_allowedshippers']); //phpcs:ignore
-        if (isset($result->Timeframes)) {
-
-            // Shippers omzetten naar shipper object
-            foreach ($result->Timeframes as $timeframe) {
-
-                $pickups[] = new MontaCheckout_PickupPoint(
-                    $timeframe->From,
-                    $timeframe->To,
-                    $timeframe->TypeCode,
-                    $timeframe->PickupPointDetails,
-                    $timeframe->ShippingOptions,
-                    $timeframe->FromToTypeCode
-                );
-
-            }
-
-        }
-
-        return $pickups;
-    }
 
     /**
      * @param bool $onstock
@@ -348,9 +301,9 @@ class MontapackingShipping
     public function getShippingOptions($onstock = true, $mailbox = false, $mailboxfit = false, $trackingonly = false, $insurance = false) //phpcs:ignore
     {
         $timeframes = [];
+        $pickups = [];
 
         if (trim($this->address->postalcode) && (trim($this->address->housenumber) || trim($this->address->street))) {
-
             // Basis gegevens uitbreiden met shipping option specifieke data
             $this->_basic = array_merge(
                 $this->_basic,
@@ -358,35 +311,51 @@ class MontapackingShipping
                     'ProductsOnStock' => ($onstock) ? 'TRUE' : 'FALSE',
                     'MailboxShipperMandatory' => $mailbox,
                     'TrackingMandatory' => $trackingonly,
-                    'MaxNumberOfPickupPoints' => 0,
                     'InsuranceRequired' => $insurance,
                     'ShipmentFitsThroughDutchMailbox' => $mailboxfit,
                 ]
             );
 
+            if ($this->_carrierConfig->getDisablePickupPoints()) {
+                $this->_basic = array_merge(
+                    $this->_basic,
+                    [
+                        'MaxNumberOfPickupPoints' => 0
+                    ]
+                );
+            }
+
             // Timeframes omzetten naar bruikbaar object
             $result = $this->call('ShippingOptions', ['_basic', '_shippers', '_order', 'address', '_products']);
 
             if (isset($result->Timeframes)) {
-
                 // Shippers omzetten naar shipper object
                 foreach ($result->Timeframes as $timeframe) {
-
-                    $timeframes[] = new MontaCheckout_TimeFrame(
-                        $timeframe->From,
-                        $timeframe->To,
-                        $timeframe->TypeCode,
-                        $timeframe->TypeDescription,
-                        $timeframe->ShippingOptions,
-                        $timeframe->FromToTypeCode
+                    if (!$timeframe->IsPickupPoint) {
+                        $timeframes[] = new MontaCheckout_TimeFrame(
+                                $timeframe->From,
+                                $timeframe->To,
+                                $timeframe->TypeCode,
+                                $timeframe->TypeDescription,
+                                $timeframe->ShippingOptions,
+                                $timeframe->FromToTypeCode
+                        );
+                    } else {
+                        $pickups[] = new MontaCheckout_PickupPoint(
+                            $timeframe->From,
+                            $timeframe->To,
+                            $timeframe->TypeCode,
+                            $timeframe->PickupPointDetails,
+                            $timeframe->ShippingOptions,
+                            $timeframe->FromToTypeCode
                     );
-
+                    }
                 }
 
             }
         }
 
-        return $timeframes;
+        return ['DeliveryOptions' => $timeframes, 'PickupOptions' => $pickups];
     }
 
     /**
@@ -421,66 +390,42 @@ class MontapackingShipping
 
         }
 
-        $method = strtolower($method);
-
-        $url = "https://api.montapacking.nl/rest/v5/" . $method;
-
-        $ch = curl_init();
-
+        $url = "https://api.montapacking.nl/rest/v5/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
 
+        $client = new Client([
+            'base_uri' => $url,
+            'timeout' => 2.0,
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
+            ]
+        ]);
 
-        curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+        $method = strtolower($method);
+        $response = $client->get($method . '?' . $request);
+        $result = json_decode($response->getBody());
 
-        $result = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            $error_msg = curl_error($ch);
+        if ($response->getStatusCode() != 200) {
+            $error_msg = $response->getReasonPhrase() . ' : ' . $response->getBody();
             $logger = $this->_logger;
             $context = ['source' => 'Montapacking Checkout'];
             $logger->critical($error_msg . " (" . $url . ")", $context);
             $result = null;
         }
 
-        curl_close($ch);
-
         if ($result == null) {
 
             sleep(1);
-            $ch = curl_init();
+            $response = $client->get($method . '?' . $request);
 
-            $this->_pass = htmlspecialchars_decode($this->_pass);
-
-            curl_setopt($ch, CURLOPT_URL, $url . '?' . $request);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->_user . ":" . $this->_pass);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-            curl_setopt($ch, CURLOPT_VERBOSE, true);
-            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-
-            $result = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-                $error_msg = curl_error($ch);
+            if ($response->getStatusCode() != 200) {
+                $error_msg = $response->getReasonPhrase() . ' : ' . $response->getBody();
                 $logger = $this->_logger;
                 $context = ['source' => 'Montapacking Checkout'];
                 $logger->critical($error_msg . " (" . $url . ")", $context);
                 $result = null;
             }
-
-            curl_close($ch);
         }
-
-
-
-        $result = json_decode($result);
 
         $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;
 

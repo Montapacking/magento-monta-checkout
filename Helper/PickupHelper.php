@@ -1,26 +1,19 @@
 <?php
 
-namespace Montapacking\MontaCheckout\Controller\DeliveryOptions;
+namespace Montapacking\MontaCheckout\Helper;
 
-use Magento\Checkout\Model\Session;
-use Magento\Framework\App\Action\Context;
+use DateTimeZone;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use Montapacking\MontaCheckout\Controller\AbstractDeliveryOptions;
-
-use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 use \DateTime;
 use \IntlDateFormatter;
 
 /**
- * Class Pickup
+ * Class PickupHelper
  *
- * @package Montapacking\MontaCheckout\Controller\DeliveryOptions
+ * @package Montapacking\MontaCheckout\Helper\PickupHelper
  */
-class Pickup extends AbstractDeliveryOptions
+class PickupHelper
 {
-    /** @var Session $checkoutSession */
-    private $checkoutSession;
-
     /** @var LocaleResolver $scopeConfig */
     private $localeResolver;
 
@@ -30,68 +23,15 @@ class Pickup extends AbstractDeliveryOptions
     protected $_logger;
 
     /**
-     * @var \Magento\Checkout\Model\Cart
-     */
-    public $cart;
-
-    /**
      * Services constructor.
      *
-     * @param Context       $context
-     * @param Session       $checkoutSession
-     * @param CarrierConfig $carrierConfig
      */
     public function __construct(
-        Context $context,
-        Session $checkoutSession,
         LocaleResolver $localeResolver,
-        CarrierConfig $carrierConfig,
-        \Montapacking\MontaCheckout\Logger\Logger $logger,
-        \Magento\Checkout\Model\Cart $cart
+        \Montapacking\MontaCheckout\Logger\Logger $logger
     ) {
-
         $this->_logger = $logger;
-
-        $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
-        $this->cart = $cart;
-
-        parent::__construct(
-            $context,
-            $carrierConfig,
-            $cart
-        );
-    }
-
-    /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Zend_Http_Client_Exception
-     */
-    public function execute()
-    {
-        $request = $this->getRequest();
-
-        $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
-
-        if ($language != 'NL' && $language != 'BE' && $language != 'DE') {
-            $language = 'EN';
-        }
-
-        try {
-            $oApi = $this->generateApi($request, $language, $this->_logger, true);
-
-            $pickupoptions = $oApi->getPickupOptions();
-
-            $pickupoptions_formatted = $this->formatPickupOptions($pickupoptions);
-
-            return $this->jsonResponse($pickupoptions_formatted);
-
-        } catch (Exception $e) {
-
-            $context = ['source' => 'Montapacking Checkout'];
-            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api.", $context);
-            return $this->jsonResponse([]);
-        }
     }
 
     /**

@@ -1,1 +1,4 @@
 .idea
+*.Identifier
+vendor
+*.lock

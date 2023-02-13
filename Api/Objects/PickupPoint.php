@@ -117,7 +117,6 @@ class PickupPoint
                 'place' => $details->City,
                 'country' => $details->CountryCode,
                 'phone' => $details->Phone,
-
                 'distance' => $details->DistanceMeters,
                 'lat' => $details->Latitude,
                 'lng' => $details->Longitude,

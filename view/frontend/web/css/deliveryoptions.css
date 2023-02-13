@@ -43,11 +43,20 @@
 
 #slider {
     display: block;  
-    overflow-x: hidden; 
+    overflow-x: scroll; 
     clear: left;
     margin-left: 60px;
     margin-right: 60px;
 }
+
+#slider::-webkit-scrollbar {
+    display: none;
+  }
+  
+  #slider {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
 #slider-content ol {
     display: table;
@@ -84,10 +93,6 @@ nomargin {
 @media screen and (max-width: 412px) {
     #montapacking-plugin {
         font-size: 12px !important;
-    }
-
-    p {
-        margin-bottom: 0.6rem !important;
     }
 
     .montapacking-container-content .italic {
@@ -337,7 +342,8 @@ nomargin {
     background-image: url(../images/RED.png) !important;
 }
 
-.montapacking-container-logo.TBQ {
+.montapacking-container-logo.TBQ,
+.montapacking-container-logo.AFH {
     background-image: url(../images/Montapacking.png) !important;
 }
 
@@ -370,6 +376,10 @@ nomargin {
     background-image: url(../images/Landmark.png) !important;
 }
 
+.montapacking-container-logo.DEF {
+    background-image: url(../images/DEF.png) !important;
+}
+    
 .montapacking-container-logo.Cycloon {
     background-image: url(../images/Cycloon.png) !important;
 }
@@ -390,6 +400,11 @@ nomargin {
     font-weight: 400;
     font-style: italic;
     font-size: 12px;
+}
+
+.montapacking-container-content  .title {
+    font-weight: 600;
+    font-size: 15px;
 }
 
 .montapacking-container-content  .normal {

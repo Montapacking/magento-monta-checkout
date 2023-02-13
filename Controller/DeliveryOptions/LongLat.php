@@ -86,7 +86,7 @@ class LongLat extends AbstractDeliveryOptions
                 $oApi = $this->generateApi($request, $language, $this->_logger, true);
             }
 
-            $has_connection = $oApi->checkConnection();
+            $shippers = $oApi->getShippers();
 
             $arr = [];
 
@@ -94,8 +94,9 @@ class LongLat extends AbstractDeliveryOptions
             $arr['latitude'] = $oApi->address->latitude;
             $arr['language'] = $language;
             $arr['googleapikey'] = $this->getCarrierConfig()->getGoogleApiKey();
+            $arr['shippers'] = $shippers;
 
-            if (true === $has_connection) {
+            if ($shippers != null) {
                 $arr['hasconnection'] = 'true';
             } else {
                 $arr['hasconnection'] = 'false';
@@ -109,7 +110,6 @@ class LongLat extends AbstractDeliveryOptions
             $arr['language'] = $language;
             $arr['hasconnection'] = 'false';
             $arr['googleapikey'] = $this->getCarrierConfig()->getGoogleApiKey();
-
 
             $context = ['source' => 'Montapacking Checkout'];
             $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context); //phpcs:ignore

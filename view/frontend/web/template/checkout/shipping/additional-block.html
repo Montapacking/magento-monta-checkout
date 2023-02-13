@@ -1,6 +1,8 @@
 <input type="hidden" id="montapacking_longitude" name="montapacking_longitude" value="">
 <input type="hidden" id="montapacking_latitude" name="montapacking_latitude" value="">
 <input type="hidden" id="montapacking_language" name="montapacking_language" value="">
+<input type="hidden" id="montapacking_addresschangedsincelastmapload" name="montapacking_addresschangedsincelastmapload" value="false">
+<input type="hidden" id="montapacking_addresschangedsincelastlonglatcall" name="montapacking_addresschangedsincelastlonglatcall" value="false">
 <input type="hidden" id="old_address" name="old_address" value="">
 <input type="hidden" id="hasconnection" name="hasconnection" value="y">
 
@@ -76,11 +78,11 @@
                     <div class="montapacking-container-content">
 
                         <p>
-                            <!-- <span class="floatleft marginright delivered" data-bind="i18n: 'Your order will be delivered with'"></span>
+                            <span class="floatleft marginright delivered" data-bind="i18n: 'Your order will be delivered with'"></span>
                             <span class="floatleft marginright shipped" data-bind="i18n: 'Your order will be shipped with'"></span>
                             <span class="floatleft marginright montapacking-delivery-information-company">###</span>
 
-                            <span class="floatleft dateblock marginright"  data-bind="i18n: 'on'"></span> -->
+                            <span class="floatleft dateblock marginright"  data-bind="i18n: 'on'"></span>
                             <span class="floatleft dateblock marginright montapacking-delivery-information-date">###</span>
 
                             <span class="floatleft timeblock marginright" data-bind="i18n: 'between'"></span>
@@ -157,7 +159,7 @@
                             <div class="montapacking-container-logo" data-bind="css: image_replace"></div>
 
                             <div class="montapacking-container-content">
-                                <p class="italic" data-bind="text: description_string"></p>
+                                <p class="title" data-bind="text: description_string"></p>
                             </div>
 
                             <div class="montapacking-container-price" data-bind="text: price_string"></div>

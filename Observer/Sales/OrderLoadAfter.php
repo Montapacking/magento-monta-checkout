@@ -2,12 +2,26 @@
 
 namespace Montapacking\MontaCheckout\Observer\Sales;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Api\Data\OrderExtension;
 
 class OrderLoadAfter implements ObserverInterface
 {
+    private $orderExtension;
 
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    /**
+     * OrderLoadAfter constructor.
+     *
+     */
+    public function __construct(
+        OrderExtension $orderExtension
+    )
+    {
+        $this->orderExtension = $orderExtension;
+    }
+
+    public function execute(Observer $observer)
     {
 
         $order = $observer->getOrder();
@@ -17,7 +31,7 @@ class OrderLoadAfter implements ObserverInterface
 
         if ($extensionAttributes === null) {
 
-            $extensionAttributes = $this->getOrderExtensionDependency();
+            $extensionAttributes = $this->orderExtension;
 
         }
 
@@ -26,16 +40,5 @@ class OrderLoadAfter implements ObserverInterface
         $extensionAttributes->setMontapackingMontacheckoutData($attr);
 
         $order->setExtensionAttributes($extensionAttributes);
-    }
-
-
-    private function getOrderExtensionDependency()
-    {
-
-        $orderExtension = \Magento\Framework\App\ObjectManager::getInstance()->get(
-            '\Magento\Sales\Api\Data\OrderExtension'
-        );
-
-        return $orderExtension;
     }
 }

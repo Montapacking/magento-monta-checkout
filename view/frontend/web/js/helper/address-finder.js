@@ -87,10 +87,10 @@ define(
 
 
                 if (!success) {
-                    setTimeout(checkState, 500);
+                    setTimeout(checkState, 50);
                 }
             }
-            setTimeout(checkState, 500);
+            setTimeout(checkState, 50);
         })();
 
 
