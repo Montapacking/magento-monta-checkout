@@ -16,7 +16,8 @@ class Data extends AbstractHelper
     public function __construct(
         Context $context,
         DirectoryList $directoryList
-    ) {
+    )
+    {
         $this->directoryList = $directoryList;
         parent::__construct(
             $context

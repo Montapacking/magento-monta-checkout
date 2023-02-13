@@ -219,7 +219,7 @@ class DeliveryHelper
 
         $description = str_replace("PostNL Pakket", "PostNL", $description);
 
-        if(count($option->codes) > 1){
+        if(count($option->codes) > 2){
             $image_code = 'DEF';
         } else {
             $image_code = trim(str_replace(",", "_", implode(",", $option->codes)));
