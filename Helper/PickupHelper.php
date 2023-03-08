@@ -198,7 +198,7 @@ class PickupHelper
                     foreach ($frame->options as $onr => $option) {
 
                         ## Check of maximale besteltijd voorbij is
-                        if (time() < strtotime($option->date) && $selected == null) {
+                        if (($option->date == null || time() < strtotime($option->date)) && $selected == null) {
                             $selected = $option;
                         }
 
