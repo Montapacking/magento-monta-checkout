@@ -2,6 +2,7 @@
 
 namespace Montapacking\MontaCheckout\Controller\DeliveryOptions;
 
+use Exception;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -40,7 +41,7 @@ class Delivery extends AbstractDeliveryOptions
      * @var \Montapacking\MontaCheckout\Helper\PickupHelper
      */
     protected $pickupHelper;
-    
+
     /**
      * @var \Montapacking\MontaCheckout\Helper\DeliveryHelper
      */
