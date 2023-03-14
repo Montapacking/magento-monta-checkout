@@ -665,8 +665,8 @@ define(
                                             <p class="storelocator-postcode-search-label" data-bind="i18n: 'Postal Code'">Postcode</p>
                                             <input type="text" class="input-text storelocator-postcode-search-input" id="storelocator-postcode-search-input"/>
                                             <button type="button" class="storelocator-postcode-search-button" id="storelocator-postcode-search-button" data-bind="i18n: 'Search'"></button>
-                                            <button type="button" data-bind="click: closePopup, i18n: 'x'" class="select-item close-item"></button>
                                         </div>
+                                        <button type="button" data-bind="click: closePopup, i18n: 'x'" class="select-item close-item"></button>
                                     </div>
                                 </div>
                                 <div id="bh-sl-map-container" class="bh-sl-map-container">
@@ -721,6 +721,7 @@ define(
                                             $("#montapacking_latitude").val(longlat['latitude']);
                                             $("#montapacking_longitude").val(longlat['longitude']);
                                             self.loadMap();
+                                            document.getElementById('category-filters').style.visibility = 'hidden';
                                             self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-pickup', '.pickup-services', '.pickup-services', true, true);
                                         }.bind(this));
                                 }.bind(this)
@@ -774,6 +775,7 @@ define(
                                     'name': $(this).find("span.cropped_company").text(),
                                     'lat': $(this).find("span.cropped_lat").text(),
                                     'lng': $(this).find("span.cropped_lng").text(),
+                                    'distance': ($(this).find("span.cropped_distance").text() / 1000),
                                     'street': $(this).find("span.cropped_street").text(),
                                     'houseNumber': $(this).find("span.cropped_housenumber").text(),
                                     'city': $(this).find("span.cropped_city").text(),
@@ -796,7 +798,7 @@ define(
                     );
 
                     const config = {
-                        //'debug': true,
+                        'debug': true,
                         'pagination': false,
                         'infowindowTemplatePath': site_url + '/template/checkout/storelocator/infowindow-description.html',
                         'listTemplatePath': site_url + '/template/checkout/storelocator/location-list-description.html',
@@ -837,6 +839,18 @@ define(
                             $('body').trigger('processStop');
                         },
                         callbackFormVals: function () {
+                            const html = $("#storelocator_container").html();
+                            self.showPopup(html);
+                            $('body').trigger('processStop');
+                        },
+                        callbackNotify: function (error) {
+                            if (useLocator.data('plugin_storeLocator')) {
+                                useLocator.storeLocator('mapping',{ lat: 0, lng: 0 });
+                                document.getElementsByClassName('storelocator-postcode-search-container')[0].style.visibility = 'hidden';
+                                document.getElementById('category-filters').style.visibility = 'hidden';
+                                document.getElementById('bh-sl-map').style.display = 'none';
+                                document.getElementsByClassName('bh-sl-loc-list')[0].style.width = '100%';
+                            }
                             const html = $("#storelocator_container").html();
                             self.showPopup(html);
                             $('body').trigger('processStop');
