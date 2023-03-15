@@ -757,7 +757,19 @@ define(
                         }
                     );
                 },
-                loadMap: function () {
+                LoadFallbackList: function (useLocator) {
+                    if (useLocator.data('plugin_storeLocator')) {
+                        useLocator.storeLocator('mapping', {lat: 0, lng: 0});
+                        document.getElementsByClassName('storelocator-postcode-search-container')[0].style.visibility = 'hidden';
+                        document.getElementById('category-filters').style.visibility = 'hidden';
+                        document.getElementById('bh-sl-map').style.display = 'none';
+                        document.getElementsByClassName('bh-sl-loc-list')[0].style.width = '100%';
+                    }
+                    const html = $("#storelocator_container").html();
+                    self.showPopup(html);
+                    $('body').trigger('processStop');
+
+                }, loadMap: function () {
                     const useLocator = $('#bh-sl-map-container');
                     const markers = [];
                     const site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
@@ -844,16 +856,7 @@ define(
                             $('body').trigger('processStop');
                         },
                         callbackNotify: function (error) {
-                            if (useLocator.data('plugin_storeLocator')) {
-                                useLocator.storeLocator('mapping',{ lat: 0, lng: 0 });
-                                document.getElementsByClassName('storelocator-postcode-search-container')[0].style.visibility = 'hidden';
-                                document.getElementById('category-filters').style.visibility = 'hidden';
-                                document.getElementById('bh-sl-map').style.display = 'none';
-                                document.getElementsByClassName('bh-sl-loc-list')[0].style.width = '100%';
-                            }
-                            const html = $("#storelocator_container").html();
-                            self.showPopup(html);
-                            $('body').trigger('processStop');
+                            self.LoadFallbackList(useLocator);
                         }
                     };
                     if (!useLocator.data('plugin_storeLocator')) {
