@@ -810,7 +810,7 @@ define(
                     );
 
                     const config = {
-                        'debug': true,
+                        'debug': false,
                         'pagination': false,
                         'infowindowTemplatePath': site_url + '/template/checkout/storelocator/infowindow-description.html',
                         'listTemplatePath': site_url + '/template/checkout/storelocator/location-list-description.html',
