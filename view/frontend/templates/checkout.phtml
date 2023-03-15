@@ -2,12 +2,11 @@
 
 /** @var \Montapacking\MontaCheckout\Block\Checkout $block */
 ?>
-<?php if ($block->hasGoogleMapsApiKey()) : ?>
     <script>
         require.config({
             paths: {
                 'Handlebars': 'Montapacking_MontaCheckout/js/view/checkout/shipping/handlebars.min',
-                'google': 'https://maps.google.com/maps/api/js?key=<?= $block->escapeJs($block->getGoogleMapsApiKey()) ?>',
+                'google': 'https://maps.google.com/maps/api/js?key=<?= (strlen($block->getGoogleMapsApiKey()) == 39) ? $block->escapeJs($block->getGoogleMapsApiKey()) : "" ?>',
                 'storeLocator': 'Montapacking_MontaCheckout/js/view/checkout/shipping/jquery.storelocator',
             },
 
@@ -38,4 +37,3 @@
             }
         });
     </script>
-<?php endif; ?>

@@ -1,6 +1,7 @@
 <?php
 
 namespace Montapacking\MontaCheckout\Api\Objects;
+use Exception;
 use GuzzleHttp\Client;
 
 /**

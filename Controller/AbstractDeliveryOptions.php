@@ -5,6 +5,7 @@ namespace Montapacking\MontaCheckout\Controller;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
 
+use Magento\Framework\App\RequestInterface;
 use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
 
@@ -67,9 +68,15 @@ abstract class AbstractDeliveryOptions extends Action
         );
     }
 
-    public function generateApi($request, $language, $logger = null, $use_googlekey = false)
+    public function generateApi(RequestInterface $request, $language, $logger = null, $use_googlekey = false)
     {
-        $street = $request->getParam('street') ? trim(implode(" ", $request->getParam('street'))) : "";
+        if($request->getParam('street') != null && is_array($request->getParam('street')) && count($request->getParam('street')) > 1){
+            $street =  trim(implode(" ", $request->getParam('street')));
+        } else if ($request->getParam('street') != null) {
+            $street = trim($request->getParam('street'));
+        } else {
+            $street = "";
+        }
         $postcode = $request->getParam('postcode') ? trim($request->getParam('postcode')) : "";
         $city = $request->getParam('city') ? trim($request->getParam('city')) : "";
         $country = $request->getParam('country') ? trim($request->getParam('country')) : "";
