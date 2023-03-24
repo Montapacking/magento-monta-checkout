@@ -52,8 +52,8 @@
             <div id="slider-content">
                 <ol data-bind="foreach: daysForSelect">
                     <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">  
-                        <p data-bind="text: day"></p>              
-                        <p data-bind="text: day_string"></p>              
+                        <p data-bind="text: day"></p>
+                        <p data-bind="text: day_string"></p>
                     </li>
                 </ol>
             </div>
@@ -66,7 +66,7 @@
 
         <div class="delivery-services">
 
-            <!-- ko if: filteredDeliveryServices().length > 0 -->
+            <!-- ko if: filteredDeliveryServices().length > 0 || standardDeliveryServices().length > 0-->
 
             <div class="container montapacking-delivery-service delivery-information displaynone">
 
@@ -110,7 +110,7 @@
             </div>
             <!-- /ko -->
 
-            <!-- ko ifnot: filteredDeliveryServices().length > 0 -->
+            <!-- ko if: filteredDeliveryServices().length == 0 && standardDeliveryServices().length == 0 -->
 
             <div class="container montapacking-delivery-service delivery-information">
 
@@ -129,13 +129,12 @@
 
             <!-- /ko -->
             
-            <!-- ko if: filteredDeliveryServices().length > 0  -->
+            <!-- ko if: filteredDeliveryServices().length > 0 || standardDeliveryServices().length > 0 -->
            
                    <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
                          <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
                     </div> 
             
-
             <!-- /ko -->
 
             <script type="text/html" id="deliveryServices-template">
