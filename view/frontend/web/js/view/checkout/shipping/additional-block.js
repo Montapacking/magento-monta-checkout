@@ -241,7 +241,7 @@ define(
 
                             this.standardDeliveryServices(objectArray.filter(timeframe =>
                                 timeframe.options[0].from === "" &&
-                                timeframe.options[0].type === 'Unknown')); 
+                                timeframe.options[0].type === 'Unknown'));
 
                             this.pickupServices(Object.values(services[1]));
                         }.bind(this)

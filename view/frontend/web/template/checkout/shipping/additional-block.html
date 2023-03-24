@@ -34,7 +34,7 @@
         <!-- /ko -->
 
     </div>
-     
+
     <!-- ko if: standardDeliveryServices().length > 0 -->
 
     <div data-bind="foreach: standardDeliveryServices" class="clearboth" id="standard-delivery-services">
@@ -42,7 +42,7 @@
     </div>
 
      <!-- /ko -->
-    
+
     <!-- ko if: filteredDeliveryServices().length > 0 -->
 
     <div id="date-picker">
@@ -51,7 +51,7 @@
         <div id="slider">
             <div id="slider-content">
                 <ol data-bind="foreach: daysForSelect">
-                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">  
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">
                         <p data-bind="text: day"></p>
                         <p data-bind="text: day_string"></p>
                     </li>
@@ -128,7 +128,7 @@
             </div>
 
             <!-- /ko -->
-            
+
             <!-- ko if: filteredDeliveryServices().length > 0 -->
            
                    <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
@@ -298,7 +298,6 @@
                     <div data-bind="attr: {'data-markerid': marker_id}" class="container montapacking-pickup-service pickup-option">
 
                         <span class="notranslate cropped_shipper montapacking-hidden" data-bind="text: image"></span>
-                        <span class="notranslate cropped_distance montapacking-hidden" data-bind="text: $parent.description.DistanceMeters"></span>
                         <span class="notranslate cropped_company montapacking-hidden" data-bind="text: $parent.description.Company "></span>
                         <span class="notranslate cropped_street montapacking-hidden" data-bind="text: $parent.description.Street "></span>
                         <span class="notranslate cropped_housenumber montapacking-hidden" data-bind="text: $parent.description.HouseNumber "></span>
