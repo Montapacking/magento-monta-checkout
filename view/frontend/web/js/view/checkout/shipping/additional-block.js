@@ -415,8 +415,6 @@ define(
                                 $(".nothavesameday").removeClass("displaynone");
                             }
                         }
-                    }else{
-                        $(".delivery-option:not(.SameDayDelivery)").find("input[value=" + lastSelectedShipper + "]").trigger("click");
                     }
 
                     if (hideDeliverInfo === true) {
