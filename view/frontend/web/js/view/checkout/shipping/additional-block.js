@@ -33,7 +33,8 @@ define(
                     deliveryFee: ko.observable(),
                     pickupFee: ko.observable(),
                     selectedShippers: ko.observable(),
-                    selectedPickup: ko.observable()
+                    selectedPickup: ko.observable(),
+                    preferredShipper: ko.observable()
                 },
                 initObservable: function () {
                     //one step checkout solution, update buttons and quantity change are not working, so we are gonna hide this options
@@ -110,7 +111,8 @@ define(
                             'filteredDeliveryServices',
                             'standardDeliveryServices',
                             'daysForSelect',
-                            'pickupPoints'
+                            'pickupPoints',
+                            'preferredShipper'
                         ]
                     );
 
@@ -217,7 +219,9 @@ define(
                             const objectArray = Object.values(services[0]);
                             this.deliveryServices(objectArray);
 
-                            const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].type !== 'Unknown');
+                            this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred)); 
+
+                            const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== ''); 
                             if (filteredDeliveryServicesList.length > 0) {
                                 const distinctFilteredItems = self.initDatePicker(objectArray);
                                 this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
@@ -227,23 +231,51 @@ define(
                                 const width = $("ol li").length;
                                 $("#slider-content").width(width * 110);
 
-                                $('#slider-content ol li:first-child').addClass("selected_day");
+                                let indexOfDay = 0;
+                                if(this.preferredShipper != null && this.preferredShipper.options[0].code != "MultipleShipper_ShippingDayUnknown") {
+                                    indexOfDay = distinctFilteredItems.indexOf(distinctFilteredItems.find(x=>x.date == this.preferredShipper.date));
+                                }
+
+                                $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click"); 
                             }
 
                             this.standardDeliveryServices(objectArray.filter(timeframe =>
                                 timeframe.options[0].from === "" &&
-                                timeframe.options[0].type === 'Unknown'));
+                                timeframe.options[0].type === 'Unknown')); 
 
                             this.pickupServices(Object.values(services[1]));
                         }.bind(this)
                     );
                 },
 
+                renderedHandler: function(){
+                    self.setPreferredShipper(); 
+                },
+
+                setPreferredShipper(){
+                    var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
+                    var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
+
+                    if(this.preferredShipper != null && 
+                        standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
+                        filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
+                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){ 
+                                standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
+
+                               var sliderElement = document.getElementById('montapacking-plugin');
+                               sliderElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                            } else {
+                                filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
+                            }
+                        this.preferredShipper = null; 
+                    } 
+                },
+
                 initDatePicker: function (objectArray) {
                     const distinctFilteredItems = [];
 
                     //search all shipping options with delivery date, so the dates can be used for the datepicker
-                    const filteredItems = objectArray.filter(timeframe => timeframe.options[0].type !== "Unknown").map(option => {
+                    const filteredItems = objectArray.filter(timeframe => timeframe.options[0].date !== '').map(option => {
                         return {
                             "date": option.options[0].date,
                             "day": option.options[0].date_string.split(' ')[0],
@@ -383,6 +415,8 @@ define(
                                 $(".nothavesameday").removeClass("displaynone");
                             }
                         }
+                    }else{
+                        $(".delivery-option:not(.SameDayDelivery)").find("input[value=" + lastSelectedShipper + "]").trigger("click");
                     }
 
                     if (hideDeliverInfo === true) {

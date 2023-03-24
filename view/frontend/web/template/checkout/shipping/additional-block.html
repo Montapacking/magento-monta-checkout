@@ -34,15 +34,15 @@
         <!-- /ko -->
 
     </div>
-
+     
     <!-- ko if: standardDeliveryServices().length > 0 -->
 
     <div data-bind="foreach: standardDeliveryServices" class="clearboth" id="standard-delivery-services">
-        <div data-bind="template: {name: 'deliveryServices-template' }"></div>
+        <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
     </div>
 
      <!-- /ko -->
-
+    
     <!-- ko if: filteredDeliveryServices().length > 0 -->
 
     <div id="date-picker">
@@ -51,9 +51,9 @@
         <div id="slider">
             <div id="slider-content">
                 <ol data-bind="foreach: daysForSelect">
-                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">
-                        <p data-bind="text: day"></p>
-                        <p data-bind="text: day_string"></p>
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">  
+                        <p data-bind="text: day"></p>              
+                        <p data-bind="text: day_string"></p>              
                     </li>
                 </ol>
             </div>
@@ -66,7 +66,7 @@
 
         <div class="delivery-services">
 
-            <!-- ko if: filteredDeliveryServices().length > 0  || standardDeliveryServices().length > 0 -->
+            <!-- ko if: filteredDeliveryServices().length > 0 -->
 
             <div class="container montapacking-delivery-service delivery-information displaynone">
 
@@ -110,7 +110,7 @@
             </div>
             <!-- /ko -->
 
-            <!-- ko if: filteredDeliveryServices().length == 0 && standardDeliveryServices().length == 0 -->
+            <!-- ko ifnot: filteredDeliveryServices().length > 0 -->
 
             <div class="container montapacking-delivery-service delivery-information">
 
@@ -128,11 +128,13 @@
             </div>
 
             <!-- /ko -->
-
-            <!-- ko if: filteredDeliveryServices().length > 0 -->
-            <div data-bind="foreach: filteredDeliveryServices" class="clearboth">
-                <div data-bind="template: {name: 'deliveryServices-template' }"></div>
-            </div>
+            
+            <!-- ko if: filteredDeliveryServices().length > 0  -->
+           
+                   <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
+                         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
+                    </div> 
+            
 
             <!-- /ko -->
 
@@ -276,11 +278,11 @@
             <!-- /ko -->
 
 
-            <!-- ko if: pickupServices().length > 0 -->
+            <!-- ko if: pickupServices().length > 0 && googleApiKeyValid -->
 
             <div class="container montapacking-pickup-service pickup-information">
 
-                <a href="javascript:"
+                <a href="javascript:;"
                    data-bind="i18n: 'Click here to choose another pick-up point', click: openStoreLocator.bind($parent)"></a>
             </div>
 
@@ -311,7 +313,6 @@
                         <span class="notranslate cropped_image_class montapacking-hidden" data-bind="text: image"></span>
                         <span class="notranslate cropped_lng montapacking-hidden" data-bind="text: $parent.description.Longitude "></span>
                         <span class="notranslate cropped_lat montapacking-hidden" data-bind="text: $parent.description.Latitude "></span>
-                        <span class="notranslate cropped_distance montapacking-hidden" data-bind="text: $parent.description.Distance "></span>
                         <span class="notranslate cropped_optioncodes montapacking-hidden" data-bind="text: optionCodes"></span>
                         <span class="notranslate cropped_optionswithvalue montapacking-hidden" data-bind="text: optionsWithValue"></span>
                         <span class="notranslate cropped_codepickup montapacking-hidden" data-bind="text: code_pickup"></span>
