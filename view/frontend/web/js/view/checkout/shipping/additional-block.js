@@ -216,6 +216,10 @@ define(
                         }
                     ).done(
                         function (services) {
+                            if (services = "[]") {
+                                return;
+                            }
+
                             const objectArray = Object.values(services[0]);
                             this.deliveryServices(objectArray);
 
