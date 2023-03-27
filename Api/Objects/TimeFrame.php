@@ -129,7 +129,9 @@ class TimeFrame
                     $option->From,
                     $option->To,
                     $option->Options,
-                    $option->ShippingDeadline
+                    $option->ShippingDeadline,
+                    $option->IsPreferred,
+                    $option->DisplayName
                 );
 
             }

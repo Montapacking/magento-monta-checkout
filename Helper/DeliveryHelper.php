@@ -218,6 +218,15 @@ class DeliveryHelper
         }
 
         $description = str_replace("PostNL Pakket", "PostNL", $description);
+        $name = $option->description;
+
+        if($option->displayName != null){
+            $parts = explode("|", $description);
+            $parts[0] = $option->displayName;
+            $description = implode(" | ", $parts);
+            
+            $name = $option->displayName;
+        }
 
         if(count($option->codes) > 2){
             $image_code = 'DEF';
@@ -232,7 +241,7 @@ class DeliveryHelper
             'image' => trim(implode(",", $option->codes)),
             'image_replace' => trim($image_code),
             'optionCodes' => $option->optioncodes,
-            'name' => $option->description,
+            'name' => $name,
             'description_string' => $description,
             'price_currency' => $curr,
             'price_string' => $curr . ' ' . number_format($option->price, 2, ',', ''),
@@ -245,6 +254,7 @@ class DeliveryHelper
             'date_from_to' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
             'date_from_to_formatted' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
             'extras' => $extras,
+            'isPreferred' => $option->isPreferred,
         ];
 
         return $options;
