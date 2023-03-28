@@ -216,16 +216,16 @@ define(
                         }
                     ).done(
                         function (services) {
-                            if (services = "[]") {
+                            if (services === "[]") {
                                 return;
                             }
 
                             const objectArray = Object.values(services[0]);
                             this.deliveryServices(objectArray);
 
-                            this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred)); 
+                            this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred));
 
-                            const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== ''); 
+                            const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== '');
                             if (filteredDeliveryServicesList.length > 0) {
                                 const distinctFilteredItems = self.initDatePicker(objectArray);
                                 this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
@@ -240,7 +240,7 @@ define(
                                     indexOfDay = distinctFilteredItems.indexOf(distinctFilteredItems.find(x=>x.date == this.preferredShipper.date));
                                 }
 
-                                $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click"); 
+                                $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click");
                             }
 
                             this.standardDeliveryServices(objectArray.filter(timeframe =>
@@ -253,17 +253,17 @@ define(
                 },
 
                 renderedHandler: function(){
-                    self.setPreferredShipper(); 
+                    self.setPreferredShipper();
                 },
 
                 setPreferredShipper(){
                     var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
                     var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
 
-                    if(this.preferredShipper != null && 
+                    if(this.preferredShipper != null &&
                         standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
                         filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
-                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){ 
+                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
                                 standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
 
                                var sliderElement = document.getElementById('montapacking-plugin');
@@ -271,8 +271,8 @@ define(
                             } else {
                                 filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
                             }
-                        this.preferredShipper = null; 
-                    } 
+                        this.preferredShipper = null;
+                    }
                 },
 
                 initDatePicker: function (objectArray) {
