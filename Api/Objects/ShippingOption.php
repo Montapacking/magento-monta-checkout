@@ -85,7 +85,7 @@ class ShippingOption
      * @param $date
      * @param $isPreferred
      */
-    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date, $isPreferred, $displayName) //phpcs:ignore
+    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date, $isPreferred, $isSustainable, $displayName) //phpcs:ignore
     {
 
         $this->setCode($code);
@@ -101,6 +101,7 @@ class ShippingOption
         $this->setExtras($extras);
         $this->setDate($date);
         $this->setIsPreferred($isPreferred);
+        $this->setIsSustainable($isSustainable);
         $this->setDisplayName($displayName);
     }
 
@@ -222,6 +223,17 @@ class ShippingOption
     public function setIsPreferred($isPreferred)
     {
         $this->isPreferred = $isPreferred;
+        return $this;
+    }
+
+     /**
+     * @param $isSustainable
+     *
+     * @return $this
+     */
+    public function setIsSustainable($isSustainable)
+    {
+        $this->isSustainable = $isSustainable;
         return $this;
     }
 

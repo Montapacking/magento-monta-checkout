@@ -223,7 +223,7 @@ define(
                             const objectArray = Object.values(services[0]);
                             this.deliveryServices(objectArray);
 
-                            this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred));
+                            this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.is_preferred));
 
                             const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== '');
                             if (filteredDeliveryServicesList.length > 0) {
