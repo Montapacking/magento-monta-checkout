@@ -216,7 +216,7 @@ define(
                         }
                     ).done(
                         function (services) {
-                            if (services == "[]") {
+                            if (services === "[]") {
                                 return;
                             }
 
@@ -258,17 +258,17 @@ define(
                 },
 
                 renderedHandler: function(){
-                    self.setPreferredShipper(); 
+                    self.setPreferredShipper();
                 },
 
                 setPreferredShipper(){
                     var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
                     var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
 
-                    if(this.preferredShipper != null && 
+                    if(this.preferredShipper != null &&
                         standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
                         filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
-                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){ 
+                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
                                 standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
 
                                var sliderElement = document.getElementById('montapacking-plugin');
@@ -276,8 +276,8 @@ define(
                             } else {
                                 filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
                             }
-                        this.preferredShipper = null; 
-                    } 
+                        this.preferredShipper = null;
+                    }
                 },
 
                 initDatePicker: function (objectArray) {

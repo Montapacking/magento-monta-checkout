@@ -1,4 +1,4 @@
-"Delivery","Bezorging"
+"Delivery","Bezorgen"
 "Pick-up","Afhalen"
 "Your order will be delivered with", "Uw order wordt bezorgd met"
 "Your order will be shipped with",  "Uw order wordt verzonden met"
@@ -56,9 +56,3 @@
 "Please select a postnumber. This is mandatory for pack stations", "Please select a postnumber. This is mandatory for pack stations"
 "Postal Code", "Postcode"
 "Search", "Zoeken"
-
-
-
-
-
-
