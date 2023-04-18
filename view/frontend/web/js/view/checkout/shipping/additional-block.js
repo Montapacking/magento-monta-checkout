@@ -223,24 +223,29 @@ define(
                             const objectArray = Object.values(services[0]);
                             this.deliveryServices(objectArray);
 
-                            this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred));
-
-                            const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== '');
-                            if (filteredDeliveryServicesList.length > 0) {
-                                const distinctFilteredItems = self.initDatePicker(objectArray);
-                                this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
-                                    timeframe.options[0].date === distinctFilteredItems[0].date));
-
-                                // set width of date picker by number of list items
-                                const width = $("ol li").length;
-                                $("#slider-content").width(width * 110);
-
-                                let indexOfDay = 0;
-                                if(this.preferredShipper != null && this.preferredShipper.options[0].code != "MultipleShipper_ShippingDayUnknown") {
-                                    indexOfDay = distinctFilteredItems.indexOf(distinctFilteredItems.find(x=>x.date == this.preferredShipper.date));
+                            if(objectArray.length > 0) {
+                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred)); 
+                                if(this.preferredShipper == null){
+                                    this.preferredShipper = objectArray[0];
                                 }
 
-                                $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click");
+                                const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== ''); 
+                                if (filteredDeliveryServicesList.length > 0) {
+                                    const distinctFilteredItems = self.initDatePicker(objectArray);
+                                    this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
+                                        timeframe.options[0].date === distinctFilteredItems[0].date));
+
+                                    // set width of date picker by number of list items
+                                    const width = $("ol li").length;
+                                    $("#slider-content").width(width * 110);
+
+                                    let indexOfDay = 0;
+                                    if(this.preferredShipper != null && this.preferredShipper.options[0].code != "MultipleShipper_ShippingDayUnknown") {
+                                        indexOfDay = distinctFilteredItems.indexOf(distinctFilteredItems.find(x=>x.date == this.preferredShipper.date));
+                                    }
+
+                                    $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click"); 
+                                }
                             }
 
                             this.standardDeliveryServices(objectArray.filter(timeframe =>
