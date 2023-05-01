@@ -81,7 +81,6 @@ class Delivery extends AbstractDeliveryOptions
 
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Zend_Http_Client_Exception
      */
     public function execute()
     {
@@ -105,6 +104,7 @@ class Delivery extends AbstractDeliveryOptions
         } catch (Exception $e) {
 
             $context = ['source' => 'Montapacking Checkout'];
+            $this->_logger->critical(json_encode($e->getMessage()), $context); //phpcs:ignore
             $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context); //phpcs:ignore
             return $this->jsonResponse(json_encode([]));
         }

@@ -64,7 +64,7 @@ abstract class AbstractDeliveryOptions extends Action
         }
 
         return $response->representJson(
-            \Zend_Json::encode($data)
+            json_decode($data)
         );
     }
 
@@ -73,7 +73,7 @@ abstract class AbstractDeliveryOptions extends Action
         if($request->getParam('street') != null && is_array($request->getParam('street')) && count($request->getParam('street')) > 1){
             $street =  trim(implode(" ", $request->getParam('street')));
         } else if ($request->getParam('street') != null) {
-            $street = trim($request->getParam('street'));
+            $street = trim(implode($request->getParam('street')));
         } else {
             $street = "";
         }
