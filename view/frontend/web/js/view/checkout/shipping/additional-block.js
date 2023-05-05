@@ -34,7 +34,7 @@ define(
                     pickupFee: ko.observable(),
                     selectedShippers: ko.observable(),
                     selectedPickup: ko.observable(),
-                    preferredShipper: null
+                    preferredShipper: ko.observable()
                 },
                 initObservable: function () {
                     //one step checkout solution, update buttons and quantity change are not working, so we are gonna hide this options
@@ -111,7 +111,8 @@ define(
                             'filteredDeliveryServices',
                             'standardDeliveryServices',
                             'daysForSelect',
-                            'pickupPoints'
+                            'pickupPoints',
+                            'preferredShipper'
                         ]
                     );
 
@@ -272,7 +273,7 @@ define(
                 },
 
                 renderedHandler: function(){
-                    self.setPreferredShipper(); 
+                    self.setPreferredShipper();
                 },
 
                 setPreferredShipper(){
@@ -282,7 +283,7 @@ define(
                     if(this.preferredShipper != null && 
                         standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
                         filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
-                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){ 
+                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
                                 standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
 
                                var sliderElement = document.getElementById('montapacking-plugin');

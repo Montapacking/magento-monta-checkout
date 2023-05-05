@@ -18,7 +18,6 @@
             data-bind="click: toggleTab.bind($parent, '.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', true, false, false)"
             class="montapacking-tab montapacking-tab-delivery active">
             <span data-bind="i18n: 'Delivery'"></span>
-            <strong data-bind="text: deliveryFee"></strong>
         </div>
         <!-- /ko -->
 
@@ -28,7 +27,6 @@
             data-bind="click: toggleTab.bind($parent, '.montapacking-tab-delivery', '.montapacking-tab-pickup', '.delivery-services', '.pickup-services', true, false, true)"
             class="montapacking-tab montapacking-tab-pickup">
             <span data-bind="i18n: 'Pick-up'"></span>
-            <strong data-bind="text: pickupFee"></strong>
         </div>
 
         <!-- /ko -->
@@ -38,7 +36,7 @@
     <!-- ko if: standardDeliveryServices().length > 0 -->
 
     <div data-bind="foreach: standardDeliveryServices" class="clearboth" id="standard-delivery-services">
-        <div data-bind="template: {name: 'deliveryServices-template' }"></div>
+        <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
     </div>
 
      <!-- /ko -->
@@ -144,9 +142,10 @@
             <!-- /ko -->
 
             <!-- ko if: filteredDeliveryServices().length > 0 -->
-            <div data-bind="foreach: filteredDeliveryServices" class="clearboth">
-                <div data-bind="template: {name: 'deliveryServices-template' }"></div>
-            </div>
+
+                   <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
+                         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
+                    </div>
 
             <!-- /ko -->
 
@@ -311,7 +310,6 @@
                     <div data-bind="attr: {'data-markerid': marker_id}" class="container montapacking-pickup-service pickup-option">
 
                         <span class="notranslate cropped_shipper montapacking-hidden" data-bind="text: image"></span>
-                        <span class="notranslate cropped_distance montapacking-hidden" data-bind="text: $parent.description.DistanceMeters"></span>
                         <span class="notranslate cropped_company montapacking-hidden" data-bind="text: $parent.description.Company "></span>
                         <span class="notranslate cropped_street montapacking-hidden" data-bind="text: $parent.description.Street "></span>
                         <span class="notranslate cropped_housenumber montapacking-hidden" data-bind="text: $parent.description.HouseNumber "></span>

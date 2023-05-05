@@ -88,6 +88,7 @@ class ShippingOption
      * @param $to
      * @param $extras
      * @param $date
+     * @param $isPreferred
      */
     public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date, $isPreferred, $displayName, $discountPercentage) //phpcs:ignore
     {
@@ -227,6 +228,28 @@ class ShippingOption
     public function setTo($to)
     {
         $this->to = $to;
+        return $this;
+    }
+
+     /**
+     * @param $isPreferred
+     *
+     * @return $this
+     */
+    public function setIsPreferred($isPreferred)
+    {
+        $this->isPreferred = $isPreferred;
+        return $this;
+    }
+
+      /**
+     * @param $displayName
+     *
+     * @return $this
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
         return $this;
     }
 
