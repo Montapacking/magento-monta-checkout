@@ -33,7 +33,8 @@ define(
                     deliveryFee: ko.observable(),
                     pickupFee: ko.observable(),
                     selectedShippers: ko.observable(),
-                    selectedPickup: ko.observable()
+                    selectedPickup: ko.observable(),
+                    preferredShipper: null
                 },
                 initObservable: function () {
                     //one step checkout solution, update buttons and quantity change are not working, so we are gonna hide this options
@@ -195,7 +196,7 @@ define(
                  * Retrieve Delivery Options from Montapacking.
                  */
                 getDeliveryServices: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
-
+                    console.log("data " + JSON.stringify(street) + " " + housenumber)
                     $.ajax(
                         {
                             method: 'GET',
@@ -203,55 +204,126 @@ define(
                             type: 'jsonp',
                             showLoader: true,
                             data: {
-                                street: street,
+                                street: street[0],
                                 postcode: postcode,
                                 city: city,
                                 country: country,
-                                housenumber: housenumber,
+                                housenumber: street[1],
                                 housenumberaddition: housenumberaddition,
                                 longlat: longlat
                             }
                         }
                     ).done(
                         function (services) {
-                            const objectArray = Object.values(services[0]);
-                            this.deliveryServices(objectArray);
-
-                            const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].type !== 'Unknown');
-                            if (filteredDeliveryServicesList.length > 0) {
-                                const distinctFilteredItems = self.initDatePicker(objectArray);
-                                this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
-                                    timeframe.options[0].date === distinctFilteredItems[0].date));
-
-                                // set width of date picker by number of list items
-                                const width = $("ol li").length;
-                                $("#slider-content").width(width * 110);
-
-                                $('#slider-content ol li:first-child').addClass("selected_day");
+                            console.log("service " + services);
+                            console.log("service 0 " + services[0]);
+                            console.log("service 1  " + services[1]);
+                            if(services == "[]" || services.length == 0){
+                                return;
                             }
 
-                            this.standardDeliveryServices(objectArray.filter(timeframe =>
-                                timeframe.options[0].from === "" &&
-                                timeframe.options[0].type === 'Unknown'));
+                            const objectArray = Object.values(services[0]);
 
-                            this.pickupServices(Object.values(services[1]));
+                            // console.log("objectArray without it" + services[0]);   
+                            // console.log("objectArray object" + Object.values(services[0]))   
+                            // console.log("objectArray " + services.length)   
+                            // console.log("Object.values(services[0]) " + Object.values(services).length)     
+                            // console.log("type " + typeof(services))     
+                            // console.log("type " + typeof(JSON.parse(services)))     
+                            // console.log("length  " + JSON.parse(services).length)     
+                            this.deliveryServices(objectArray);
+
+                            if (objectArray.length > 0){
+                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred));
+                                console.log("pref " + JSON.stringify(objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred))));
+                                if(this.preferredShipper == null) {
+                                    
+                                    this.preferredShipper = objectArray[0];
+                                }
+
+                                const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== ''); 
+                                if (filteredDeliveryServicesList.length > 0) {
+                                    const distinctFilteredItems = self.initDatePicker(objectArray);
+                                    this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
+                                        timeframe.options[0].date === distinctFilteredItems[0].date));
+
+                                    // set width of date picker by number of list items
+                                    const width = $("ol li").length;
+                                    $("#slider-content").width(width * 110);
+
+                                    let indexOfDay = 0;  
+                                    if(this.preferredShipper != null && this.preferredShipper.options[0].code != "MultipleShipper_ShippingDayUnknown") {
+                                        indexOfDay = distinctFilteredItems.indexOf(distinctFilteredItems.find(x=>x.date == this.preferredShipper.date));
+                                    }
+
+                                    $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click"); 
+                                }
+
+                                this.standardDeliveryServices(objectArray.filter(timeframe =>
+                                    timeframe.options[0].from === "" &&
+                                    timeframe.options[0].type === 'Unknown'));  
+                            }
+
+                                this.pickupServices(Object.values(services[1])); 
+                        
                         }.bind(this)
+                        
                     );
+                },
+
+                renderedHandler: function(){
+                    self.setPreferredShipper(); 
+                },
+
+                setPreferredShipper(){
+                    var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
+                    var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
+
+                    if(this.preferredShipper != null && 
+                        standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
+                        filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
+                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){ 
+                                standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
+
+                               var sliderElement = document.getElementById('montapacking-plugin');
+                               sliderElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                            } else {
+                                filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
+                            }
+                        this.preferredShipper = null; 
+                    } 
+                },
+
+                checkDiscount(){ 
+                    return this.daysForSelect.some(x=>x.discountPercentage > 0)
                 },
 
                 initDatePicker: function (objectArray) {
                     const distinctFilteredItems = [];
-
+                    
+                    console.log("discount " + JSON.stringify(objectArray));
                     //search all shipping options with delivery date, so the dates can be used for the datepicker
-                    const filteredItems = objectArray.filter(timeframe => timeframe.options[0].type !== "Unknown").map(option => {
+                    const filteredItems = objectArray.map(option => {
                         return {
                             "date": option.options[0].date,
                             "day": option.options[0].date_string.split(' ')[0],
                             "day_string":
-                                option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2])
+                                option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]),
+                            "discountPercentage" : option.options.some(x=>x.discount_percentage > 0) ? option.options.find(x=>x.discount_percentage > 0).discount_percentage : 0,
+                            "discountPercentageText" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
                         }
                     });
+                    
+                    filteredItems.sort(function(a,b){
+                        let date1 = a.date.split('-');
+                        let date2 = b.date.split('-');
+                        return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discountPercentage - a.discountPercentage
+                    })
 
+                    console.log("filteredItems " + JSON.stringify(filteredItems));
+
+                    console.log("discount " + JSON.stringify(filteredItems));
+                    
                     // filter all duplicates
                     $.each(filteredItems, function (index, item) {
                         let alreadyAdded = false;

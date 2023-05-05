@@ -59,6 +59,19 @@ class ShippingOption
      * @var
      */
     public $date;
+     /**
+     * @var
+     */
+    public $isPreferred;    
+    /**
+     * @var
+     */
+    public $displayName;   
+    /**
+     * @var
+     */
+    public $discountPercentage;     
+
 
     /**
      * ShippingOption constructor.
@@ -76,7 +89,7 @@ class ShippingOption
      * @param $extras
      * @param $date
      */
-    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date) //phpcs:ignore
+    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date, $isPreferred, $displayName, $discountPercentage) //phpcs:ignore
     {
 
         $this->setCode($code);
@@ -91,6 +104,20 @@ class ShippingOption
         $this->setTo($to);
         $this->setExtras($extras);
         $this->setDate($date);
+        $this->setIsPreferred($isPreferred);
+        $this->setDisplayName($displayName);
+        $this->setDiscountPercentage($discountPercentage);
+    }
+
+     /**
+     * @param $code
+     *
+     * @return $this
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+        $this->discountPercentage = $discountPercentage;
+        return $this;
     }
 
     /**

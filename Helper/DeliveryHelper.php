@@ -63,6 +63,8 @@ class DeliveryHelper
 
             foreach ($frames as $nr => $frame) {
 
+                $percentageText = $frame->discountPercentage != null ? "-" . $frame->discountPercentage . "%" :  null;
+
                 foreach ($frame->options as $onr => $option) {
 
                     $description = [];
@@ -157,7 +159,7 @@ class DeliveryHelper
                             'time' => $time != null ? $time : "", //phpcs:ignore
                             'description' => $frame->description,
                             'price_currency' => $curr,
-                            'options' => $options
+                            'options' => $options,
                         ];
                     }
 
@@ -245,6 +247,8 @@ class DeliveryHelper
             'date_from_to' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . "-" . date('H:i', strtotime($to)) : "",
             'date_from_to_formatted' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
             'extras' => $extras,
+            'isPreferred' => $option->isPreferred,
+            'discount_percentage' => $option->discountPercentage,
         ];
 
         return $options;

@@ -51,10 +51,24 @@
         <div id="slider">
             <div id="slider-content">
                 <ol data-bind="foreach: daysForSelect">
-                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">
-                        <p data-bind="text: day"></p>
-                        <p data-bind="text: day_string"></p>
-                    </li>
+                
+                        <!-- <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)" style="position: relative;">
+                            <p data-bind="text: day"></p>
+                            <p data-bind="text: day_string"></p>
+                       
+                        </li> -->
+
+                        
+                          
+                        <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discountPercentage > 0 }">
+                            <p data-bind="text: day, css: {'day-text-discount': discountPercentage > 0 }"></p> 
+                            <p data-bind="text: day_string, css: {'day-text-discount': discountPercentage > 0 }"></p>                            
+                            
+                             <!-- ko if: discountPercentage > 0 -->
+                                <p data-bind="text: discountPercentageText"  style="margin:  auto;width: 60%; color:green;background-color: lightgreen;"></p>
+                              <!-- /ko -->
+
+                        </li>            
                 </ol>
             </div>
         </div>
@@ -162,7 +176,7 @@
                                 <p class="title" data-bind="text: description_string"></p>
                             </div>
 
-                            <div class="montapacking-container-price" data-bind="text: price_string"></div>
+                            <div class="montapacking-container-price" data-bind="text: price_string, css: {'color-green':   discount_percentage > 0 || discount_percentage != '0'}  "></div>
                             <div class="clearboth"></div>
                         </div>
 

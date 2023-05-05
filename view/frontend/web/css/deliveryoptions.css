@@ -260,10 +260,10 @@
 }
 
 .montapacking-parent .montapacking-tab.day.selected_day {
-    background-color: #1979c3;
     border:  none;
-    color: white;
     box-shadow: 1px 1px 10px -4px grey;
+    
+    font-weight: 700;
 }
 
 @media screen and (max-width: 380px) {
@@ -1180,4 +1180,16 @@
     .bh-sl-container .bh-sl-filters-container .select-item {
         margin-right: 0;
     }
+}
+
+
+.day-discount{
+    padding-bottom:10px ;
+}
+.day-text-discount{
+    margin-bottom: 0px
+}
+
+.color-green{
+    color:green;
 }
