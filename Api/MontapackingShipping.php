@@ -253,7 +253,7 @@ class MontapackingShipping
      */
     public function checkStock($sku)
     {
-        $url = "http://34b2-185-213-105-175.ngrok-free.app/";
+        $url = "https://api.montapacking.nl/rest/v5/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
 
         $client = new Client([
@@ -391,7 +391,7 @@ class MontapackingShipping
 
         }
 
-        $url = "http://34b2-185-213-105-175.ngrok-free.app/";
+        $url = "https://api.montapacking.nl/rest/v5/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
 
         $client = new Client([
@@ -428,7 +428,7 @@ class MontapackingShipping
             }
         }
 
-        $url = "http://34b2-185-213-105-175.ngrok-free.app/" . $method . $request; 
+        $url = "https://api.montapacking.nl/rest/v5/" . $method . $request; 
 
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;
