@@ -63,8 +63,6 @@ class DeliveryHelper
 
             foreach ($frames as $nr => $frame) {
 
-                $percentageText = $frame->discountPercentage != null ? "-" . $frame->discountPercentage . "%" :  null;
-
                 foreach ($frame->options as $onr => $option) {
 
                     $description = [];
