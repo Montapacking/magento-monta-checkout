@@ -30,7 +30,7 @@ class TimeFrame
      * @var array
      */
     public $options = [];
-    
+
     public $type;
 
     /**
@@ -101,7 +101,7 @@ class TimeFrame
     {
         $this->description = $description;
         return $this;
-    }    
+    }
 
     /**
      * @param $options
