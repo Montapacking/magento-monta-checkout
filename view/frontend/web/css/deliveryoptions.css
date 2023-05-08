@@ -1182,7 +1182,6 @@
     }
 }
 
-
 .day-discount{
     padding-bottom:10px ;
 }
@@ -1192,4 +1191,11 @@
 
 .color-green{
     color:green;
+}
+
+.discount-percentage{
+    margin:  auto;
+    width: 60%; 
+    color:green;
+    background-color: lightgreen;
 }

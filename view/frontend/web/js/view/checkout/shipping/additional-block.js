@@ -197,7 +197,6 @@ define(
                  * Retrieve Delivery Options from Montapacking.
                  */
                 getDeliveryServices: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
-                    console.log("data " + JSON.stringify(street) + " " + housenumber)
                     $.ajax(
                         {
                             method: 'GET',
@@ -209,29 +208,19 @@ define(
                                 postcode: postcode,
                                 city: city,
                                 country: country,
-                                housenumber: street[1],
+                                housenumber: housenumber,
                                 housenumberaddition: housenumberaddition,
                                 longlat: longlat
                             }
                         }
                     ).done(
                         function (services) {
-                            console.log("service " + services);
-                            console.log("service 0 " + services[0]);
-                            console.log("service 1  " + services[1]);
-                            if(services == "[]" || services.length == 0){
+                            if(services === "[]"){
                                 return;
                             }
 
                             const objectArray = Object.values(services[0]);
 
-                            // console.log("objectArray without it" + services[0]);   
-                            // console.log("objectArray object" + Object.values(services[0]))   
-                            // console.log("objectArray " + services.length)   
-                            // console.log("Object.values(services[0]) " + Object.values(services).length)     
-                            // console.log("type " + typeof(services))     
-                            // console.log("type " + typeof(JSON.parse(services)))     
-                            // console.log("length  " + JSON.parse(services).length)     
                             this.deliveryServices(objectArray);
 
                             if (objectArray.length > 0){
@@ -252,7 +241,7 @@ define(
                                     const width = $("ol li").length;
                                     $("#slider-content").width(width * 110);
 
-                                    let indexOfDay = 0;  
+                                    let indexOfDay = 0;
                                     if(this.preferredShipper != null && this.preferredShipper.options[0].code != "MultipleShipper_ShippingDayUnknown") {
                                         indexOfDay = distinctFilteredItems.indexOf(distinctFilteredItems.find(x=>x.date == this.preferredShipper.date));
                                     }
@@ -265,7 +254,7 @@ define(
                                     timeframe.options[0].type === 'Unknown'));  
                             }
 
-                                this.pickupServices(Object.values(services[1])); 
+                            this.pickupServices(Object.values(services[1])); 
                         
                         }.bind(this)
                         

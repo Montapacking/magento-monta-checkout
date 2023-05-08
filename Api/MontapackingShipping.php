@@ -253,14 +253,14 @@ class MontapackingShipping
      */
     public function checkStock($sku)
     {
-        $url = "https://api.montapacking.nl/rest/v5/";
+        $url = "http://34b2-185-213-105-175.ngrok-free.app/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
 
         $client = new Client([
             // Base URI is used with relative requests
             'base_uri' => $url,
             // You can set any number of default request options.
-            'timeout' => 2.0,
+            'timeout' => 10.0,
             'headers' => [
                 'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
             ]
@@ -338,7 +338,8 @@ class MontapackingShipping
                                 $timeframe->TypeCode,
                                 $timeframe->TypeDescription,
                                 $timeframe->ShippingOptions,
-                                $timeframe->FromToTypeCode
+                                $timeframe->FromToTypeCode,   
+                                $timeframe->DiscountPercentage
                         );
                     } else {
                         $pickups[] = new MontaCheckout_PickupPoint(
@@ -390,12 +391,12 @@ class MontapackingShipping
 
         }
 
-        $url = "https://api.montapacking.nl/rest/v5/";
+        $url = "http://34b2-185-213-105-175.ngrok-free.app/";
         $this->_pass = htmlspecialchars_decode($this->_pass);
 
         $client = new Client([
             'base_uri' => $url,
-            'timeout' => 2.0,
+            'timeout' => 10.0,
             'headers' => [
                 'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
             ]
@@ -427,7 +428,7 @@ class MontapackingShipping
             }
         }
 
-        $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;
+        $url = "http://34b2-185-213-105-175.ngrok-free.app/" . $method . $request; 
 
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;

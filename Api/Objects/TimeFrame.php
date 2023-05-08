@@ -30,11 +30,7 @@ class TimeFrame
      * @var array
      */
     public $options = [];
-    /**
-     * @var
-     */
-    public $discountPercentage;    
-
+    
     public $type;
 
     /**
@@ -45,9 +41,8 @@ class TimeFrame
      * @param $code
      * @param $description
      * @param $options
-     * @param $discountPercentage
      */
-    public function __construct($from, $to, $code, $description, $options, $type, $discountPercentage)
+    public function __construct($from, $to, $code, $description, $options, $type)
     {
 
         $this->setFrom($from);
@@ -56,7 +51,6 @@ class TimeFrame
         $this->setDescription($description);
         $this->setOptions($options);
         $this->setType($type);
-        $this->setDiscountPercentage($discountPercentage);
     }
 
     public function setType($type)
@@ -107,19 +101,7 @@ class TimeFrame
     {
         $this->description = $description;
         return $this;
-    }
-
-      /**
-     * @param $discountPercentage
-     *
-     * @return $this
-     */
-    public function setDiscountPercentage($discountPercentage)
-    {
-        $this->discountPercentage = $discountPercentage;
-        return $this;
     }    
-    
 
     /**
      * @param $options

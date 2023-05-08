@@ -48,25 +48,16 @@
         <button class="date-picker-button right"type="button" data-bind="click: moveRight">></button>
         <div id="slider">
             <div id="slider-content">
-                <ol data-bind="foreach: daysForSelect">
-                
-                        <!-- <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)" style="position: relative;">
-                            <p data-bind="text: day"></p>
-                            <p data-bind="text: day_string"></p>
-                       
-                        </li> -->
-
+                <ol data-bind="foreach: daysForSelect">                     
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discountPercentage > 0 }">
+                        <p data-bind="text: day, css: {'day-text-discount': discountPercentage > 0 }"></p> 
+                        <p data-bind="text: day_string, css: {'day-text-discount': discountPercentage > 0 }"></p>                            
                         
-                          
-                        <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discountPercentage > 0 }">
-                            <p data-bind="text: day, css: {'day-text-discount': discountPercentage > 0 }"></p> 
-                            <p data-bind="text: day_string, css: {'day-text-discount': discountPercentage > 0 }"></p>                            
-                            
-                             <!-- ko if: discountPercentage > 0 -->
-                                <p data-bind="text: discountPercentageText"  style="margin:  auto;width: 60%; color:green;background-color: lightgreen;"></p>
-                              <!-- /ko -->
+                        <!-- ko if: discountPercentage > 0 -->
+                            <p data-bind="text: discountPercentageText"  class="discount-percentage"></p>
+                        <!-- /ko -->
 
-                        </li>            
+                    </li>            
                 </ol>
             </div>
         </div>
