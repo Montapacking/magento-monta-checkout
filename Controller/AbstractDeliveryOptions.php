@@ -64,7 +64,7 @@ abstract class AbstractDeliveryOptions extends Action
         }
 
         return $response->representJson(
-            json_decode($data)
+            json_encode($data)
         );
     }
 
