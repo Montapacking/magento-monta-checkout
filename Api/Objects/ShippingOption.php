@@ -72,7 +72,6 @@ class ShippingOption
      */
     public $discountPercentage;     
 
-
     /**
      * ShippingOption constructor.
      *
