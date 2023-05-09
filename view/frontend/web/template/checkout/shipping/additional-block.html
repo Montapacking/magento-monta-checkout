@@ -49,12 +49,12 @@
         <div id="slider">
             <div id="slider-content">
                 <ol data-bind="foreach: daysForSelect">                     
-                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discountPercentage > 0 }">
-                        <p data-bind="text: day, css: {'day-text-discount': discountPercentage > 0 }"></p> 
-                        <p data-bind="text: day_string, css: {'day-text-discount': discountPercentage > 0 }"></p>                            
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discount_percentage > 0 }">
+                        <p data-bind="text: day, css: {'day-text-discount': discount_percentage > 0 }"></p> 
+                        <p data-bind="text: day_string, css: {'day-text-discount': discount_percentage > 0 }"></p>                            
                         
-                        <!-- ko if: discountPercentage > 0 -->
-                            <p data-bind="text: discountPercentageText"  class="discount-percentage"></p>
+                        <!-- ko if: discount_percentage > 0 -->
+                            <p data-bind="text: discount_percentage_text"  class="discount-percentage"></p>
                         <!-- /ko -->
 
                     </li>            

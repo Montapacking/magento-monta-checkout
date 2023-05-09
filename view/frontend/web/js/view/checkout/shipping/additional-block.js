@@ -297,8 +297,8 @@ define(
                             "day": option.options[0].date_string.split(' ')[0],
                             "day_string":
                                 option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]),
-                            "discountPercentage" : option.options.some(x=>x.discount_percentage > 0) ? option.options.find(x=>x.discount_percentage > 0).discount_percentage : 0,
-                            "discountPercentageText" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
+                            "discount_percentage" : option.options.some(x=>x.discount_percentage > 0) ? option.options.find(x=>x.discount_percentage > 0).discount_percentage : 0,
+                            "discount_percentage_text" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
                         }
                     });
                     

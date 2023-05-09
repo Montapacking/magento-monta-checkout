@@ -255,7 +255,7 @@ class DeliveryHelper
             'date_from_to_formatted' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string : "", //phpcs:ignore
             'extras' => $extras,
             'isPreferred' => $option->isPreferred,
-            'discount_percentage' => $option->discountPercentage,
+            'discount_percentage' => $option->discountPercentage
         ];
 
         return $options;
