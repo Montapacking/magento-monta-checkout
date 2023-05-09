@@ -427,7 +427,7 @@ class MontapackingShipping
             }
         }
 
-        $url = "https://api.montapacking.nl/rest/v5/" . $method . $request; 
+        $url = "https://api.montapacking.nl/rest/v5/" . $method . $request;
 
         if (null !== $this->_logger && null === $result) {
             $logger = $this->_logger;
