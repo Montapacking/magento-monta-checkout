@@ -289,7 +289,7 @@ define(
 
                 initDatePicker: function (objectArray) {
                     const distinctFilteredItems = [];
-                    
+
                     //search all shipping options with delivery date, so the dates can be used for the datepicker
                     const filteredItems = objectArray.map(option => {
                         return {
