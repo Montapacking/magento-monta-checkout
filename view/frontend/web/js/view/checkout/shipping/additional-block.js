@@ -215,7 +215,7 @@ define(
                         }
                     ).done(
                         function (services) {
-                            if (services === "[]"){
+                            if (services === "[]") {
                                 return;
                             }
 
