@@ -204,7 +204,7 @@ define(
                             type: 'jsonp',
                             showLoader: true,
                             data: {
-                                street: street[0],
+                                street: street,
                                 postcode: postcode,
                                 city: city,
                                 country: country,
@@ -215,7 +215,7 @@ define(
                         }
                     ).done(
                         function (services) {
-                            if(services === "[]"){
+                            if (services === "[]"){
                                 return;
                             }
 
@@ -225,7 +225,6 @@ define(
 
                             if (objectArray.length > 0){
                                 this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred));
-                                console.log("pref " + JSON.stringify(objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred))));
                                 if(this.preferredShipper == null) {
                                     
                                     this.preferredShipper = objectArray[0];
@@ -270,7 +269,7 @@ define(
                     var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
 
                     if(this.preferredShipper != null && 
-                        standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
+                        standardDeliveryServicesElement.length == this.standardDeliveryServices().length && 
                         filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
                             if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
                                 standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
@@ -291,7 +290,6 @@ define(
                 initDatePicker: function (objectArray) {
                     const distinctFilteredItems = [];
                     
-                    console.log("discount " + JSON.stringify(objectArray));
                     //search all shipping options with delivery date, so the dates can be used for the datepicker
                     const filteredItems = objectArray.map(option => {
                         return {
@@ -304,15 +302,11 @@ define(
                         }
                     });
                     
-                    filteredItems.sort(function(a,b){
+                    filteredItems.sort(function(a,b) {
                         let date1 = a.date.split('-');
                         let date2 = b.date.split('-');
                         return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discountPercentage - a.discountPercentage
                     })
-
-                    console.log("filteredItems " + JSON.stringify(filteredItems));
-
-                    console.log("discount " + JSON.stringify(filteredItems));
                     
                     // filter all duplicates
                     $.each(filteredItems, function (index, item) {
@@ -335,6 +329,10 @@ define(
                     this.daysForSelect(distinctFilteredItems);
 
                     return distinctFilteredItems;
+                },
+
+                checkDiscount(){ 
+                    return this.daysForSelect.some(x=>x.discountPercentage > 0)
                 },
 
                 setDeliveryOption: function (type, details, additional_info) {

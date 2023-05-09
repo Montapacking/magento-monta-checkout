@@ -338,8 +338,7 @@ class MontapackingShipping
                                 $timeframe->TypeCode,
                                 $timeframe->TypeDescription,
                                 $timeframe->ShippingOptions,
-                                $timeframe->FromToTypeCode,   
-                                $timeframe->DiscountPercentage
+                                $timeframe->FromToTypeCode
                         );
                     } else {
                         $pickups[] = new MontaCheckout_PickupPoint(

@@ -105,7 +105,7 @@ class Delivery extends AbstractDeliveryOptions
         } catch (Exception $e) {
 
             $context = ['source' => 'Montapacking Checkout'];
-            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $ex->getMessage()); //phpcs:ignore
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", ['error' => $e->getMessage()]); //phpcs:ignore
             return $this->jsonResponse(json_encode([]));
         }
     }
