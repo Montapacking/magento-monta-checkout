@@ -224,7 +224,7 @@ define(
                             this.deliveryServices(objectArray);
 
                             if (objectArray.length > 0){
-                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.is_preferreds));
+                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.is_preferred));
                                 if(this.preferredShipper == null) {
                                     
                                     this.preferredShipper = objectArray[0];
@@ -284,7 +284,7 @@ define(
                 },
 
                 checkDiscount(){ 
-                    return this.daysForSelect.some(x=>x.discountPercentage > 0)
+                    return this.daysForSelect.some(x=>x.discount_percentage > 0);
                 },
 
                 initDatePicker: function (objectArray) {
@@ -305,7 +305,7 @@ define(
                     filteredItems.sort(function(a,b) {
                         let date1 = a.date.split('-');
                         let date2 = b.date.split('-');
-                        return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discountPercentage - a.discountPercentage
+                        return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discount_percentage - a.discount_percentage
                     })
                     
                     // filter all duplicates
