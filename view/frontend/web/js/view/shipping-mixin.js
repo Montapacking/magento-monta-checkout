@@ -34,7 +34,7 @@ define(
 
                         if($("input.montapacking_delivery_option").length == 0 && $("input.initialPickupRadio").length == 0)
                         {
-                            var hasData = true;
+                            return originalResult;
                         }
                         else
                         {

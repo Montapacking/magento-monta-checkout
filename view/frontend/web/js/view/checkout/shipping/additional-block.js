@@ -197,7 +197,6 @@ define(
                  * Retrieve Delivery Options from Montapacking.
                  */
                 getDeliveryServices: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
-
                     $.ajax(
                         {
                             method: 'GET',
@@ -221,11 +220,13 @@ define(
                             }
 
                             const objectArray = Object.values(services[0]);
+
                             this.deliveryServices(objectArray);
 
-                            if(objectArray.length > 0) {
-                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred)); 
-                                if(this.preferredShipper == null){
+                            if (objectArray.length > 0){
+                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.is_preferred));
+                                if(this.preferredShipper == null) {
+                                    
                                     this.preferredShipper = objectArray[0];
                                 }
 
@@ -246,14 +247,16 @@ define(
 
                                     $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click"); 
                                 }
+
+                                this.standardDeliveryServices(objectArray.filter(timeframe =>
+                                    timeframe.options[0].from === "" &&
+                                    timeframe.options[0].type === 'Unknown'));  
                             }
 
-                            this.standardDeliveryServices(objectArray.filter(timeframe =>
-                                timeframe.options[0].from === "" &&
-                                timeframe.options[0].type === 'Unknown'));
-
-                            this.pickupServices(Object.values(services[1]));
+                            this.pickupServices(Object.values(services[1])); 
+                        
                         }.bind(this)
+                        
                     );
                 },
 
@@ -276,23 +279,35 @@ define(
                             } else {
                                 filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
                             }
-                        this.preferredShipper = null;
-                    }
+                        this.preferredShipper = null; 
+                    } 
+                },
+
+                checkDiscount(){ 
+                    return this.daysForSelect.some(x=>x.discount_percentage > 0);
                 },
 
                 initDatePicker: function (objectArray) {
                     const distinctFilteredItems = [];
 
                     //search all shipping options with delivery date, so the dates can be used for the datepicker
-                    const filteredItems = objectArray.filter(timeframe => timeframe.options[0].date !== '').map(option => {
+                    const filteredItems = objectArray.map(option => {
                         return {
                             "date": option.options[0].date,
                             "day": option.options[0].date_string.split(' ')[0],
                             "day_string":
-                                option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2])
+                                option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]),
+                            "discount_percentage" : option.options.some(x=>x.discount_percentage > 0) ? option.options.find(x=>x.discount_percentage > 0).discount_percentage : 0,
+                            "discount_percentage_text" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
                         }
                     });
-
+                    
+                    filteredItems.sort(function(a,b) {
+                        let date1 = a.date.split('-');
+                        let date2 = b.date.split('-');
+                        return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discount_percentage - a.discount_percentage
+                    })
+                    
                     // filter all duplicates
                     $.each(filteredItems, function (index, item) {
                         let alreadyAdded = false;
@@ -314,6 +329,10 @@ define(
                     this.daysForSelect(distinctFilteredItems);
 
                     return distinctFilteredItems;
+                },
+
+                checkDiscount(){ 
+                    return this.daysForSelect.some(x=>x.discountPercentage > 0)
                 },
 
                 setDeliveryOption: function (type, details, additional_info) {
@@ -874,7 +893,12 @@ define(
                             'PAK': [site_url + '/images/PostNL.png', 32, 32],
                             'DHLservicepunt': [site_url + '/images/DHL.png', 32, 32],
                             'DPDparcelstore': [site_url + '/images/DPD.png', 32, 32],
-                            'AFH': [site_url + '/images/AFH.png', 32, 32]
+                            'AFH': [site_url + '/images/AFH.png', 32, 32],
+                            'DHLFYPickupPoint': [site_url + '/images/DHLFYPickupPoint.png', 32, 32],
+                            'DHLParcelConnectPickupPoint': [site_url + '/images/DHLParcelConnectPickupPoint.png', 32, 32],
+                            'DHLservicepuntGroot': [site_url + '/images/DHLservicepuntGroot.png', 32, 32],
+                            'GLSPickupPoint': [site_url + '/images/GLSPickupPoint.png', 32, 32],
+                            'UPSAP': [site_url + '/images/UPSAP.png', 32, 32]
                         },
                         callbackMarkerClick: function (marker, markerId, $selectedLocation, location) {
                             $(".bh-sl-container .bh-sl-filters-container .select-item").css("display", "block");

@@ -260,10 +260,10 @@
 }
 
 .montapacking-parent .montapacking-tab.day.selected_day {
-    background-color: #1979c3;
     border:  none;
-    color: white;
     box-shadow: 1px 1px 10px -4px grey;
+    
+    font-weight: 700;
 }
 
 @media screen and (max-width: 380px) {
@@ -316,6 +316,7 @@
 .montapacking-container-logo.DHLservicepunt,
 .montapacking-container-logo.SELSELBuspakje,
 .montapacking-container-logo.DHLParcelConnect,
+.montapacking-container-logo.DHLFYPickupPoint,
 .montapacking-container-logo.DHLservicepuntGroot,
 .montapacking-container-logo.DHLFYPakket,
 .montapacking-container-logo.SELGroot,
@@ -1180,4 +1181,22 @@
     .bh-sl-container .bh-sl-filters-container .select-item {
         margin-right: 0;
     }
+}
+
+.day-discount{
+    padding-bottom:10px ;
+}
+.day-text-discount{
+    margin-bottom: 0px
+}
+
+.color-green{
+    color:#0db50d;
+}
+
+.discount-percentage{
+    margin:  auto;
+    width: 60%; 
+    color:green;
+    background-color: lightgreen;
 }

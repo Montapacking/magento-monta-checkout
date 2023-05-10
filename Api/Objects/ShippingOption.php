@@ -66,7 +66,11 @@ class ShippingOption
     /**
      * @var
      */
-    public $displayName;    
+    public $displayName;   
+    /**
+     * @var
+     */
+    public $discountPercentage;     
 
     /**
      * ShippingOption constructor.
@@ -85,9 +89,8 @@ class ShippingOption
      * @param $date
      * @param $isPreferred
      */
-    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date, $isPreferred, $displayName) //phpcs:ignore
+    public function __construct($code, $codes, $optioncodes, $optionsWithValue, $description, $mailbox, $price, $currency, $from, $to, $extras, $date, $isPreferred, $displayName, $isSustainable, $discountPercentage) //phpcs:ignore
     {
-
         $this->setCode($code);
         $this->setCodes($codes);
         $this->setOptionCodes($optioncodes);
@@ -101,7 +104,20 @@ class ShippingOption
         $this->setExtras($extras);
         $this->setDate($date);
         $this->setIsPreferred($isPreferred);
+        $this->setIsSustainable($isSustainable);
         $this->setDisplayName($displayName);
+        $this->setDiscountPercentage($discountPercentage);
+    }
+
+     /**
+     * @param $code
+     *
+     * @return $this
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+        $this->discountPercentage = $discountPercentage;
+        return $this;
     }
 
     /**
@@ -222,6 +238,17 @@ class ShippingOption
     public function setIsPreferred($isPreferred)
     {
         $this->isPreferred = $isPreferred;
+        return $this;
+    }
+
+     /**
+     * @param $isSustainable
+     *
+     * @return $this
+     */
+    public function setIsSustainable($isSustainable)
+    {
+        $this->isSustainable = $isSustainable;
         return $this;
     }
 
