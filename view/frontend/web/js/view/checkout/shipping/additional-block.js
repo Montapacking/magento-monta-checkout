@@ -268,8 +268,8 @@ define(
                     var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
                     var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
 
-                    if(this.preferredShipper != null && 
-                        standardDeliveryServicesElement.length == this.standardDeliveryServices().length && 
+                    if(this.preferredShipper != null &&
+                        standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
                         filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
                             if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
                                 standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
