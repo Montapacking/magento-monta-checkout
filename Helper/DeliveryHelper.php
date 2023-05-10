@@ -157,7 +157,7 @@ class DeliveryHelper
                             'time' => $time != null ? $time : "", //phpcs:ignore
                             'description' => $frame->description,
                             'price_currency' => $curr,
-                            'options' => $options,
+                            'options' => $options
                         ];
                     }
 
