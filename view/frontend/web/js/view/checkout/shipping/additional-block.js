@@ -224,7 +224,7 @@ define(
                             this.deliveryServices(objectArray);
 
                             if (objectArray.length > 0){
-                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.isPreferred));
+                                this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.is_preferreds));
                                 if(this.preferredShipper == null) {
                                     
                                     this.preferredShipper = objectArray[0];
@@ -893,7 +893,12 @@ define(
                             'PAK': [site_url + '/images/PostNL.png', 32, 32],
                             'DHLservicepunt': [site_url + '/images/DHL.png', 32, 32],
                             'DPDparcelstore': [site_url + '/images/DPD.png', 32, 32],
-                            'AFH': [site_url + '/images/AFH.png', 32, 32]
+                            'AFH': [site_url + '/images/AFH.png', 32, 32],
+                            'DHLFYPickupPoint': [site_url + '/images/DHLFYPickupPoint.png', 32, 32],
+                            'DHLParcelConnectPickupPoint': [site_url + '/images/DHLParcelConnectPickupPoint.png', 32, 32],
+                            'DHLservicepuntGroot': [site_url + '/images/DHLservicepuntGroot.png', 32, 32],
+                            'GLSPickupPoint': [site_url + '/images/GLSPickupPoint.png', 32, 32],
+                            'UPSAP': [site_url + '/images/UPSAP.png', 32, 32]
                         },
                         callbackMarkerClick: function (marker, markerId, $selectedLocation, location) {
                             $(".bh-sl-container .bh-sl-filters-container .select-item").css("display", "block");

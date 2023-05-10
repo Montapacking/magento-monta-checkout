@@ -32,15 +32,15 @@
         <!-- /ko -->
 
     </div>
-
+     
     <!-- ko if: standardDeliveryServices().length > 0 -->
 
     <div data-bind="foreach: standardDeliveryServices" class="clearboth" id="standard-delivery-services">
         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
-    </div>
+    </div> 
 
      <!-- /ko -->
-
+    
     <!-- ko if: filteredDeliveryServices().length > 0 -->
 
     <div id="date-picker">
@@ -131,12 +131,12 @@
             </div>
 
             <!-- /ko -->
-
+            
             <!-- ko if: filteredDeliveryServices().length > 0 -->
 
                    <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
                          <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
-                    </div>
+            </div>
 
             <!-- /ko -->
 
@@ -163,7 +163,22 @@
                             <div class="montapacking-container-logo" data-bind="css: image_replace"></div>
 
                             <div class="montapacking-container-content">
-                                <p class="title" data-bind="text: description_string"></p>
+                                <div style="display: flex;">
+                                    <p class="title" data-bind="text: description_string"></p>
+                                    
+                                <!-- ko if: is_sustainable -->
+                                <div class="field-tooltip toggle" style="position: relative;">
+                                    <img style="width: 20px; height: 20px; margin-left: 5px;" class="field-tooltip-action action-help"
+                                        data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false" src="/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout/images/sustainable.png"/>
+                                    <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="i18n: 'Sustainably delivered'">
+                                    </div>
+                                </div>
+                                <!-- /ko -->
+                            
+                                </div>
                             </div>
 
                             <div class="montapacking-container-price" data-bind="text: price_string, css: {'color-green': discount_percentage > 0}  "></div>
