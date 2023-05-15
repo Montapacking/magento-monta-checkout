@@ -48,11 +48,16 @@
         <button class="date-picker-button right"type="button" data-bind="click: moveRight">></button>
         <div id="slider">
             <div id="slider-content">
-                <ol data-bind="foreach: daysForSelect">
-                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)">  
-                        <p data-bind="text: day"></p>              
-                        <p data-bind="text: day_string"></p>              
-                    </li>
+                <ol data-bind="foreach: daysForSelect">                     
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discount_percentage > 0 }">
+                        <p data-bind="text: day, css: {'day-text-discount': discount_percentage > 0 }"></p> 
+                        <p data-bind="text: day_string, css: {'day-text-discount': discount_percentage > 0 }"></p>                            
+                        
+                        <!-- ko if: discount_percentage > 0 -->
+                            <p data-bind="text: discount_percentage_text"  class="discount-percentage"></p>
+                        <!-- /ko -->
+
+                    </li>            
                 </ol>
             </div>
         </div>
@@ -176,7 +181,7 @@
                                 </div>
                             </div>
 
-                            <div class="montapacking-container-price" data-bind="text: price_string"></div>
+                            <div class="montapacking-container-price" data-bind="text: price_string, css: {'color-green': discount_percentage > 0}  "></div>
                             <div class="clearboth"></div>
                         </div>
 
