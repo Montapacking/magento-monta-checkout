@@ -99,6 +99,8 @@ class Delivery extends AbstractDeliveryOptions
             $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions']);
             $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions']);
 
+            $this->checkoutSession->setLatestShipping([$shippingoptions_formatted, $pickupoptions_formatted]);
+
             return $this->jsonResponse([$shippingoptions_formatted, $pickupoptions_formatted]);
 
         } catch (Exception $e) {
