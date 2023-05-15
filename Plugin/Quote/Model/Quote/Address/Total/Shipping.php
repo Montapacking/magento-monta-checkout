@@ -2,24 +2,39 @@
 
 namespace Montapacking\MontaCheckout\Plugin\Quote\Model\Quote\Address\Total;
 
+use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface as ShippingAssignmentApi;
 use Magento\Quote\Model\Quote\Address\Total as QuoteAddressTotal;
+use Montapacking\MontaCheckout\Logger\Logger;
 
 class Shipping
 {
     private $scopeConfig;
 
     /**
+     * @var \Montapacking\MontaCheckout\Logger\Logger
+     */
+    protected $_logger;
+
+
+    /** @var Session $checkoutSession */
+    private $checkoutSession;
+
+    /**
      * Shipping constructor.
      *
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        Session $checkoutSession,
+        Logger $logger
     )
     {
         $this->scopeConfig = $scopeConfig;
+        $this->checkoutSession = $checkoutSession;
+        $this->_logger = $logger;
     }
 
     /**
@@ -63,9 +78,17 @@ class Shipping
             return $result;
         }
 
-        if ($deliveryOptionType == 'pickup') {
 
-            $fee = $deliveryOptionAdditionalInfo->total_price;
+
+        if ($deliveryOptionType == 'pickup') {
+            foreach ($this->checkoutSession->getLatestShipping()[1] as $timeframe) {
+                foreach ($timeframe->options as $option) {
+                    if($option->code == $deliveryOptionAdditionalInfo->code){
+                        $selectedOptionFromCache = $option;
+                        $fee = $selectedOptionFromCache->price_raw;
+                    }
+                }
+            }
             $method_title = $deliveryOptionAdditionalInfo->company;
 
             $desc = explode("|", $deliveryOptionAdditionalInfo->description);
@@ -73,7 +96,15 @@ class Shipping
         }
 
         if ($deliveryOptionType == 'delivery') {
-            $fee = $deliveryOptionAdditionalInfo->total_price;
+            foreach ($this->checkoutSession->getLatestShipping()[0] as $timeframe) {
+                foreach ($timeframe->options as $option) {
+                    if($option->code == $deliveryOptionAdditionalInfo->code){
+                        $selectedOptionFromCache = $option;
+                        $fee = $selectedOptionFromCache->price_raw;
+                    }
+                }
+            }
+
             $method_title = $deliveryOptionAdditionalInfo->name;
 
             $desc = [];
@@ -89,6 +120,11 @@ class Shipping
             if (isset($deliveryOptionDetails->options)) {
                 foreach ($deliveryOptionDetails->options as $value) {
                     $desc[] = $value;
+                    foreach ($selectedOptionFromCache->extras as $extra) {
+                        if($extra['code'] == $value){
+                            $fee += $extra['price_raw'];
+                        }
+                    }
                 }
             }
 

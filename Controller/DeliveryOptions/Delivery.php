@@ -81,7 +81,6 @@ class Delivery extends AbstractDeliveryOptions
 
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Zend_Http_Client_Exception
      */
     public function execute()
     {
@@ -100,12 +99,15 @@ class Delivery extends AbstractDeliveryOptions
             $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions']);
             $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions']);
 
+            $this->checkoutSession->setLatestShipping([$shippingoptions_formatted, $pickupoptions_formatted]);
+
             return $this->jsonResponse([$shippingoptions_formatted, $pickupoptions_formatted]);
 
         } catch (Exception $e) {
 
             $context = ['source' => 'Montapacking Checkout'];
-            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", ['error' => $e->getMessage()]); //phpcs:ignore
+            $this->_logger->critical(json_encode($e->getMessage()), $context); //phpcs:ignore
+            $this->_logger->critical("Webshop was unable to connect to Montapacking REST api. Please contact Montapacking", $context); //phpcs:ignore
             return $this->jsonResponse(json_encode([]));
         }
     }

@@ -6,6 +6,7 @@ define(
         'Magento_Checkout/js/model/quote',
         'Montapacking_MontaCheckout/js/helper/address-finder',
         'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
+        'Magento_Checkout/js/action/set-shipping-information'
     ], function (
         $,
         Component,
@@ -13,6 +14,7 @@ define(
         quote,
         AddressFinder,
         pickupShop,
+        setShippingInformationAction
     ) {
 
         'use strict';
@@ -226,7 +228,6 @@ define(
                             if (objectArray.length > 0){
                                 this.preferredShipper = objectArray.find(timeframe => timeframe.options.some(option => option.is_preferred));
                                 if(this.preferredShipper == null) {
-                                    
                                     this.preferredShipper = objectArray[0];
                                 }
 
@@ -361,7 +362,7 @@ define(
                     address.extension_attributes.montapacking_montacheckout_data = checkoutConfig.quoteData.montapacking_montacheckout_data;
 
                     quote.shippingAddress(address);
-
+                    setShippingInformationAction();
                 },
 
                 getfilterDeliveryServicesByDate: function (date, event) {

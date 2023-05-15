@@ -132,7 +132,7 @@ class TimeFrame
                     $option->ShippingDeadline,
                     $option->IsPreferred,
                     $option->DisplayName,
-                    $option->IsSustainable,
+                    $option->IsSustainable ?? false,
                     $option->DiscountPercentage
                 );
 
