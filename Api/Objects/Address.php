@@ -89,7 +89,7 @@ class Address
     public function setLongLat()
     {
         // Get lat and long by address
-        $address = $this->street . ' ' . $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode; // Google HQ
+        $address = $this->housenumber . ' ' . $this->housenumberaddition . ', ' . $this->postalcode . ' ' . $this->countrycode; // Google HQ
         $prepAddr = str_replace('  ', ' ', $address);
         $prepAddr = str_replace(' ', '+', $prepAddr);
         $google_maps_url = "https://maps.google.com/maps/api/geocode/json?address=" . $prepAddr . "&sensor=false&key=" . $this->googleapikey; //phpcs:ignore
