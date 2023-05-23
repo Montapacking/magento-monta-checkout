@@ -62,7 +62,11 @@ class ShippingOption
      /**
      * @var
      */
-    public $isPreferred;    
+    public $isPreferred;
+     /**
+     * @var
+     */
+    public $isSustainable;
     /**
      * @var
      */
