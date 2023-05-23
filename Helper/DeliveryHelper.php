@@ -85,8 +85,7 @@ class DeliveryHelper
                             $description[] = date('H:i', strtotime($from)) . " - " . date('H:i', strtotime($to)) . $hour_string; //phpcs:ignore
                         }
                         if ($frame->code != null && trim($frame->code)) {
-                            $frame->code_desc = __($frame->code);
-                            $description[] = $frame->code_desc;
+                            $description[] = __($frame->code);
                         }
                     }
 
@@ -224,7 +223,7 @@ class DeliveryHelper
             $parts = explode("|", $description);
             $parts[0] = $option->displayName;
             $description = implode(" | ", $parts);
-            
+
             $name = $option->displayName;
         }
 

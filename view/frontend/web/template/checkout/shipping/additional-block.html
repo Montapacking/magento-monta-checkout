@@ -32,15 +32,15 @@
         <!-- /ko -->
 
     </div>
-     
+
     <!-- ko if: standardDeliveryServices().length > 0 -->
 
     <div data-bind="foreach: standardDeliveryServices" class="clearboth" id="standard-delivery-services">
         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
-    </div> 
+    </div>
 
      <!-- /ko -->
-    
+
     <!-- ko if: filteredDeliveryServices().length > 0 -->
 
     <div id="date-picker">
@@ -131,7 +131,7 @@
             </div>
 
             <!-- /ko -->
-            
+
             <!-- ko if: filteredDeliveryServices().length > 0 -->
 
                    <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
@@ -165,7 +165,7 @@
                             <div class="montapacking-container-content">
                                 <div style="display: flex;">
                                     <p class="title" data-bind="text: description_string"></p>
-                                    
+
                                 <!-- ko if: is_sustainable -->
                                 <div class="field-tooltip toggle" style="position: relative;">
                                     <img style="width: 20px; height: 20px; margin-left: 5px;" class="field-tooltip-action action-help"
@@ -177,7 +177,7 @@
                                     </div>
                                 </div>
                                 <!-- /ko -->
-                            
+
                                 </div>
                             </div>
 
