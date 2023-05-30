@@ -260,7 +260,7 @@ class MontapackingShipping
             // Base URI is used with relative requests
             'base_uri' => $url,
             // You can set any number of default request options.
-            'timeout' => 2.0,
+            'timeout' => 10.0,
             'headers' => [
                 'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
             ]
@@ -395,7 +395,7 @@ class MontapackingShipping
 
         $client = new Client([
             'base_uri' => $url,
-            'timeout' => 2.0,
+            'timeout' => 10.0,
             'headers' => [
                 'Authorization' => 'Basic ' . base64_encode($this->_user . ":" . $this->_pass)
             ]
