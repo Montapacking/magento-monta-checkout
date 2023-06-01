@@ -231,7 +231,7 @@ define(
                                     this.preferredShipper = objectArray[0];
                                 }
 
-                                const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== ''); 
+                                const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== '');
                                 if (filteredDeliveryServicesList.length > 0) {
                                     const distinctFilteredItems = self.initDatePicker(objectArray);
                                     this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
@@ -246,18 +246,17 @@ define(
                                         indexOfDay = distinctFilteredItems.indexOf(distinctFilteredItems.find(x=>x.date == this.preferredShipper.date));
                                     }
 
-                                    $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click"); 
+                                    $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click");
                                 }
-
                                 this.standardDeliveryServices(objectArray.filter(timeframe =>
                                     timeframe.options[0].from === "" &&
-                                    timeframe.options[0].type === 'Unknown'));  
+                                    timeframe.options[0].type === 'Unknown'));
                             }
 
-                            this.pickupServices(Object.values(services[1])); 
-                        
+                            this.pickupServices(Object.values(services[1]));
+
                         }.bind(this)
-                        
+
                     );
                 },
 
@@ -280,35 +279,30 @@ define(
                             } else {
                                 filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
                             }
-                        this.preferredShipper = null; 
-                    } 
-                },
-
-                checkDiscount(){ 
-                    return this.daysForSelect.some(x=>x.discount_percentage > 0);
+                        this.preferredShipper = null;
+                    }
                 },
 
                 initDatePicker: function (objectArray) {
                     const distinctFilteredItems = [];
 
                     //search all shipping options with delivery date, so the dates can be used for the datepicker
-                    const filteredItems = objectArray.map(option => {
+                    const filteredItems = objectArray.filter(timeframe => timeframe.options[0].date !== '').map(option => {
                         return {
                             "date": option.options[0].date,
                             "day": option.options[0].date_string.split(' ')[0],
-                            "day_string":
-                                option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]),
+                            "day_string": option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]),
                             "discount_percentage" : option.options.some(x=>x.discount_percentage > 0) ? option.options.find(x=>x.discount_percentage > 0).discount_percentage : 0,
                             "discount_percentage_text" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
                         }
                     });
-                    
+
                     filteredItems.sort(function(a,b) {
                         let date1 = a.date.split('-');
                         let date2 = b.date.split('-');
                         return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discount_percentage - a.discount_percentage
                     })
-                    
+
                     // filter all duplicates
                     $.each(filteredItems, function (index, item) {
                         let alreadyAdded = false;
@@ -332,7 +326,7 @@ define(
                     return distinctFilteredItems;
                 },
 
-                checkDiscount(){ 
+                checkDiscount(){
                     return this.daysForSelect.some(x=>x.discountPercentage > 0)
                 },
 
