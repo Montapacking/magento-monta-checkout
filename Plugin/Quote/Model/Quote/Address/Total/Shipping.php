@@ -78,7 +78,9 @@ class Shipping
             return $result;
         }
 
-
+        if(!$this->checkoutSession->getLatestShipping()) {
+            return $result;
+        }
 
         if ($deliveryOptionType == 'pickup') {
             foreach ($this->checkoutSession->getLatestShipping()[1] as $timeframe) {
