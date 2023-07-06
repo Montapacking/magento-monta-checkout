@@ -792,6 +792,15 @@ define(
                     return false;
 
                 },
+                
+                createSiteUrl: function(){
+                    const dataUrl = window.dataUrl.split('/');
+                    const site_url = dataUrl.slice(5,-2);
+                    site_url.unshift('static');  
+                    site_url.push('Montapacking_MontaCheckout');
+
+                    return '/' + site_url.join("/");
+                },
 
                 openStoreLocator: function () {
 
@@ -804,7 +813,6 @@ define(
                             'storeLocator'], function (Handlebars, $, google, storeLocator) {
                             window.Handlebars = Handlebars;
                             const useLocator = $('#bh-sl-map-container');
-                            const site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
                             /* Map */
                             if (useLocator) {
                                 self.loadMap();
@@ -827,7 +835,7 @@ define(
                 }, loadMap: function () {
                     const useLocator = $('#bh-sl-map-container');
                     const markers = [];
-                    const site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
+                    const site_url = createSiteUrl();
                     $(".montapacking-pickup-service.pickup-option").each(
                         function (index) {
                             const openingtimes = $(this).find(".table-container .table").html();
