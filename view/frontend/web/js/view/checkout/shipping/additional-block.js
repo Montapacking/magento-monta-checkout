@@ -793,7 +793,17 @@ define(
 
                 },
 
-                openStoreLocator: function () {
+                
+                createSiteUrl: function(){
+                    const dataUrl = window.dataUrl.split('/');
+                    const site_url = dataUrl.slice(5,-2);
+                    site_url.unshift('static');  
+                    site_url.push('Montapacking_MontaCheckout');
+
+                    return '/' + site_url.join("/");
+                },
+
+                openStoreLocator: function () { 
 
                     $('body').trigger('processStart');
 
@@ -804,7 +814,6 @@ define(
                             'storeLocator'], function (Handlebars, $, google, storeLocator) {
                             window.Handlebars = Handlebars;
                             const useLocator = $('#bh-sl-map-container');
-                            const site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
                             /* Map */
                             if (useLocator) {
                                 self.loadMap();

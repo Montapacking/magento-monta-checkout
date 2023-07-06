@@ -181,8 +181,12 @@ define(
                     address.housenumber   = $("input[name*='streetNumber']").val();
                     address.housenumberaddition   = $("input[name*='strNumberAddition']").val();
                 } else {
-
-                    address.postcode   = $("input[name*='postcode']").val();
+                    $("input[name*='postcode']").each((index, input)=> {
+                        if(input.value){
+                            address.postcode = input.value;
+                            return false;
+                        }
+                    })
 
                     address.street = {
                         0 : $("input[name*='street[0]']").val(),
