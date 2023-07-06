@@ -802,7 +802,7 @@ define(
                     return '/' + site_url.join("/");
                 },
 
-                openStoreLocator: function () { 
+                openStoreLocator: function () {
 
                     $('body').trigger('processStart');
 
