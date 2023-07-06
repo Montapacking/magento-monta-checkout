@@ -792,7 +792,6 @@ define(
                     return false;
 
                 },
-
                 
                 createSiteUrl: function(){
                     const dataUrl = window.dataUrl.split('/');
@@ -836,7 +835,7 @@ define(
                 }, loadMap: function () {
                     const useLocator = $('#bh-sl-map-container');
                     const markers = [];
-                    const site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
+                    const site_url = createSiteUrl();
                     $(".montapacking-pickup-service.pickup-option").each(
                         function (index) {
                             const openingtimes = $(this).find(".table-container .table").html();
