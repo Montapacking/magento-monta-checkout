@@ -262,7 +262,7 @@
 .montapacking-parent .montapacking-tab.day.selected_day {
     border:  none;
     box-shadow: 1px 1px 10px -4px grey;
-    
+
     font-weight: 700;
 }
 
@@ -383,6 +383,9 @@
 
 .montapacking-container-logo.Cycloon {
     background-image: url(../images/Cycloon.png) !important;
+}
+.montapacking-container-logo.Asendia {
+    background-image: url(../images/Asendia.png) !important;
 }
 
 /* CONTAINER CONTENT */
@@ -1196,7 +1199,7 @@
 
 .discount-percentage{
     margin:  auto;
-    width: 60%; 
+    width: 60%;
     color:green;
     background-color: lightgreen;
 }

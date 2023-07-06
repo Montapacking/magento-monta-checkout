@@ -4,6 +4,7 @@ namespace Montapacking\MontaCheckout\Plugin\Quote\Model;
 
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\ResourceModel\Order;
 
 class QuoteManagement
 {
@@ -13,6 +14,9 @@ class QuoteManagement
     /** @var OrderRepositoryInterface $orderRepository */
     private $orderRepository;
 
+    /** @var \Magento\Sales\Model\ResourceModel\Order  */
+    private $orderResource;
+
     /**
      * QuoteManagement constructor.
      *
@@ -20,10 +24,12 @@ class QuoteManagement
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        Order $orderResource,
     ) {
         $this->cartRepository = $cartRepository;
         $this->orderRepository = $orderRepository;
+        $this->orderResource = $orderResource;
     }
 
     /**
@@ -86,7 +92,7 @@ class QuoteManagement
         }
 
         $order->setMontapackingMontacheckoutData($deliveryOption);
-        $order->save();
+        $this->orderResource->saveAttribute($order, 'montapacking_montacheckout_data');
 
         return $orderId;
     }
