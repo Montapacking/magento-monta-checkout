@@ -835,7 +835,7 @@ define(
                 }, loadMap: function () {
                     const useLocator = $('#bh-sl-map-container');
                     const markers = [];
-                    const site_url = createSiteUrl();
+                    const site_url = self.createSiteUrl();
                     $(".montapacking-pickup-service.pickup-option").each(
                         function (index) {
                             const openingtimes = $(this).find(".table-container .table").html();
