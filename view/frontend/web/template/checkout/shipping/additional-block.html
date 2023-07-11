@@ -52,15 +52,12 @@
                 <ol data-bind="foreach: daysForSelect1, afterRender: renderedHandlerDatePicker">
                     <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)" style="width: auto; height: 90px">
 
-
-
                         <p data-bind="text: text"></p>
 
-
                         <!-- ko if: discount_percentage > 0 -->
+
                             <p data-bind="text: discount_percentage_text" style="margin-bottom: 0"></p>
-
-
+                            
                         <!-- /ko -->
 
                     </li>
