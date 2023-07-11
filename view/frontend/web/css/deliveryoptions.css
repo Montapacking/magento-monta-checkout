@@ -39,14 +39,27 @@
     height: 100px;
     background: #d3d3d380;
     border:none;
+    margin: 5px;
+    border-radius: 10px;
+    height: 90px;
+}
+
+.date-picker-button:hover{
+    border: none;
+    cursor: pointer; 
 }
 
 #slider {
     display: block;
     overflow-x: scroll;
     clear: left;
-    margin-left: 60px;
-    margin-right: 60px;
+
+    background: #D4D9E370;
+
+    margin-bottom: 10px;
+
+    border-radius: 10px;
+
 }
 
 #slider::-webkit-scrollbar {
@@ -128,7 +141,7 @@
 
 .montapacking-parent .container {
     padding: 10px 15px;
-    border: 1px solid #D4D9E3;
+    border: 1px solid #D4D9E370; 
     margin-bottom: 10px;
     border-radius: 5px;
     background: white;
@@ -177,6 +190,18 @@
 
 .montapacking-services .delivery-option {
     display: block;
+
+}
+
+.montapacking-services .delivery-option:hover {
+    box-shadow: 0 0 19px -9px gray;
+    cursor: pointer;
+}
+
+
+
+ .montapacking-delivery-service.delivery-services{
+    background: green !important;
 }
 
 /* OVERALL PICKUP BLOCKS CSS */
@@ -212,11 +237,10 @@
 
 .montapacking-parent .montapacking-tab {
     float: left;
-    width: 50%;
     cursor: pointer;
     padding: 20px;
     color: #27324C;
-    border: 1px solid #D4D9E3;
+
     margin-bottom: 10px;
     background: white;
     text-align: center;
@@ -257,6 +281,7 @@
     width: 140px;
     border-radius: 10px;
     margin-right: 10px;
+    margin-top: 5px;
 }
 
 .montapacking-parent .montapacking-tab.day.selected_day {
@@ -264,6 +289,10 @@
     box-shadow: 1px 1px 10px -4px grey;
 
     font-weight: 700;
+}
+
+#slider-content  ol {
+    margin-left: 10px;
 }
 
 @media screen and (max-width: 380px) {
@@ -383,9 +412,6 @@
 
 .montapacking-container-logo.Cycloon {
     background-image: url(../images/Cycloon.png) !important;
-}
-.montapacking-container-logo.Asendia {
-    background-image: url(../images/Asendia.png) !important;
 }
 
 /* CONTAINER CONTENT */

@@ -39,22 +39,28 @@
         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
     </div>
 
-     <!-- /ko -->
+    <!-- /ko -->
 
-    <!-- ko if: filteredDeliveryServices().length > 0 -->
-
+    <!-- ko if: daysForSelect1().length > 0 -->
     <div id="date-picker">
-        <button class="date-picker-button left" type="button" data-bind="click: moveLeft"><</button>
-        <button class="date-picker-button right"type="button" data-bind="click: moveRight">></button>
-        <div id="slider">
+
+        <div id="slider" >
+            <button class="date-picker-button left" type="button" data-bind="click: moveLeft"  style="z-index: 99"><</button>
+            <button class="date-picker-button right"type="button" data-bind="click: moveRight" >> </button>
             <div id="slider-content">
-                <ol data-bind="foreach: daysForSelect">
-                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discount_percentage > 0 }">
-                        <p data-bind="text: day, css: {'day-text-discount': discount_percentage > 0 }"></p>
-                        <p data-bind="text: day_string, css: {'day-text-discount': discount_percentage > 0 }"></p>
+
+                <ol data-bind="foreach: daysForSelect1, afterRender: renderedHandlerDatePicker">
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent)" style="width: auto; height: 90px">
+
+
+
+                        <p data-bind="text: text"></p>
+
 
                         <!-- ko if: discount_percentage > 0 -->
-                            <p data-bind="text: discount_percentage_text"  class="discount-percentage"></p>
+                            <p data-bind="text: discount_percentage_text" style="margin-bottom: 0"></p>
+
+
                         <!-- /ko -->
 
                     </li>
@@ -62,8 +68,8 @@
             </div>
         </div>
     </div>
+    <!-- /ko -->
 
-     <!-- /ko -->
 
     <div class="montapacking-services">
 
@@ -80,7 +86,7 @@
                     <div class="montapacking-container-content">
 
                         <p>
-                            <span class="floatleft marginright delivered" data-bind="i18n: 'Your order will be delivered with'"></span>
+                              <span class="floatleft marginright delivered" data-bind="i18n: 'Your order will be delivered with'"></span>
                             <span class="floatleft marginright shipped" data-bind="i18n: 'Your order will be shipped with'"></span>
                             <span class="floatleft marginright montapacking-delivery-information-company">###</span>
 
@@ -90,10 +96,33 @@
                             <span class="floatleft timeblock marginright" data-bind="i18n: 'between'"></span>
                             <span class="floatleft timeblock marginright montapacking-delivery-information-time">###</span>
 
-                            <div class="clearboth"></div>
-                            <ul class="montapacking-delivery-information-options">
+                        <div class="clearboth"></div>
 
-                            </ul>
+
+                        <!-- ko if: optionsOfSelectedShipper().length > 0  -->
+
+                            <div class="montapacking-container-delivery-options">
+
+
+                                <p class="normal" data-bind="i18n: 'Choose your desired additional options'"></p>
+
+                                <div data-bind="foreach: optionsOfSelectedShipper">
+
+                                    <div class="montapacking-delivery-option">
+                                        <input
+                                            data-bind="value: code, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +code + ']', id: $parent.code +code}, click: $parent.toggleShipperOptionToSelectedShipper.bind($parent)"
+                                            type="checkbox"
+                                            class="radio"/>
+                                        <label data-bind="text: name, attr: {for: $parent.code +code}"></label>
+                                        <span class="delivery-fee" data-bind="text: price_string"></span>
+                                        <span class="delivery-fee-hidden montapacking-hidden" data-bind="text: price_raw"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        <!-- /ko -->
                         </p>
 
                         <a class="displaynone havesameday"href="javascript:;"
@@ -133,20 +162,23 @@
 
             <!-- ko if: filteredDeliveryServices().length > 0 -->
 
-                   <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
-                         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
+            <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
+                <span class="notranslate cropped_name montapacking-hidden" data-bind="text: options.name"></span>
+                <div data-bind="template: {name: 'deliveryServices-template' }"></div>
             </div>
 
             <!-- /ko -->
 
             <script type="text/html" id="deliveryServices-template">
 
+
                 <div data-bind="foreach: options">
                     <!-- ko -->
 
-                    <div data-bind="css: $parent.code" class="container montapacking-delivery-service delivery-option">
+                    <div class="container montapacking-delivery-service delivery-option"  data-bind="css: $parent.code, click: $parents[1].selectShipper.bind(element), checked: $parent.selectedShippers, , attr: {id: code, value: code}">
 
-                        <span class="notranslate cropped_name montapacking-hidden" data-bind="text: name"></span>
+
+                    <span class="notranslate cropped_name montapacking-hidden" data-bind="text: name"></span>
                         <span class="notranslate cropped_date montapacking-hidden" data-bind="text: date"></span>
                         <span class="notranslate cropped_date_text montapacking-hidden" data-bind="text: date_string"></span>
                         <span class="notranslate cropped_time montapacking-hidden" data-bind="text: date_from_to"></span>
@@ -163,51 +195,30 @@
 
                             <div class="montapacking-container-content">
                                 <div style="display: flex;">
-                                    <p class="title" data-bind="text: description_string"></p>
+                                    <p class="title" data-bind="text: description_string" style="margin-top: 12px"></p>
 
-                                <!-- ko if: is_sustainable -->
-                                <div class="field-tooltip toggle" style="position: relative;">
-                                    <img style="width: 20px; height: 20px; margin-left: 5px;" class="field-tooltip-action action-help"
-                                        data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
-                                        data-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false" src="/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout/images/sustainable.png"/>
-                                    <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="i18n: 'Sustainably delivered'">
+                                    <!-- ko if: is_sustainable -->
+                                    <div class="field-tooltip toggle" style="position: relative;">
+                                        <img style="width: 20px; height: 20px; margin-left: 5px;" class="field-tooltip-action action-help"
+                                             data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
+                                             data-toggle="dropdown"
+                                             aria-haspopup="true"
+                                             aria-expanded="false" src="/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout/images/sustainable.png"/>
+                                        <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="i18n: 'Sustainably delivered'">
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- /ko -->
+                                    <!-- /ko -->
 
                                 </div>
                             </div>
 
-                            <div class="montapacking-container-price" data-bind="text: price_string, css: {'color-green': discount_percentage > 0}  "></div>
+                            <div class="montapacking-container-price" data-bind="text: price_string, css: {'color-green': discount_percentage > 0}  " style="margin-top: 12px"></div>
                             <div class="clearboth"></div>
                         </div>
 
 
-                        <!-- ko if: extras-->
-                        <div class="montapacking-container-delivery-options">
-
-                            <!-- ko if: extras.length > 0 -->
-                            <p class="normal" data-bind="i18n: 'Choose your desired additional options'"></p>
-                            <!-- /ko -->
-                            <div data-bind="foreach: extras">
-
-                                <div class="montapacking-delivery-option">
-                                    <input
-                                        data-bind="value: code, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +code + ']', id: $parent.code +code}"
-                                        type="checkbox"
-                                        class="radio"/>
-                                    <label data-bind="text: name, attr: {for: $parent.code +code}"></label>
-                                    <span class="delivery-fee" data-bind="text: price_string"></span>
-                                    <span class="delivery-fee-hidden montapacking-hidden" data-bind="text: price_raw"></span>
-                                </div>
-                            </div>
-
-                        </div>
-                        <!-- /ko -->
-
                         <!-- ko if: optionCodes-->
+
                         <div class="montapacking-container-delivery-optioncodes">
                             <div data-bind="foreach: optionCodes">
 
@@ -221,11 +232,10 @@
                         </div>
                         <!-- /ko -->
 
-
-                        <div class="montapacking-container-select-option montapacking-styled-radiobutton">
+                        <div class="montapacking-container-select-option montapacking-styled-radiobutton" style="display: none ;">
                             <input
                                 data-bind="click: $parents[1].selectShipper.bind($element), checked: $parent.selectedShippers, , attr: {id: code, value: code}"
-                                type="radio" class="montapacking_delivery_option" class="radio"
+                                type="hidden" class="montapacking_delivery_option" class="radio"
                                 name="montapacking[shipper]"/>
                             <label data-bind="attr: {for: code}, i18n: 'Select delivery option'"></label>
                         </div>

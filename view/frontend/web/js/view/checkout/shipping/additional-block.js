@@ -1,3 +1,4 @@
+
 define(
     [
         'jquery',
@@ -6,7 +7,9 @@ define(
         'Magento_Checkout/js/model/quote',
         'Montapacking_MontaCheckout/js/helper/address-finder',
         'Montapacking_MontaCheckout/js/view/checkout/shipping-information/pickup-shop',
-        'Magento_Checkout/js/action/set-shipping-information'
+        'Magento_Checkout/js/action/set-shipping-information',
+
+
     ], function (
         $,
         Component,
@@ -14,7 +17,8 @@ define(
         quote,
         AddressFinder,
         pickupShop,
-        setShippingInformationAction
+        setShippingInformationAction,
+
     ) {
 
         'use strict';
@@ -31,12 +35,14 @@ define(
                     standardDeliveryServices: ko.observableArray([]),
                     filteredDeliveryServices: ko.observableArray([]),
                     daysForSelect: ko.observableArray([]),
+                    daysForSelect1: ko.observableArray([]),
                     pickupServices: ko.observableArray([]),
                     deliveryFee: ko.observable(),
                     pickupFee: ko.observable(),
                     selectedShippers: ko.observable(),
                     selectedPickup: ko.observable(),
-                    preferredShipper: ko.observable()
+                    preferredShipper: ko.observable(),
+                    optionsOfSelectedShipper: ko.observableArray()
                 },
                 initObservable: function () {
                     //one step checkout solution, update buttons and quantity change are not working, so we are gonna hide this options
@@ -58,7 +64,11 @@ define(
 
                     const url = new URL(window.location.href).toString();
 
+
+
                     let urlPrefix = '';
+
+
 
                     if (url.includes('/nl/')) {
                         urlPrefix = '/nl';
@@ -113,8 +123,10 @@ define(
                             'filteredDeliveryServices',
                             'standardDeliveryServices',
                             'daysForSelect',
+                            'daysForSelect1',
                             'pickupPoints',
-                            'preferredShipper'
+                            'preferredShipper',
+                            'optionsOfSelectedShipper'
                         ]
                     );
 
@@ -232,10 +244,18 @@ define(
                                 }
 
                                 const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== '');
+
                                 if (filteredDeliveryServicesList.length > 0) {
-                                    const distinctFilteredItems = self.initDatePicker(objectArray);
-                                    this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
-                                        timeframe.options[0].date === distinctFilteredItems[0].date));
+                                    let distinctFilteredItems = null;
+                                    let isWithDiscount = objectArray.find(timeframe => timeframe.options.some(option => option.discount_percentage > 0));
+                                    self.createRangeDatePicker(objectArray);
+                                    if(isWithDiscount){
+                                        distinctFilteredItems = self.setRange(objectArray, 0);
+                                    }else {
+                                        distinctFilteredItems = self.initDatePicker(objectArray);
+                                    }
+
+                                    this.filteredDeliveryServices(distinctFilteredItems);
 
                                     // set width of date picker by number of list items
                                     const width = $("ol li").length;
@@ -260,31 +280,151 @@ define(
                     );
                 },
 
+                setRange(objectArray, range){
+
+                    const items = objectArray.map(option => {
+                        return {
+                            "discount": option.options[0].discount_percentage,
+                            "date": option.options[0].date,
+                            "options":option.options
+                        }
+                    });
+                    const groupByDiscount  = items
+                        .reduce((newgroup, shipperoption) => {
+                            const { discount } = shipperoption;
+                            newgroup[discount] = newgroup[discount] ?? [];
+                            newgroup[discount].push(shipperoption);
+
+                            return newgroup;
+                        },{});
+
+                    const groupByShipperCode = Object.values(groupByDiscount[range]).map(option => {
+                        return {
+                            "shippercode": option.options[0].optionCodes.length > 0 ? option.options[0].optionCodes[0] : "",
+                            "options":option.options
+                        }
+                    });
+
+                    var subgroep  = Object.values(groupByShipperCode).reduce((newgroup,shipperoption) =>{
+                        const { shippercode } = shipperoption;
+
+                        newgroup[shippercode] = newgroup[shippercode] ?? [];
+                        newgroup[shippercode].push(shipperoption);
+
+                        return newgroup;
+                    },{})
+                    //12:00 - 14:00
+                    //18:00 - 22:00
+
+                    var startandend = Object.values(subgroep[""]).map((item) =>{
+
+                        return {
+                            "start": item.options[0].from,
+                            "end": item.options[0].to
+                        }
+                    })
+
+                    var firststartdate = startandend.sort(function (a, b) {
+                        return a.start.localeCompare(b.start);
+                    })[0];
+
+                    var lastenddate = startandend.sort(function (a, b) {
+                        return b.end.localeCompare(a.end);
+                    })[0];
+
+                    var subitems = [];
+
+                    subgroep[""][0].options[0].description_string = subgroep[""][0].options[0].description_string.split('|')[0] + ' | '+  firststartdate.start + ' - ' + lastenddate.end + ' uur';
+
+                    subitems.push(subgroep[""][0]);
+                    subitems.push(subgroep["EveningDelivery"][0]);
+
+                    return subitems;
+                },
+
+                createRangeDatePicker(objectArray){
+
+                    const items = objectArray.map(option => {
+                        return {
+                            "discount": option.options[0].discount_percentage,
+                            "date": option.options[0].date,
+                            "options":option.options
+                        }
+                    });
+                    const groupByDiscount = items
+                        .reduce((newgroup, shipperoption) => {
+                            const { discount } = shipperoption;
+                            newgroup[discount] = newgroup[discount] ?? [];
+                            newgroup[discount].push(shipperoption);
+
+                            return newgroup;
+                        },{});
+
+
+                    const firstday = new Date();
+                    const today = firstday;
+
+                    const datepickeritems = Object.values(groupByDiscount).map(item => {
+                        let startDate = item[0].date.split('-');
+                        let endDate = item[item.length -1].date.split('-');
+
+                        const numberOfDaysFromTodayToStart  = (new Date(startDate[2],startDate[1],startDate[0]).getDate() - today.getDate()   ) ;
+
+                        const numberOfDaysFromTodayToEnd = (new Date(endDate[2],endDate[1],endDate[0]).getDate() - today.getDate()  );
+
+                        let text = "";
+                        if(numberOfDaysFromTodayToStart  == 1 && numberOfDaysFromTodayToEnd == 1){
+                            text = "Morgen";
+                        }else if(numberOfDaysFromTodayToStart == numberOfDaysFromTodayToEnd){
+                            text = "Bezorgd over " + numberOfDaysFromTodayToStart  + "  dagen";
+                        }else{
+                            text = 'Tussen ' + numberOfDaysFromTodayToStart + ' en ' + numberOfDaysFromTodayToEnd + ' werkdagen'
+                        }
+
+                        return {
+                            "first":item[0].date.toString(),
+                            "last":item[item.length -1].date.toString(),
+                            "discount_percentage":item[0].discount.toString(),
+                            "discount_percentage_text": item[0].discount.toString() + "% korting",
+                            "start": numberOfDaysFromTodayToStart,
+                            "end": numberOfDaysFromTodayToEnd,
+                            "text": text
+                        }
+                    })
+
+                    this.daysForSelect1(datepickeritems);
+                },
+
                 renderedHandler: function(){
                     self.setPreferredShipper();
                 },
 
                 setPreferredShipper(){
+
                     var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
                     var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
 
                     if(this.preferredShipper != null &&
                         standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
                         filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
-                            if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
-                                standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
+                        if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
+                            standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
 
-                               var sliderElement = document.getElementById('montapacking-plugin');
-                               sliderElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
-                            } else {
-                                filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
-                            }
+                            var sliderElement = document.getElementById('montapacking-plugin');
+                            sliderElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                        } else {
+                            filteredDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
+                        }
                         this.preferredShipper = null;
                     }
                 },
 
                 initDatePicker: function (objectArray) {
                     const distinctFilteredItems = [];
+
+
+
+
 
                     //search all shipping options with delivery date, so the dates can be used for the datepicker
                     const filteredItems = objectArray.filter(timeframe => timeframe.options[0].date !== '').map(option => {
@@ -296,6 +436,8 @@ define(
                             "discount_percentage_text" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
                         }
                     });
+
+                    // console.log(JSON.stringify(items));
 
                     filteredItems.sort(function(a,b) {
                         let date1 = a.date.split('-');
@@ -321,7 +463,7 @@ define(
                         }
                     });
 
-                    this.daysForSelect(distinctFilteredItems);
+
 
                     return distinctFilteredItems;
                 },
@@ -359,22 +501,42 @@ define(
                     setShippingInformationAction();
                 },
 
+                renderedHandlerDatePicker(){
+                    $(".montapacking-tab.day").each(function(index,item){
+                        item.style.background = "white";
+                        item.style.color = "black";
+                    })
+                    var element = $(".montapacking-tab.day")[0];
+
+                    element.style.background = '#01B5E2';
+                    element.style.color = "white";
+                },
+
                 getfilterDeliveryServicesByDate: function (date, event) {
-                    $('#slider-content ol li').removeClass("selected_day");
-                    const target = $(event.target).closest(".day");
-                    target.addClass("selected_day");
-                    target[0].scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                    $(".montapacking-tab.day").each(function(index,item){
+                        item.style.background = "white";
+                        item.style.color = "black";
+                    })
+
+
+                    var element = event.currentTarget;
+
+                    element.style.background = '#01B5E2';
+                    element.style.color = "white";
+
+                    const objects = this.deliveryServices();
 
                     self.setfilterDeliveryServicesByDate(date);
                 },
 
                 setfilterDeliveryServicesByDate: function (date) {
-                    const objects = this.deliveryServices;
+                    const objects = this.deliveryServices();
                     const objectsFiltered = objects.filter(timeframe => timeframe.options[0].date === date.date);
                     const objectsSorted = objectsFiltered.sort((a, b) =>
                         parseInt(parseFloat(a.options[0].price_raw)) - parseInt(parseFloat(b.options[0].price_raw))
                     );
-                    this.filteredDeliveryServices(objectsSorted);
+
+                    this.filteredDeliveryServices(self.setRange(objects, date.discount_percentage));
                 },
 
                 moveLeft: function () {
@@ -453,32 +615,67 @@ define(
                     $("#date-picker").show();
                 },
 
-                selectShipper: function () {
+                toggleShipperOptionToSelectedShipper: function(element){
+
+                    // todo: remove shipperoption when item deselected
+
+                    const checkoutConfig = window.checkoutConfig;
+                    var montapacking_montacheckout_data = JSON.parse(checkoutConfig.quoteData.montapacking_montacheckout_data);
+                    let details = [];
+                    var total_price = 0;
+
+                    if(montapacking_montacheckout_data.details){
+                        details = montapacking_montacheckout_data.details;
+                        details[0].options.push(element.code);
+
+                        total_price = montapacking_montacheckout_data.additional_info[0].total_price + parseFloat(element.price_raw);
+                    }else{
+                        details.push(
+                            {
+                                short_code: montapacking_montacheckout_data.additional_info.name,
+                                options: options,
+                            }
+                        );
+
+                        total_price = parseFloat(montapacking_montacheckout_data.additional_info[0].price) + parseFloat(element.price_raw);
+                    }
+
+                    total_price = total_price.toString().replace('.', ',');
+
+                    self.setDeliveryOption('delivery', details, montapacking_montacheckout_data.additional_info);
+                    self.deliveryFee(total_price);
+                },
+
+                selectShipper: function (element, event) {
+
+                    this.optionsOfSelectedShipper(element.extras);
+
+                    var htmlelement = $("input#" + element.code + ".montapacking_delivery_option");
 
                     $(".delivery-information").hide();
                     $("#date-picker").hide();
                     // set vars
 
-                    const code = $(this).val();
-                    const name = $(this).parents(".delivery-option").find(".cropped_name").text();
-                    const type = $(this).parents(".delivery-option").find(".cropped_type").text();
-                    let date = $(this).parents(".delivery-option").find(".cropped_date").text();
-                    let date_text = $(this).parents(".delivery-option").find(".cropped_time").text();
-                    const date_string = $(this).parents(".delivery-option").find(".cropped_date_text").text();
+                    const code = element.code
+                    const name = htmlelement.parents(".delivery-option").find(".cropped_name").text();
+                    const type = htmlelement.parents(".delivery-option").find(".cropped_type").text();
+                    let date = htmlelement.parents(".delivery-option").find(".cropped_date").text();
+                    let date_text = htmlelement.parents(".delivery-option").find(".cropped_time").text();
+                    const date_string = htmlelement.parents(".delivery-option").find(".cropped_date_text").text();
 
                     if (date === '01-01-1970') {
                         date = '';
                         date_text = '';
                     }
 
-                    const time = $(this).parents(".delivery-option").find(".cropped_time").text();
-                    const time_text = $(this).parents(".delivery-option").find(".cropped_time_text").text();
-                    const price = $(this).parents(".delivery-option").find(".cropped_price").text();
-                    const image_class = $(this).parents(".delivery-option").find(".cropped_image_class").text();
-                    const image_class_replaced = $(this).parents(".delivery-option").find(".cropped_image_class_replaced").text();
+                    const time = htmlelement.parents(".delivery-option").find(".cropped_time").text();
+                    const time_text = htmlelement.parents(".delivery-option").find(".cropped_time_text").text();
+                    const price = htmlelement.parents(".delivery-option").find(".cropped_price").text();
+                    const image_class =htmlelement.parents(".delivery-option").find(".cropped_image_class").text();
+                    const image_class_replaced = htmlelement.parents(".delivery-option").find(".cropped_image_class_replaced").text();
                     const short_code = image_class;
-                    const checked_boxes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-options input[type=checkbox]:checked");
-                    const option_codes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-optioncodes input[type=hidden]");
+                    const checked_boxes = htmlelement.parents(".delivery-option").find(".montapacking-container-delivery-options input[type=checkbox]:checked");
+                    const option_codes = htmlelement.parents(".delivery-option").find(".montapacking-container-delivery-optioncodes input[type=hidden]");
                     let total_price = parseFloat(price);
 
                     // set delivery information
@@ -792,11 +989,10 @@ define(
                     return false;
 
                 },
-                
                 createSiteUrl: function(){
                     const dataUrl = window.dataUrl.split('/');
                     const site_url = dataUrl.slice(5,-2);
-                    site_url.unshift('static');  
+                    site_url.unshift('static');
                     site_url.push('Montapacking_MontaCheckout');
 
                     return '/' + site_url.join("/");
@@ -835,7 +1031,8 @@ define(
                 }, loadMap: function () {
                     const useLocator = $('#bh-sl-map-container');
                     const markers = [];
-                    const site_url = self.createSiteUrl();
+
+                    const site_url = this.createSiteUrl();
                     $(".montapacking-pickup-service.pickup-option").each(
                         function (index) {
                             const openingtimes = $(this).find(".table-container .table").html();
