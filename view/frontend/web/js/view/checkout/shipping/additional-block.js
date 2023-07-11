@@ -249,7 +249,7 @@ define(
                                     let distinctFilteredItems = null;
                                     let isWithDiscount = objectArray.find(timeframe => timeframe.options.some(option => option.discount_percentage > 0));
                                     self.createRangeDatePicker(objectArray);
-                                    if(isWithDiscount){
+                                    if (isWithDiscount) {
                                         distinctFilteredItems = self.setRange(objectArray, 0);
                                     }else {
                                         distinctFilteredItems = self.initDatePicker(objectArray);
