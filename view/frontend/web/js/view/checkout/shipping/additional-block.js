@@ -644,6 +644,8 @@ define(
 
                     self.setDeliveryOption('delivery', details, montapacking_montacheckout_data.additional_info);
                     self.deliveryFee(total_price);
+
+                    return true;
                 },
 
                 selectShipper: function (element, event) {
