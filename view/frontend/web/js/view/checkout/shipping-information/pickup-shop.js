@@ -18,7 +18,7 @@ define(
                 },
 
                 initObservable: function () {
-                    window.monta_plugin_pickup = this;
+                    var self = this;
 
 
                     var checkoutConfig = window.checkoutConfig;
@@ -95,7 +95,7 @@ define(
                         function () {
                             var isSelected = false;
 
-                            if (window.monta_plugin_pickup.parcelShopAddress() !== null) {
+                            if (self.parcelShopAddress() !== null) {
                                 isSelected = true;
                             }
 

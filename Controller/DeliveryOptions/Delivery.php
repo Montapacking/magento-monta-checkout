@@ -14,6 +14,9 @@ use Montapacking\MontaCheckout\Helper\PickupHelper;
 use Montapacking\MontaCheckout\Logger\Logger;
 use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 
+use Carbon\Carbon;
+use Monta\MontaProcessing\NumberGenerator;
+
 /**
  * Class Delivery
  *
@@ -65,6 +68,10 @@ class Delivery extends AbstractDeliveryOptions
         DeliveryHelper  $deliveryHelper
     )
     {
+//        $tomorrow = Carbon::now()->addDay();
+//        $processingstuff = new NumberGenerator();
+//        print_r($processingstuff->Generate(0, 100)); die();
+
         $this->_logger = $logger;
         $this->checkoutSession = $checkoutSession;
         $this->localeResolver = $localeResolver;
@@ -94,14 +101,21 @@ class Delivery extends AbstractDeliveryOptions
         try {
             $oApi = $this->generateApi($request, $language, $this->_logger, true);
 
-            $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
+//            $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
+//
+//            $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions']);
+//            $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions']);
+//
+//            $this->checkoutSession->setLatestShipping([$shippingoptions_formatted, $pickupoptions_formatted]);
 
-            $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions']);
-            $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions']);
+//            return $this->jsonResponse([$shippingoptions_formatted, $pickupoptions_formatted]);
 
-            $this->checkoutSession->setLatestShipping([$shippingoptions_formatted, $pickupoptions_formatted]);
+            $this->checkoutSession->setLatestShipping([$oApi['DeliveryOptions'], $oApi['PickupOptions'],  $oApi['CustomerLocation']]);
 
-            return $this->jsonResponse([$shippingoptions_formatted, $pickupoptions_formatted]);
+
+            return $this->jsonResponse([$oApi['DeliveryOptions'], $oApi['PickupOptions'], $oApi['CustomerLocation']]);
+
+
 
         } catch (Exception $e) {
 

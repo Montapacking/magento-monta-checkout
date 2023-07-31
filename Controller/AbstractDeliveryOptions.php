@@ -4,10 +4,10 @@ namespace Montapacking\MontaCheckout\Controller;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
-
 use Magento\Framework\App\RequestInterface;
 use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
-use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
+use Monta\CheckoutApiWrapper\Objects\Settings;
+use Monta\CheckoutApiWrapper\MontapackingShipping as MontpackingApi;
 
 abstract class AbstractDeliveryOptions extends Action
 {
@@ -73,7 +73,7 @@ abstract class AbstractDeliveryOptions extends Action
         if($request->getParam('street') != null && is_array($request->getParam('street')) && count($request->getParam('street')) > 1){
             $street =  trim(implode(" ", $request->getParam('street')));
         } else if ($request->getParam('street') != null) {
-            $street = trim(implode($request->getParam('street')));
+            $street = trim($request->getParam('street'));
         } else {
             $street = "";
         }
@@ -121,9 +121,23 @@ abstract class AbstractDeliveryOptions extends Action
          */
         $cart = $this->getCart();
 
-        $oApi = new MontpackingApi($webshop, $username, $password, $googleapikey, $language);
-        $oApi->setLogger($logger);
-        $oApi->setCarrierConfig($this->getCarrierConfig());
+
+        /**
+         * Todo: Fix to make dynamic from Magento settings later
+         */
+        $settings = new Settings(
+            'origin',
+            'username',
+            'password',
+            true,
+            4,
+            'apikey',
+            200
+        );
+
+
+
+        $oApi = new MontpackingApi($settings, $language);
         $oApi->setAddress($street, $housenumber, $housenumberaddition, $postcode, $city, $state, $country);
 
 
@@ -131,6 +145,7 @@ abstract class AbstractDeliveryOptions extends Action
         $priceExcl = $cart->getQuote()->getSubtotal();
 
         if ($cart->getQuote()->getSubtotalInclTax() > 0) {
+            $priceIncl = $cart->getQuote()->getSubtotalInclTax();
             $priceIncl = $cart->getQuote()->getSubtotalInclTax();
         } else if ($cart->getQuote()->getShippingAddress()->getSubtotalInclTax() > 0) {
             $priceIncl = $cart->getQuote()->getShippingAddress()->getSubtotalInclTax();
@@ -143,44 +158,54 @@ abstract class AbstractDeliveryOptions extends Action
 
         $bAllProductsAvailable = true;
 
-        foreach ($items as $item) {
 
-            if ($leadingstockmontapacking) {
-
-                //$oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight')); //phpcs:ignore
-
-                if (!$disabledeliverydays) {
-                    $oApi->addProduct($item->getSku(), $item->getQty()); //phpcs:ignore
-
-                    // we let our api calculate the stock with the added products, so we set the stock on false
-                    $bAllProductsAvailable = false;
-
-                    //if (false === $oApi->checkStock($item->getSku())) {
-                    //    $bAllProductsAvailable = false;
-                    //    break;
-                    //}
-
-                }
-
-            } else {
-                $stockItem = $item->getProduct()->getExtensionAttributes()->getStockItem();
-
-                //print $stockItem->getQty()."-".$item->getQty();
-                //exit;
-                //echo "<pre>";print_r($item->debug());
-
-                if ($stockItem->getQty() <= 0 || $stockItem->getQty() < $item->getQty()) {
-
-                    $bAllProductsAvailable = false;
-                    break;
-                }
-            }
+        foreach($items as $item) {
+            $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
         }
 
-        if (false === $bAllProductsAvailable || $disabledeliverydays) {
-            $oApi->setOnstock(false);
-        }
+//        foreach ($items as $item) {
+//
+//            if ($leadingstockmontapacking) {
+//
+////                $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
+//
+//                if (!$disabledeliverydays) {
+//                    $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
+//
+//                    // we let our api calculate the stock with the added products, so we set the stock on false
+////                    $bAllProductsAvailable = true;
+//
+//                    if (false === $oApi->checkStock($item->getSku())) {
+//                        $bAllProductsAvailable = false;
+//                        break;
+//                    }
+//
+//                }
+//
+//            } else {
+//                $stockItem = $item->getProduct()->getExtensionAttributes()->getStockItem();
+//
+//                //print $stockItem->getQty()."-".$item->getQty();
+//                //exit;
+//                //echo "<pre>";print_r($item->debug());
+//
+//                if ($stockItem->getQty() <= 0 || $stockItem->getQty() < $item->getQty()) {
+//
+//                    $bAllProductsAvailable = false;
+//                    break;
+//                }
+//            }
+//        }
 
-        return $oApi;
+//        if (false === $bAllProductsAvailable || $disabledeliverydays) {
+//            $oApi->setOnstock(false);
+//        }
+
+
+
+//        $frames = $oApi->getShippingOptions($bAllProductsAvailable, false, false, false, false);
+        $frames = $oApi->getShippingOptions(true, false, false, false, false);
+
+        return $frames;
     }
 }

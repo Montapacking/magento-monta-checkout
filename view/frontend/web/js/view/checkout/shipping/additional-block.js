@@ -54,7 +54,7 @@ define(
                         });
                     });
 
-                    window.monta_plugin = this;
+                    self = this;
 
                     const url = new URL(window.location.href).toString();
 
@@ -137,9 +137,9 @@ define(
                             this.deliveryFee(null);
                             this.pickupFee(null);
 
-                            this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
+                            this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
 
-                            window.monta_plugin.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true, this.addressChanged);
+                            self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true, this.addressChanged);
 
                             // fill old adress field
                             const existCondition = setInterval(function () {
@@ -152,7 +152,7 @@ define(
                         }.bind(this)
                     );
 
-                    window.monta_plugin.loadPopup();
+                    self.loadPopup();
 
                     return this;
                 },
@@ -161,7 +161,7 @@ define(
                  * Retrieve LONG LAT
                  */
                 getLongLat: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
-
+console.log('LONG LAT js method', street)
                     $.ajax(
                         {
                             method: 'GET',
@@ -180,6 +180,7 @@ define(
                         }
                     ).done(
                         function (services) {
+                            console.log('LONG LAT js method COMPLETED', services)
 
                             $("#montapacking_longitude").val(services.longitude);
                             $("#montapacking_latitude").val(services.latitude);
@@ -233,9 +234,14 @@ define(
 
                                 const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== '');
                                 if (filteredDeliveryServicesList.length > 0) {
-                                    const distinctFilteredItems = window.monta_plugin.initDatePicker(objectArray);
-                                    this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
-                                        timeframe.options[0].date === distinctFilteredItems[0].date));
+                                    const distinctFilteredItems = self.initDatePicker(objectArray);
+
+                                    this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe => {
+                                            return timeframe.date === distinctFilteredItems[0].date
+                                    }));
+
+
+                                    console.log('We end with ', filteredDeliveryServicesList.length)
 
                                     // set width of date picker by number of list items
                                     const width = $("ol li").length;
@@ -248,29 +254,41 @@ define(
 
                                     $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click");
                                 }
+
                                 this.standardDeliveryServices(objectArray.filter(timeframe =>
                                     timeframe.options[0].from === "" &&
                                     timeframe.options[0].type === 'Unknown'));
                             }
 
-                            this.pickupServices(Object.values(services[1]));
+                            let marker_id = 1;
+                            Object.values(services[1]).map(item => {
+                                item['marker_id'] = marker_id++
+                            })
 
+                            $("#montapacking_longitude").val(services[2]['longitude']);
+                            $("#montapacking_latitude").val(services[2]['latitude']);
+                            $("#montapacking_language").val(services[2]['language']);
+                            $("#hasconnection").val("y");
+
+                            this.pickupServices(Object.values(services[1]));
                         }.bind(this)
 
                     );
                 },
 
                 renderedHandler: function(){
-                    window.monta_plugin.setPreferredShipper();
+                    self.setPreferredShipper();
                 },
 
                 setPreferredShipper(){
                     var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
                     var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
 
+                    // var somanyitems = this.filteredDeliveryServices().toArray();
+                    console.log('dbg kevin', this.filteredDeliveryServices()[0].options.length)
                     if(this.preferredShipper != null &&
                         standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
-                        filteredDeliveryServicesElement.length == this.filteredDeliveryServices().length) {
+                        filteredDeliveryServicesElement.length == this.filteredDeliveryServices()[0].options.length) {
                             if(this.preferredShipper.options[0].code == "MultipleShipper_ShippingDayUnknown"){
                                 standardDeliveryServicesElement.find("input[value=" + this.preferredShipper.options[0].code + "]").trigger("click");
 
@@ -284,52 +302,81 @@ define(
                 },
 
                 initDatePicker: function (objectArray) {
-                    const distinctFilteredItems = [];
+                    console.log('Init Date Picker', objectArray);
 
-                    //search all shipping options with delivery date, so the dates can be used for the datepicker
-                    const filteredItems = objectArray.filter(timeframe => timeframe.options[0].date !== '').map(option => {
-                        return {
-                            "date": option.options[0].date,
-                            "day": option.options[0].date_string.split(' ')[0],
-                            "day_string": option.options[0].date_string.split(' ')[1].concat(' ', option.options[0].date_string.split(' ')[2]),
-                            "discount_percentage" : option.options.some(x=>x.discount_percentage > 0) ? option.options.find(x=>x.discount_percentage > 0).discount_percentage : 0,
-                            "discount_percentage_text" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
-                        }
-                    });
+                    /** Add DiscountPercentage to array list because the datepicker use it on date level instead on shipping level */
+                   objectArray = objectArray.filter(datepicker => datepicker.options.some(o => {
+                       datepicker['discount'] = o.discountPercentage;
+                       return datepicker;
+                   }));
 
-                    filteredItems.sort(function(a,b) {
-                        let date1 = a.date.split('-');
-                        let date2 = b.date.split('-');
-                        return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discount_percentage - a.discount_percentage
-                    })
+                    this.daysForSelect(objectArray);
 
-                    // filter all duplicates
-                    $.each(filteredItems, function (index, item) {
-                        let alreadyAdded = false;
-                        let i;
-                        for (i in distinctFilteredItems) {
-                            if (distinctFilteredItems[i].date === item.date) {
-                                alreadyAdded = true;
-                            }
-                        }
-                        if (!alreadyAdded) {
-                            distinctFilteredItems.push(item);
-                        }
-                        //show max 10 days in date picker
-                        if (distinctFilteredItems.length === 10) {
-                            return false;
-                        }
-                    });
+                    return objectArray;
 
-                    this.daysForSelect(distinctFilteredItems);
-
-                    return distinctFilteredItems;
+                    // const distinctFilteredItems = [];
+                    //
+                    // //search all shipping options with delivery date, so the dates can be used for the datepicker
+                    // const filteredItems = objectArray.filter(timeframe => timeframe.options[0].date !== '').map(option => {
+                    //
+                    //     let prettyDate = option.date.split('-');
+                    //     let testdate = new Date(prettyDate[2] + '-' + prettyDate[1] + '-' + prettyDate[0])
+                    //
+                    //     let longDate = new Date(testdate).toLocaleDateString('nl-NL', { weekday:"long", year:"numeric", month:"long", day:"numeric"});
+                    //     let longdateString = `${longDate.split(' ')[1]} ${longDate.split(' ')[2]}`;
+                    //
+                    //     console.log('longDate', longDate)
+                    //     console.log('longdateString', longdateString)
+                    //
+                    //     return {
+                    //         "date": option.date,
+                    //         "day": getDayName(testdate, "nl-NL"),
+                    //         "day_string": longdateString,
+                    //         "discount_percentage" : option.options.some(x=>x.discount_percentage > 0) ? option.options.find(x=>x.discount_percentage > 0).discount_percentage : 0,
+                    //         "discount_percentage_text" : option.options.some(x=>x.discount_percentage > 0) ? '-' + option.options.find(x=>x.discount_percentage > 0).discount_percentage + '%' : 0
+                    //     }
+                    // });
+                    //
+                    // function getDayName(dateStr, locale)
+                    // {
+                    //     var date = new Date(dateStr);
+                    //     return date.toLocaleDateString(locale, { weekday: 'long' });
+                    // }
+                    //
+                    // filteredItems.sort(function(a,b) {
+                    //     let date1 = a.date.split('-');
+                    //     let date2 = b.date.split('-');
+                    //     return new Date(date1[2],date1[1],date1[0]) - new Date(date2[2], date2[1], date2[0]) || b.discount_percentage - a.discount_percentage
+                    // })
+                    //
+                    // // filter all duplicates
+                    // $.each(filteredItems, function (index, item) {
+                    //     let alreadyAdded = false;
+                    //     let i;
+                    //     for (i in distinctFilteredItems) {
+                    //         console.log(distinctFilteredItems[i]);
+                    //         if (distinctFilteredItems[i].date === item.date) {
+                    //             alreadyAdded = true;
+                    //         }
+                    //     }
+                    //     if (!alreadyAdded) {
+                    //         distinctFilteredItems.push(item);
+                    //     }
+                    //     //show max 10 days in date picker
+                    //     if (distinctFilteredItems.length === 10) {
+                    //         return false;
+                    //     }
+                    // });
+                    //
+                    // this.daysForSelect(distinctFilteredItems);
+                    //
+                    //
+                    // return distinctFilteredItems;
                 },
 
                 checkDiscount(){
                     return this.daysForSelect.some(x=>x.discountPercentage > 0)
                 },
-
                 setDeliveryOption: function (type, details, additional_info) {
 
                     const deliveryOption = {
@@ -359,21 +406,44 @@ define(
                     setShippingInformationAction();
                 },
 
+                // Todo: Kevin check this out
                 getfilterDeliveryServicesByDate: function (date, event) {
+
                     $('#slider-content ol li').removeClass("selected_day");
                     const target = $(event.target).closest(".day");
                     target.addClass("selected_day");
                     target[0].scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
 
-                    window.monta_plugin.setfilterDeliveryServicesByDate(date);
+                    self.setfilterDeliveryServicesByDate(date);
                 },
 
+                // Todo: Kevin check this out
                 setfilterDeliveryServicesByDate: function (date) {
                     const objects = this.deliveryServices;
-                    const objectsFiltered = objects.filter(timeframe => timeframe.options[0].date === date.date);
-                    const objectsSorted = objectsFiltered.sort((a, b) =>
-                        parseInt(parseFloat(a.options[0].price_raw)) - parseInt(parseFloat(b.options[0].price_raw))
-                    );
+
+                    // console.log('objects? ', objects.filter(timeframe => timeframe.date == date.date))
+                    //
+                    // console.log('date', date.date)
+
+                    // const filter = 'nature';
+                    // const filteredResult = objects.filter((item) => {
+                    //     return (item.options);
+                    // });
+                    //
+                    // console.log('filteredResult', filteredResult)
+                    //
+                    //
+                    // // console.log('Hello Kevin, this is debug' , objects);
+                    //
+                    // const objectsFiltered = objects.filter(timeframe => timeframe.options[0].date === date.date);
+                    // const objectsSorted = objectsFiltered.sort((a, b) =>
+                    //     parseInt(parseFloat(a.options[0].price_raw)) - parseInt(parseFloat(b.options[0].price_raw))
+                    // );
+                    // console.log('objectsSorted', objectsSorted)
+
+
+                    var objectsSorted = objects.filter(timeframe => timeframe.date == date.date)
+
                     this.filteredDeliveryServices(objectsSorted);
                 },
 
@@ -409,15 +479,13 @@ define(
                         if (currentTab === '.montapacking-tab-pickup') {
                             $("input.selectshipment").val("pickup");
                             $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
+
+                            console.log('pickuppickuppickup', $("input.selectshipment").val("pickup"));
+                            console.log('clickclickclick', $(".pickup-option:first").find("input.initialPickupRadio").trigger("click"))
+
                             $("#date-picker").hide()
                             $("#standard-delivery-services").hide()
                             const address = JSON.parse($("#old_address").val());
-
-                            if ($("#montapacking_addresschangedsincelastlonglatcall").val() === 'true' || $("#montapacking_latitude").val() === "" || $("#montapacking_longitude").val() === "") {
-                                window.monta_plugin.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
-                                $("#montapacking_addresschangedsincelastlonglatcall").val('false');
-                            }
-
                         } else {
 
                             $("input.selectshipment").val("delivery");
@@ -452,9 +520,7 @@ define(
                     $(optionsTab).fadeIn('slow');
                     $("#date-picker").show();
                 },
-
                 selectShipper: function () {
-
                     $(".delivery-information").hide();
                     $("#date-picker").hide();
                     // set vars
@@ -522,6 +588,7 @@ define(
 
                             const raw_price = $(element).parents(".montapacking-delivery-option").find(".delivery-fee-hidden").text();
                             const option_price = parseFloat(raw_price);
+                            console.log('Oh kom op hey.....')
                             total_price += option_price;
 
                             options.push($(this).val());
@@ -551,7 +618,7 @@ define(
                         }, 250
                     );
 
-
+                    // Todo: Bugfix total_price
                     $(".delivery-information").find(".montapacking-container-price").html("&euro; " + total_price);
 
                     const additional_info = [];
@@ -574,8 +641,8 @@ define(
                         }
                     );
 
-                    window.monta_plugin.setDeliveryOption('delivery', details, additional_info);
-                    window.monta_plugin.deliveryFee(total_price);
+                    self.setDeliveryOption('delivery', details, additional_info);
+                    self.deliveryFee(total_price);
 
                     pickupShop().parcelShopAddress(null);
 
@@ -591,7 +658,6 @@ define(
 
 
                 selectPickUp: function () {
-
                     $(".pickup-information").hide();
 
                     // set vars
@@ -607,6 +673,7 @@ define(
                     const description = $(this).parents(".pickup-option").find(".cropped_description").text();
                     const country = $(this).parents(".pickup-option").find(".cropped_country").text();
                     const price = $(this).parents(".pickup-option").find(".cropped_price").text();
+                    console.log('price raw JS', price)
                     const image_class = $(this).parents(".pickup-option").find(".cropped_image_class").text();
                     const short_code = image_class;
                     const distance = $(this).parents(".pickup-option").find(".cropped_distance").text();
@@ -628,7 +695,7 @@ define(
                         $(".open-business-hours").removeClass("displaynone");
                         $(".block-business-hours").removeClass("displaynone");
                     }
-
+console.log('company', company)
                     // set pickup information
                     $(".pickup-information").find(".montapacking-pickup-information-company").html(company);
                     $(".pickup-information").find(".montapacking-pickup-information-description-distance").html(description);
@@ -681,8 +748,8 @@ define(
                         }
                     );
 
-                    window.monta_plugin.setDeliveryOption('pickup', details, additional_info);
-                    window.monta_plugin.pickupFee(total_price);
+                    self.setDeliveryOption('pickup', details, additional_info);
+                    self.pickupFee(total_price);
                     pickupShop().parcelShopAddress(additional_info[0]);
 
                     return true;
@@ -714,7 +781,7 @@ define(
                             <div class="bh-sl-container">
                                 <div class="bh-sl-filters-container">
                                     <div class="storelocator-top-bar-container">
-                                        <button type="button" data-bind="click: closePopup, i18n: 'Use selection'" class="select-item displaynone"></button>
+                                        <button type="button" data-bind="click: closePopup, i18n: 'Use selection'" class="select-item FAKECLASSHERE displaynone"></button>
                                         <ul id="category-filters" class="bh-sl-filters"></ul>
                                         <div class="storelocator-postcode-search-container">
                                             <p class="storelocator-postcode-search-label" data-bind="i18n: 'Postal Code'">Postcode</p>
@@ -738,7 +805,7 @@ define(
                         '<div class="positioning">' + html + '</div>'
                     );
 
-                    ko.applyBindings(window.monta_plugin, document.getElementById('modular-container'));
+                    ko.applyBindings(self, document.getElementById('modular-container'));
 
                     document.getElementById('storelocator-postcode-search-button').addEventListener('click', () => {
                         let newZip = document.getElementById('storelocator-postcode-search-input').value;
@@ -754,31 +821,26 @@ define(
                                         street: "n",
                                         postcode: newZip,
                                         country: address.country,
-                                        longlat: false
+                                        longlat: true
                                     }
                                 }
                             ).done(
                                 function (services) {
+
                                     this.pickupServices.removeAll();
+
+                                    let marker_id = 1;
+                                    Object.values(services[1]).map(item => {
+                                        item['marker_id'] = marker_id++
+                                    })
+
                                     Object.values(services[1]).forEach(f => this.pickupServices.push(f));
                                     $("#montapacking_addresschangedsincelastmapload").val('true');
-                                    $.ajax({
-                                            method: 'GET',
-                                            url: this.urlPrefix + '/montacheckout/deliveryoptions/longlat',
-                                            type: 'jsonp',
-                                            showLoader: true,
-                                            data: {
-                                                street: "n", postcode: newZip, country: address.country, longlat: true
-                                            }
-                                        }
-                                    ).done(
-                                        function (longlat) {
-                                            $("#montapacking_latitude").val(longlat['latitude']);
-                                            $("#montapacking_longitude").val(longlat['longitude']);
-                                            window.monta_plugin.loadMap();
-                                            document.getElementById('category-filters').style.visibility = 'hidden';
-                                            window.monta_plugin.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-pickup', '.pickup-services', '.pickup-services', true, true);
-                                        }.bind(this));
+                                    $("#montapacking_latitude").val(services[2]['latitude']);
+                                    $("#montapacking_longitude").val(services[2]['longitude']);
+                                    self.loadMap();
+                                    document.getElementById('category-filters').style.visibility = 'hidden';
+                                    self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-pickup', '.pickup-services', '.pickup-services', true, true);
                                 }.bind(this)
                             );
                         }
@@ -793,15 +855,6 @@ define(
 
                 },
 
-                createSiteUrl: function(){
-                    const dataUrl = window.dataUrl.split('/');
-                    const site_url = dataUrl.slice(5,-2);
-                    site_url.unshift('static');
-                    site_url.push('Montapacking_MontaCheckout');
-
-                    return '/' + site_url.join("/");
-                },
-
                 openStoreLocator: function () {
 
                     $('body').trigger('processStart');
@@ -813,9 +866,10 @@ define(
                             'storeLocator'], function (Handlebars, $, google, storeLocator) {
                             window.Handlebars = Handlebars;
                             const useLocator = $('#bh-sl-map-container');
+                            const site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
                             /* Map */
                             if (useLocator) {
-                                window.monta_plugin.loadMap();
+                                self.loadMap();
                             }
                         }
                     );
@@ -829,13 +883,14 @@ define(
                         document.getElementsByClassName('bh-sl-loc-list')[0].style.width = '100%';
                     }
                     const html = $("#storelocator_container").html();
-                    window.monta_plugin.showPopup(html);
+                    self.showPopup(html);
                     $('body').trigger('processStop');
 
                 }, loadMap: function () {
+
                     const useLocator = $('#bh-sl-map-container');
                     const markers = [];
-                    const site_url = window.monta_plugin.createSiteUrl();
+                    const site_url = '/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout';
                     $(".montapacking-pickup-service.pickup-option").each(
                         function (index) {
                             const openingtimes = $(this).find(".table-container .table").html();
@@ -915,16 +970,16 @@ define(
                         },
                         callbackFilters: function () {
                             const html = $("#storelocator_container").html();
-                            window.monta_plugin.showPopup(html);
+                            self.showPopup(html);
                             $('body').trigger('processStop');
                         },
                         callbackFormVals: function () {
                             const html = $("#storelocator_container").html();
-                            window.monta_plugin.showPopup(html);
+                            self.showPopup(html);
                             $('body').trigger('processStop');
                         },
                         callbackNotify: function (error) {
-                            window.monta_plugin.LoadFallbackList(useLocator);
+                            self.LoadFallbackList(useLocator);
                         }
                     };
                     if (!useLocator.data('plugin_storeLocator')) {
@@ -935,7 +990,7 @@ define(
                         $('#bh-sl-map-container').show();
                     } else {
                         var html = $("#storelocator_container").html();
-                        window.monta_plugin.showPopup(html);
+                        self.showPopup(html);
                         $('body').trigger('processStop');
                     }
                     $("#montapacking_addresschangedsincelastmapload").val('false');

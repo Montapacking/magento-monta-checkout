@@ -41,22 +41,33 @@
 
      <!-- /ko -->
 
+<!--    <pre data-bind="text: filteredDeliveryServices().length"></pre>-->
+
     <!-- ko if: filteredDeliveryServices().length > 0 -->
 
     <div id="date-picker">
         <button class="date-picker-button left" type="button" data-bind="click: moveLeft"><</button>
-        <button class="date-picker-button right"type="button" data-bind="click: moveRight">></button>
+        <button class="date-picker-button right" type="button" data-bind="click: moveRight">></button>
         <div id="slider">
             <div id="slider-content">
                 <ol data-bind="foreach: daysForSelect">
-                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discount_percentage > 0 }">
-                        <p data-bind="text: day, css: {'day-text-discount': discount_percentage > 0 }"></p>
-                        <p data-bind="text: day_string, css: {'day-text-discount': discount_percentage > 0 }"></p>
 
-                        <!-- ko if: discount_percentage > 0 -->
-                            <p data-bind="text: discount_percentage_text"  class="discount-percentage"></p>
+<!--                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent),  css: {'day-discount': discount_percentage > 0 }">-->
+<!--                        <p data-bind="text: day, css: {'day-text-discount': discount_percentage > 0 }"></p>-->
+<!--                        <p data-bind="text: day_string, css: {'day-text-discount': discount_percentage > 0 }"></p>-->
+
+<!--                        &lt;!&ndash; ko if: discount_percentage > 0 &ndash;&gt;-->
+<!--                            <p data-bind="text: discount_percentage_text"  class="discount-percentage"></p>-->
+<!--                        &lt;!&ndash; /ko &ndash;&gt;-->
+<!--                    </li>-->
+
+                    <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent), css: { 'day-discount': 10 }">
+                        <p data-bind="text: day, css: {'day-text-discount': discount > 0 }"></p>
+                        <p data-bind="text: date"></p>
+
+                        <!-- ko if: discount > 0 -->
+                            <p data-bind="text: discount + '%'"  class="discount-percentage"></p>
                         <!-- /ko -->
-
                     </li>
                 </ol>
             </div>
@@ -69,11 +80,14 @@
 
         <div class="delivery-services">
 
-            <!-- ko if: filteredDeliveryServices().length > 0  || standardDeliveryServices().length > 0 -->
+<!--            <pre data-bind="text: filteredDeliveryServices().length"></pre>-->
+<!--            <pre data-bind="text: standardDeliveryServices().length"></pre>-->
 
+            <!-- ko if: filteredDeliveryServices().length > 0  || standardDeliveryServices().length > 0 -->
             <div class="container montapacking-delivery-service delivery-information displaynone">
 
                 <div class="montapacking-container-header">
+
 
                     <div class="montapacking-container-logo"></div>
 
@@ -103,7 +117,6 @@
                            data-bind="i18n: 'Click here to choose a different delivery option',click: showDeliveryOptions.bind($parent, '.delivery-information', '.delivery-option')"></a>
 
                     </div>
-
                     <div class="montapacking-container-price">###</div>
 
                     <div class="clearboth"></div>
@@ -132,97 +145,115 @@
             <!-- /ko -->
 
             <!-- ko if: filteredDeliveryServices().length > 0 -->
-
-                   <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
-                         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
-            </div>
-
+           <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
+               <div data-bind="template: { name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
+           </div>
             <!-- /ko -->
 
             <script type="text/html" id="deliveryServices-template">
 
+<!--                <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+
                 <div data-bind="foreach: options">
+
+<!--                    <pre data-bind="text: shipper"></pre>-->
+
                     <!-- ko -->
+                    <!-- Enable Debug -->
+<!--                    <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+<!--                    <p data-bind="text: code"></p>-->
 
                     <div data-bind="css: $parent.code" class="container montapacking-delivery-service delivery-option">
 
-                        <span class="notranslate cropped_name montapacking-hidden" data-bind="text: name"></span>
-                        <span class="notranslate cropped_date montapacking-hidden" data-bind="text: date"></span>
-                        <span class="notranslate cropped_date_text montapacking-hidden" data-bind="text: date_string"></span>
-                        <span class="notranslate cropped_time montapacking-hidden" data-bind="text: date_from_to"></span>
-                        <span class="notranslate cropped_time_text montapacking-hidden" data-bind="text: date_from_to_formatted"></span>
-                        <span class="notranslate cropped_price montapacking-hidden" data-bind="text: price_raw"></span>
-                        <span class="notranslate cropped_code montapacking-hidden" data-bind="text: code"></span>
-                        <span class="notranslate cropped_image_class montapacking-hidden" data-bind="text: image"></span>
-                        <span class="notranslate cropped_image_class_replaced montapacking-hidden" data-bind="text: image_replace"></span>
-                        <span class="notranslate cropped_type montapacking-hidden" data-bind="text: type"></span>
+<!--                        <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+<!--                        <span data-bind="text: $parent.day"></span>-->
+
+                        <span class="notranslate cropped_name montapacking-hidden" data-bind="text: displayName"></span>
+<!--                        <span class="notranslate cropped_date montapacking-hidden" data-bind="text: date"></span>-->
+<!--                        <span class="notranslate cropped_date_text montapacking-hidden" data-bind="text: date_string"></span>-->
+<!--                        <span class="notranslate cropped_time montapacking-hidden" data-bind="text: date_from_to"></span>-->
+<!--                        <span class="notranslate cropped_time_text montapacking-hidden" data-bind="text: date_from_to_formatted"></span>-->
+                        <span class="notranslate cropped_price montapacking-hidden" data-bind="text: price"></span>
+<!--                        <span class="notranslate cropped_code montapacking-hidden" data-bind="text: code"></span>-->
+<!--                        <span class="notranslate cropped_image_class montapacking-hidden" data-bind="text: image"></span>-->
+                        <span class="notranslate cropped_image_class_replaced montapacking-hidden" data-bind="text: shipper"></span>
+<!--                        <span class="notranslate cropped_type montapacking-hidden" data-bind="text: type"></span>-->
+
+<!--                            <p data-bind="text: code"></p>-->
+
+<!--                        <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
 
                         <div class="montapacking-container-header">
 
-                            <div class="montapacking-container-logo" data-bind="css: image_replace"></div>
+                            <div class="montapacking-container-logo" data-bind="css: shipper"></div>
+<!--                            <div class="montapacking-container-logo PostNL"></div>-->
 
                             <div class="montapacking-container-content">
                                 <div style="display: flex;">
-                                    <p class="title" data-bind="text: description_string"></p>
+                                    <p class="title" data-bind="text: displayName"></p>
 
-                                <!-- ko if: is_sustainable -->
-                                <div class="field-tooltip toggle" style="position: relative;">
-                                    <img style="width: 20px; height: 20px; margin-left: 5px;" class="field-tooltip-action action-help"
-                                        data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
-                                        data-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false" src="/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout/images/sustainable.png"/>
-                                    <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="i18n: 'Sustainably delivered'">
+                                    <!-- ko if: isSustainable -->
+                                    <div class="field-tooltip toggle" style="position: relative;">
+                                        <img style="width: 20px; height: 20px; margin-left: 5px;" class="field-tooltip-action action-help"
+                                            data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true"
+                                            aria-expanded="false" src="/static/frontend/Magento/luma/nl_NL/Montapacking_MontaCheckout/images/sustainable.png" />
+                                        <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="i18n: 'Sustainably delivered'"></div>
                                     </div>
-                                </div>
                                 <!-- /ko -->
-
                                 </div>
                             </div>
-
-                            <div class="montapacking-container-price" data-bind="text: price_string, css: {'color-green': discount_percentage > 0}  "></div>
+<!--                            <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+                            <div class="montapacking-container-price" data-bind="text: priceFormatted, css: { 'color-green': discountPercentage > 0 }"></div>
                             <div class="clearboth"></div>
                         </div>
 
 
-                        <!-- ko if: extras-->
+                        <!-- ko if: deliveryOptions-->
+
                         <div class="montapacking-container-delivery-options">
 
-                            <!-- ko if: extras.length > 0 -->
+                            <!-- ko if: deliveryOptions.length > 0 -->
                             <p class="normal" data-bind="i18n: 'Choose your desired additional options'"></p>
                             <!-- /ko -->
-                            <div data-bind="foreach: extras">
 
+                            <div data-bind="foreach: deliveryOptions">
                                 <div class="montapacking-delivery-option">
                                     <input
                                         data-bind="value: code, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +code + ']', id: $parent.code +code}"
                                         type="checkbox"
-                                        class="radio"/>
-                                    <label data-bind="text: name, attr: {for: $parent.code +code}"></label>
-                                    <span class="delivery-fee" data-bind="text: price_string"></span>
-                                    <span class="delivery-fee-hidden montapacking-hidden" data-bind="text: price_raw"></span>
+                                        class="radio_kevkev"/>
+                                    <label data-bind="text: description, attr: {for: $parent.code +code}"></label>
+                                    <span class="delivery-fee" data-bind="text: priceFormatted"></span>
+                                    <span class="delivery-fee-hidden montapacking-hidden" data-bind="text: price"></span>
                                 </div>
                             </div>
 
                         </div>
                         <!-- /ko -->
 
-                        <!-- ko if: optionCodes-->
-                        <div class="montapacking-container-delivery-optioncodes">
-                            <div data-bind="foreach: optionCodes">
+<!--                        &lt;!&ndash; ko if: optioncodes&ndash;&gt;-->
+<!--                        <div class="montapacking-container-delivery-optioncodes">-->
+<!--                            <div data-bind="foreach: optioncodes">-->
 
-                                <input
-                                    data-bind="value: $data, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +$data + ']', id: $parent.code +$data}"
-                                    type="hidden"
-                                    class="text"/>
+<!--                                <input-->
+<!--                                    data-bind="value: $data, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +$data + ']', id: $parent.code +$data}"-->
+<!--                                    type="hidden"-->
+<!--                                    class="text"/>-->
 
-                            </div>
+<!--                            </div>-->
 
-                        </div>
-                        <!-- /ko -->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; /ko &ndash;&gt;-->
 
 
                         <div class="montapacking-container-select-option montapacking-styled-radiobutton">
+
+<!--                            <h1 data-bind="$parents"></h1>-->
+<!--                            <pre data-bind="text: $parents"></pre>-->
+<!--                            <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+
                             <input
                                 data-bind="click: $parents[1].selectShipper.bind($element), checked: $parent.selectedShippers, , attr: {id: code, value: code}"
                                 type="radio" class="montapacking_delivery_option" class="radio"
@@ -248,7 +279,6 @@
                 <div class="montapacking-container-header">
 
                     <div class="montapacking-container-logo"></div>
-
                     <div class="montapacking-container-content">
                         <p class="montapacking-pickup-information-company"></p>
                         <p class="montapacking-pickup-information-description-distance italic"></p>
@@ -293,7 +323,6 @@
 
             <!-- /ko -->
 
-
             <!-- ko if: pickupServices().length > 0 -->
 
             <div class="container montapacking-pickup-service pickup-information">
@@ -304,84 +333,83 @@
 
             <!-- /ko -->
 
-
             <!-- ko if: pickupServices().length > 0 -->
             <div data-bind="foreach: pickupServices">
+                <div data-bind="attr: {'data-markerid': marker_id}" class="container montapacking-pickup-service pickup-option">
 
-                <div data-bind="foreach: options">
+                    <span class="notranslate cropped_shipper montapacking-hidden" data-bind="text: shipperCode"></span>
+                    <span class="notranslate cropped_company montapacking-hidden" data-bind="text: company "></span>
+                    <span class="notranslate cropped_street montapacking-hidden" data-bind="text: street "></span>
+                    <span class="notranslate cropped_housenumber montapacking-hidden" data-bind="text: houseNumber "></span>
+                    <span class="notranslate cropped_postal montapacking-hidden" data-bind="text: postalCode "></span>
+                    <span class="notranslate cropped_city montapacking-hidden" data-bind="text: city "></span>
+                    <span class="notranslate cropped_description montapacking-hidden" data-bind="text: displayName + ' | ' + distanceMeters + 'meters' "></span>
+                    <span class="notranslate cropped_description_storelocator montapacking-hidden" data-bind="text: displayName "></span>
+                    <span class="notranslate cropped_country montapacking-hidden" data-bind="text: countryCode "></span>
+                    <span class="notranslate cropped_price montapacking-hidden" data-bind="text: price"></span>
+                    <span class="notranslate cropped_code montapacking-hidden" data-bind="text: code"></span>
+                    <span class="notranslate cropped_image_class montapacking-hidden" data-bind="text: shipperCode"></span>
+                    <span class="notranslate cropped_lng montapacking-hidden" data-bind="text: longitude "></span>
+                    <span class="notranslate cropped_lat montapacking-hidden" data-bind="text: latitude "></span>
+                    <span class="notranslate cropped_distance montapacking-hidden" data-bind="text: distanceMeters"></span>
+<!--                    <span class="notranslate cropped_optioncodes montapacking-hidden" data-bind="text: optionCodes"></span>-->
+                    <!--                        <span class="notranslate cropped_optionswithvalue montapacking-hidden" data-bind="text: optionsWithValue"></span>-->
+                    <!--                        <span class="notranslate cropped_codepickup montapacking-hidden" data-bind="text: code_pickup"></span>-->
 
-                    <!-- ko -->
+                    <div class="montapacking-container-header">
 
-                    <div data-bind="attr: {'data-markerid': marker_id}" class="container montapacking-pickup-service pickup-option">
+                        <!--- For Images, replace later with code -->
+                        <div data-bind="css: company" class="montapacking-container-logo"></div>
 
-                        <span class="notranslate cropped_shipper montapacking-hidden" data-bind="text: image"></span>
-                        <span class="notranslate cropped_company montapacking-hidden" data-bind="text: $parent.description.Company "></span>
-                        <span class="notranslate cropped_street montapacking-hidden" data-bind="text: $parent.description.Street "></span>
-                        <span class="notranslate cropped_housenumber montapacking-hidden" data-bind="text: $parent.description.HouseNumber "></span>
-                        <span class="notranslate cropped_postal montapacking-hidden" data-bind="text: $parent.description.PostalCode "></span>
-                        <span class="notranslate cropped_city montapacking-hidden" data-bind="text: $parent.description.City "></span>
-                        <span class="notranslate cropped_description montapacking-hidden" data-bind="text: description_string "></span>
-                        <span class="notranslate cropped_description_storelocator montapacking-hidden" data-bind="text: description_string_storelocator "></span>
-                        <span class="notranslate cropped_country montapacking-hidden" data-bind="text: $parent.description.CountryCode "></span>
-                        <span class="notranslate cropped_price montapacking-hidden" data-bind="text: price_raw"></span>
-                        <span class="notranslate cropped_code montapacking-hidden" data-bind="text: code"></span>
-                        <span class="notranslate cropped_image_class montapacking-hidden" data-bind="text: image"></span>
-                        <span class="notranslate cropped_lng montapacking-hidden" data-bind="text: $parent.description.Longitude "></span>
-                        <span class="notranslate cropped_lat montapacking-hidden" data-bind="text: $parent.description.Latitude "></span>
-                        <span class="notranslate cropped_distance montapacking-hidden" data-bind="text: $parent.description.Distance "></span>
-                        <span class="notranslate cropped_optioncodes montapacking-hidden" data-bind="text: optionCodes"></span>
-                        <span class="notranslate cropped_optionswithvalue montapacking-hidden" data-bind="text: optionsWithValue"></span>
-                        <span class="notranslate cropped_codepickup montapacking-hidden" data-bind="text: code_pickup"></span>
+                        <div class="montapacking-container-content">
+                            <p data-bind="text: company"></p>
+                            <!--                                <p class="italic" data-bind="text: description_string"></p>-->
+                            <p class="normal" data-bind="text: company +' '+ houseNumber"></p>
+                            <p class="normal" data-bind="text: postalCode +' '+ city+' ('+countryCode+')'">></p>
 
-
-                        <div class="montapacking-container-header">
-
-                            <div data-bind="css: image_replace" class="montapacking-container-logo"></div>
-
-                            <div class="montapacking-container-content">
-                                <p data-bind="text: $parent.description.Company"></p>
-                                <p class="italic" data-bind="text: description_string"></p>
-                                <p class="normal" data-bind="text: $parent.description.Company +' '+$parent.description.HouseNumber"></p>
-                                <p class="normal" data-bind="text: $parent.description.PostalCode +' '+$parent.description.City+' ('+$parent.description.CountryCode+')'">></p>
-
-                                <p><a class="open-business-hours" data-bind="click: $parents[1].showBusinessHours.bind($element), i18n: 'Show business hours'"></a></p>
-                            </div>
-                            <!-- ko if: $parent.description.OpeningTimes-->
-                            <div class="montapacking-container-price" data-bind="text: price_string"></div>
-                            <!-- /ko -->
-                            <div class="clearboth"></div>
-                        </div>
-                        <!-- ko if: $parent.description.OpeningTimes-->
-                        <div class="table-container block-business-hours">
-                            <a class="close" data-bind="click: $parents[1].closeBusinessHours.bind($element), i18n: 'Close'"></a>
-                            <div class="table">
-
-                                <div data-bind="foreach: $parent.description.OpeningTimes">
-                                    <!-- ko -->
-                                    <div class="row">
-                                        <div class="cell" data-bind="text: Day"></div>
-                                        <div class="cell">
-                                            <div data-bind="foreach: OpeningTimes">
-                                                <span data-bind="text: From +' - '+To"></span><br>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /ko -->
-                                </div>
-                            </div>
+                            <!--                                <p><a class="open-business-hours" data-bind="click: $parents[1].showBusinessHours.bind($element), i18n: 'Show business hours'"></a></p>-->
                         </div>
 
+                        <!-- ko if: openingTimes-->
+                            <div class="montapacking-container-price" data-bind="text: priceFormatted"></div>
                         <!-- /ko -->
 
+                        <div class="clearboth"></div>
+                    </div>
+                    <!-- ko if: openingTimes -->
+                    <div class="table-container block-business-hours">
+<!--                        <a class="close" data-bind="click: $parents[1].closeBusinessHours.bind($element), i18n: 'Close'"></a>-->
+                        <div class="table">
 
-                        <div class="montapacking-container-select-option montapacking-styled-radiobutton">
-                            <input data-bind="value: code, attr: {id: code}, click: $parents[1].selectPickUp.bind($element), checked: $parent.selectedShippers" type="radio"
-                                   class="radio initialPickupRadio" name="montapacking[pickup]"/>
-                            <label data-bind="attr: {for: code}, i18n: 'Select pick-up point'" ></label>
+                            <div data-bind="foreach: openingTimes">
+
+                                <div class="row">
+                                    <div class="cell" data-bind="text: day"></div>
+                                    <div class="cell">
+<!--                                        <div data-bind="foreach: OpeningTimes">-->
+<!--                                            <span data-bind="text: From +' - '+To"></span><br>-->
+<!--                                        </div>-->
+
+
+
+                                            <span data-bind="text: from +' - '+to"></span><br>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-
                     </div>
 
+
+                    <div class="montapacking-container-select-option montapacking-styled-radiobutton">
+
+                        <input data-bind="value: code, attr: {id: code}, click: $parent.selectPickUp.bind($element), $parent.checked: selectedShippers" type="radio"
+                               class="radio initialPickupRadio" name="montapacking[pickup]"/>
+
+                        <label data-bind="attr: {for: code}, i18n: 'Select pick-up point'" ></label>
+                    </div>
                     <!-- /ko -->
                 </div>
             </div>
