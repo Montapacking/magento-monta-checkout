@@ -900,6 +900,7 @@ define(
                             'DHLFYPickupPoint': [site_url + '/images/DHLFYPickupPoint.png', 32, 32],
                             'DHLParcelConnectPickupPoint': [site_url + '/images/DHLParcelConnectPickupPoint.png', 32, 32],
                             'DHLservicepuntGroot': [site_url + '/images/DHLservicepuntGroot.png', 32, 32],
+                            'BudbeePickupPoint': [site_url + '/images/BudbeePickupPoint.png', 32, 32],
                             'GLSPickupPoint': [site_url + '/images/GLSPickupPoint.png', 32, 32],
                             'UPSAP': [site_url + '/images/UPSAP.png', 32, 32]
                         },

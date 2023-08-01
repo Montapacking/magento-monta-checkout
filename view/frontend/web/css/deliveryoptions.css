@@ -306,7 +306,8 @@
     background-image: url(../images/FedEx.png) !important;
 }
 
-.montapacking-container-logo.Budbee{
+.montapacking-container-logo.Budbee,
+.montapacking-container-logo.BudbeePickupPoint{
     background-image: url(../images/BudBee.png) !important;
 }
 
