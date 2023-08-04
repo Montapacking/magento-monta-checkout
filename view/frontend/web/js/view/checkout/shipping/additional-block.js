@@ -54,7 +54,7 @@ define(
                         });
                     });
 
-                    self = this;
+                    window.monta_plugin = this;
 
                     const url = new URL(window.location.href).toString();
 
@@ -139,7 +139,7 @@ define(
 
                             this.getDeliveryServices(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, false);
 
-                            self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true, this.addressChanged);
+                            window.monta_plugin.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-delivery', '.pickup-services', '.delivery-services', false, true, this.addressChanged);
 
                             // fill old adress field
                             const existCondition = setInterval(function () {
@@ -152,7 +152,7 @@ define(
                         }.bind(this)
                     );
 
-                    self.loadPopup();
+                    window.monta_plugin.loadPopup();
 
                     return this;
                 },
@@ -233,7 +233,7 @@ define(
 
                                 const filteredDeliveryServicesList = objectArray.filter(timeframe => timeframe.options[0].date !== '');
                                 if (filteredDeliveryServicesList.length > 0) {
-                                    const distinctFilteredItems = self.initDatePicker(objectArray);
+                                    const distinctFilteredItems = window.monta_plugin.initDatePicker(objectArray);
                                     this.filteredDeliveryServices(filteredDeliveryServicesList.filter(timeframe =>
                                         timeframe.options[0].date === distinctFilteredItems[0].date));
 
@@ -261,7 +261,7 @@ define(
                 },
 
                 renderedHandler: function(){
-                    self.setPreferredShipper();
+                    window.monta_plugin.setPreferredShipper();
                 },
 
                 setPreferredShipper(){
@@ -365,7 +365,7 @@ define(
                     target.addClass("selected_day");
                     target[0].scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
 
-                    self.setfilterDeliveryServicesByDate(date);
+                    window.monta_plugin.setfilterDeliveryServicesByDate(date);
                 },
 
                 setfilterDeliveryServicesByDate: function (date) {
@@ -414,7 +414,7 @@ define(
                             const address = JSON.parse($("#old_address").val());
 
                             if ($("#montapacking_addresschangedsincelastlonglatcall").val() === 'true' || $("#montapacking_latitude").val() === "" || $("#montapacking_longitude").val() === "") {
-                                self.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
+                                window.monta_plugin.getLongLat(address.street, address.postcode, address.city, address.country, address.housenumber, address.housenumberaddition, true);
                                 $("#montapacking_addresschangedsincelastlonglatcall").val('false');
                             }
 
@@ -574,8 +574,8 @@ define(
                         }
                     );
 
-                    self.setDeliveryOption('delivery', details, additional_info);
-                    self.deliveryFee(total_price);
+                    window.monta_plugin.setDeliveryOption('delivery', details, additional_info);
+                    window.monta_plugin.deliveryFee(total_price);
 
                     pickupShop().parcelShopAddress(null);
 
@@ -681,8 +681,8 @@ define(
                         }
                     );
 
-                    self.setDeliveryOption('pickup', details, additional_info);
-                    self.pickupFee(total_price);
+                    window.monta_plugin.setDeliveryOption('pickup', details, additional_info);
+                    window.monta_plugin.pickupFee(total_price);
                     pickupShop().parcelShopAddress(additional_info[0]);
 
                     return true;
@@ -738,7 +738,7 @@ define(
                         '<div class="positioning">' + html + '</div>'
                     );
 
-                    ko.applyBindings(self, document.getElementById('modular-container'));
+                    ko.applyBindings(window.monta_plugin, document.getElementById('modular-container'));
 
                     document.getElementById('storelocator-postcode-search-button').addEventListener('click', () => {
                         let newZip = document.getElementById('storelocator-postcode-search-input').value;
@@ -775,9 +775,9 @@ define(
                                         function (longlat) {
                                             $("#montapacking_latitude").val(longlat['latitude']);
                                             $("#montapacking_longitude").val(longlat['longitude']);
-                                            self.loadMap();
+                                            window.monta_plugin.loadMap();
                                             document.getElementById('category-filters').style.visibility = 'hidden';
-                                            self.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-pickup', '.pickup-services', '.pickup-services', true, true);
+                                            window.monta_plugin.toggleTab('.montapacking-tab-pickup', '.montapacking-tab-pickup', '.pickup-services', '.pickup-services', true, true);
                                         }.bind(this));
                                 }.bind(this)
                             );
@@ -792,11 +792,11 @@ define(
                     return false;
 
                 },
-                
+
                 createSiteUrl: function(){
                     const dataUrl = window.dataUrl.split('/');
                     const site_url = dataUrl.slice(5,-2);
-                    site_url.unshift('static');  
+                    site_url.unshift('static');
                     site_url.push('Montapacking_MontaCheckout');
 
                     return '/' + site_url.join("/");
@@ -815,7 +815,7 @@ define(
                             const useLocator = $('#bh-sl-map-container');
                             /* Map */
                             if (useLocator) {
-                                self.loadMap();
+                                window.monta_plugin.loadMap();
                             }
                         }
                     );
@@ -829,13 +829,13 @@ define(
                         document.getElementsByClassName('bh-sl-loc-list')[0].style.width = '100%';
                     }
                     const html = $("#storelocator_container").html();
-                    self.showPopup(html);
+                    window.monta_plugin.showPopup(html);
                     $('body').trigger('processStop');
 
                 }, loadMap: function () {
                     const useLocator = $('#bh-sl-map-container');
                     const markers = [];
-                    const site_url = createSiteUrl();
+                    const site_url = window.monta_plugin.createSiteUrl();
                     $(".montapacking-pickup-service.pickup-option").each(
                         function (index) {
                             const openingtimes = $(this).find(".table-container .table").html();
@@ -900,6 +900,7 @@ define(
                             'DHLFYPickupPoint': [site_url + '/images/DHLFYPickupPoint.png', 32, 32],
                             'DHLParcelConnectPickupPoint': [site_url + '/images/DHLParcelConnectPickupPoint.png', 32, 32],
                             'DHLservicepuntGroot': [site_url + '/images/DHLservicepuntGroot.png', 32, 32],
+                            'BudbeePickupPoint': [site_url + '/images/BudbeePickupPoint.png', 32, 32],
                             'GLSPickupPoint': [site_url + '/images/GLSPickupPoint.png', 32, 32],
                             'UPSAP': [site_url + '/images/UPSAP.png', 32, 32]
                         },
@@ -915,16 +916,16 @@ define(
                         },
                         callbackFilters: function () {
                             const html = $("#storelocator_container").html();
-                            self.showPopup(html);
+                            window.monta_plugin.showPopup(html);
                             $('body').trigger('processStop');
                         },
                         callbackFormVals: function () {
                             const html = $("#storelocator_container").html();
-                            self.showPopup(html);
+                            window.monta_plugin.showPopup(html);
                             $('body').trigger('processStop');
                         },
                         callbackNotify: function (error) {
-                            self.LoadFallbackList(useLocator);
+                            window.monta_plugin.LoadFallbackList(useLocator);
                         }
                     };
                     if (!useLocator.data('plugin_storeLocator')) {
@@ -935,7 +936,7 @@ define(
                         $('#bh-sl-map-container').show();
                     } else {
                         var html = $("#storelocator_container").html();
-                        self.showPopup(html);
+                        window.monta_plugin.showPopup(html);
                         $('body').trigger('processStop');
                     }
                     $("#montapacking_addresschangedsincelastmapload").val('false');

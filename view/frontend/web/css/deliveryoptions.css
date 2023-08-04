@@ -306,7 +306,8 @@
     background-image: url(../images/FedEx.png) !important;
 }
 
-.montapacking-container-logo.Budbee{
+.montapacking-container-logo.Budbee,
+.montapacking-container-logo.BudbeePickupPoint{
     background-image: url(../images/BudBee.png) !important;
 }
 
@@ -315,17 +316,26 @@
 .montapacking-container-logo.DHLpallet,
 .montapacking-container-logo.DHLservicepunt,
 .montapacking-container-logo.SELSELBuspakje,
+.montapacking-container-logo.SELBuspakje,
 .montapacking-container-logo.DHLParcelConnect,
 .montapacking-container-logo.DHLFYPickupPoint,
 .montapacking-container-logo.DHLservicepuntGroot,
 .montapacking-container-logo.DHLFYPakket,
+.montapacking-container-logo.DHLFYBuspakje,
+.montapacking-container-logo.DHLParcelConnectGroot,
+.montapacking-container-logo.DHLDEWarenpost,
+.montapacking-container-logo.DHLEP,
 .montapacking-container-logo.SELGroot,
+.montapacking-container-logo.DHLDE,
+.montapacking-container-logo.DHLDEGroot,
 .montapacking-container-logo.SEL {
     background-image: url(../images/DHL.png) !important;
 }
 
 .montapacking-container-logo.DPD,
 .montapacking-container-logo.DPDPL,
+.montapacking-container-logo.DPDGroot,
+.montapacking-container-logo.DPDparcelstoreGroot,
 .montapacking-container-logo.DPDparcelstore{
     background-image: url(../images/DPD.png) !important;
 }
