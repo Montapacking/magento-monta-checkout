@@ -129,6 +129,11 @@ define(
                     2 : $("input[name*='street[2]']").val()
                 };
 
+                if ($("input[name*='streetNumber']").length > 0 && $("input[name*='strNumberAddition']").length > 0){
+                    address.housenumber = $("input[name*='streetNumber']").val();
+                    address.housenumberaddition   = $("input[name*='strNumberAddition']").val();
+                }
+
                 if (!address.country || !address.postcode) {
                     return false;
                 }
