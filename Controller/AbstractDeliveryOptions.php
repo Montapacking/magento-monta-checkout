@@ -5,8 +5,9 @@ namespace Montapacking\MontaCheckout\Controller;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\RequestInterface;
-use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 use Monta\CheckoutApiWrapper\Objects\Settings;
+use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
+//use Monta\CheckoutApiWrapper\Objects\Settings;
 use Monta\CheckoutApiWrapper\MontapackingShipping as MontpackingApi;
 
 abstract class AbstractDeliveryOptions extends Action
@@ -70,6 +71,22 @@ abstract class AbstractDeliveryOptions extends Action
 
     public function generateApi(RequestInterface $request, $language, $logger = null, $use_googlekey = false)
     {
+//        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+//        $directory = $objectManager->get('\Magento\Framework\Filesystem\DirectoryList');
+//        $rootDir = $directory->getRoot();
+//
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/MontapackingShipping.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/Address.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/OpeningTime.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/Option.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/Order.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/PickupPoint.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/Product.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/Settings.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/Shipper.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/ShippingOption.php';
+//        require_once $directory->getRoot() . '/app/code/Montapacking/MontaCheckout/vendor/monta/checkout-api-wrapper/src/Objects/TimeFrame.php';
+
         if($request->getParam('street') != null && is_array($request->getParam('street')) && count($request->getParam('street')) > 1){
             $street =  trim(implode(" ", $request->getParam('street')));
         } else if ($request->getParam('street') != null) {
@@ -121,25 +138,21 @@ abstract class AbstractDeliveryOptions extends Action
          */
         $cart = $this->getCart();
 
-
         /**
          * Todo: Fix to make dynamic from Magento settings later
          */
         $settings = new Settings(
-            'origin',
-            'username',
-            'password',
+            $webshop,
+            $username,
+            $password,
             true,
             4,
-            'apikey',
+            $googleapikey,
             200
         );
 
-
-
         $oApi = new MontpackingApi($settings, $language);
         $oApi->setAddress($street, $housenumber, $housenumberaddition, $postcode, $city, $state, $country);
-
 
         $priceIncl = $cart->getQuote()->getSubtotal();
         $priceExcl = $cart->getQuote()->getSubtotal();
@@ -160,7 +173,13 @@ abstract class AbstractDeliveryOptions extends Action
 
 
         foreach($items as $item) {
-            $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
+            $oApi->addProduct(
+                $item->getSku(),
+                $item->getQty(),
+                $item->getData('length') ?: 0,
+                $item->getData('width') ?: 0,
+                $item->getData('weight') ?: 0
+            );
         }
 
 //        foreach ($items as $item) {
@@ -201,10 +220,8 @@ abstract class AbstractDeliveryOptions extends Action
 //            $oApi->setOnstock(false);
 //        }
 
-
-
 //        $frames = $oApi->getShippingOptions($bAllProductsAvailable, false, false, false, false);
-        $frames = $oApi->getShippingOptions(true, false, false, false, false);
+        $frames = $oApi->getShippingOptions();
 
         return $frames;
     }
