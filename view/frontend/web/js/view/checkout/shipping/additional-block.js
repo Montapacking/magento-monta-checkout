@@ -240,9 +240,6 @@ console.log('LONG LAT js method', street)
                                             return timeframe.date === distinctFilteredItems[0].date
                                     }));
 
-
-                                    console.log('We end with ', filteredDeliveryServicesList.length)
-
                                     // set width of date picker by number of list items
                                     const width = $("ol li").length;
                                     $("#slider-content").width(width * 110);
@@ -255,9 +252,9 @@ console.log('LONG LAT js method', street)
                                     $('#slider-content ol li:nth-child(' + (indexOfDay + 1) + ')').trigger("click");
                                 }
 
-                                this.standardDeliveryServices(objectArray.filter(timeframe =>
-                                    timeframe.options[0].from === "" &&
-                                    timeframe.options[0].type === 'Unknown'));
+                                var fakeTimeframe = {};
+                                fakeTimeframe['options'] = [services[3]];
+                                this.standardDeliveryServices(fakeTimeframe);
                             }
 
                             let marker_id = 1;
@@ -284,8 +281,6 @@ console.log('LONG LAT js method', street)
                     var standardDeliveryServicesElement = $("#standard-delivery-services .delivery-option:not(.SameDayDelivery)");
                     var filteredDeliveryServicesElement = $("#deliveryServices-delivery-services .delivery-option:not(.SameDayDelivery)");
 
-                    // var somanyitems = this.filteredDeliveryServices().toArray();
-                    console.log('dbg kevin', this.filteredDeliveryServices()[0].options.length)
                     if(this.preferredShipper != null &&
                         standardDeliveryServicesElement.length == this.standardDeliveryServices().length &&
                         filteredDeliveryServicesElement.length == this.filteredDeliveryServices()[0].options.length) {
@@ -302,8 +297,6 @@ console.log('LONG LAT js method', street)
                 },
 
                 initDatePicker: function (objectArray) {
-                    console.log('Init Date Picker', objectArray);
-
                     /** Add DiscountPercentage to array list because the datepicker use it on date level instead on shipping level */
                    objectArray = objectArray.filter(datepicker => datepicker.options.some(o => {
                        datepicker['discount'] = o.discountPercentage;

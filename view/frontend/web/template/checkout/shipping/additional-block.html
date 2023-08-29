@@ -33,7 +33,7 @@
 
     </div>
 
-    <!-- ko if: standardDeliveryServices().length > 0 -->
+    <!-- ko if: standardDeliveryServices() != null -->
 
     <div data-bind="foreach: standardDeliveryServices" class="clearboth" id="standard-delivery-services">
         <div data-bind="template: {name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
@@ -61,6 +61,7 @@
 <!--                        &lt;!&ndash; /ko &ndash;&gt;-->
 <!--                    </li>-->
 
+                    <!-- ko if: date != null -->
                     <li class="montapacking-tab day" data-bind="click: $parent.getfilterDeliveryServicesByDate.bind($parent), css: { 'day-discount': 10 }">
                         <p data-bind="text: day, css: {'day-text-discount': discount > 0 }"></p>
                         <p data-bind="text: date"></p>
@@ -69,6 +70,7 @@
                             <p data-bind="text: discount + '%'"  class="discount-percentage"></p>
                         <!-- /ko -->
                     </li>
+                    <!-- /ko -->
                 </ol>
             </div>
         </div>
@@ -79,9 +81,6 @@
     <div class="montapacking-services">
 
         <div class="delivery-services">
-
-<!--            <pre data-bind="text: filteredDeliveryServices().length"></pre>-->
-<!--            <pre data-bind="text: standardDeliveryServices().length"></pre>-->
 
             <!-- ko if: filteredDeliveryServices().length > 0  || standardDeliveryServices().length > 0 -->
             <div class="container montapacking-delivery-service delivery-information displaynone">
@@ -152,9 +151,10 @@
 
             <script type="text/html" id="deliveryServices-template">
 
-<!--                <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
 
                 <div data-bind="foreach: options">
+
+<!--                                    <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
 
 <!--                    <pre data-bind="text: shipper"></pre>-->
 
@@ -165,7 +165,7 @@
 
                     <div data-bind="css: $parent.code" class="container montapacking-delivery-service delivery-option">
 
-<!--                        <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>-->
+<!--                        <pre data-bind="text: ko.toJSON($options, null, 2)"></pre>-->
 <!--                        <span data-bind="text: $parent.day"></span>-->
 
                         <span class="notranslate cropped_name montapacking-hidden" data-bind="text: displayName"></span>
@@ -223,7 +223,7 @@
                                     <input
                                         data-bind="value: code, attr: {name: 'montapacking[shipper][extras][' +$parent.code + '][' +code + ']', id: $parent.code +code}"
                                         type="checkbox"
-                                        class="radio_kevkev"/>
+                                        class="radio"/>
                                     <label data-bind="text: description, attr: {for: $parent.code +code}"></label>
                                     <span class="delivery-fee" data-bind="text: priceFormatted"></span>
                                     <span class="delivery-fee-hidden montapacking-hidden" data-bind="text: price"></span>

@@ -100,23 +100,9 @@ class Delivery extends AbstractDeliveryOptions
 
         try {
             $oApi = $this->generateApi($request, $language, $this->_logger, true);
+            $this->checkoutSession->setLatestShipping([$oApi['DeliveryOptions'], $oApi['PickupOptions'],  $oApi['CustomerLocation'], $oApi['StandardShipper']]);
 
-//            $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
-//
-//            $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions']);
-//            $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions']);
-//
-//            $this->checkoutSession->setLatestShipping([$shippingoptions_formatted, $pickupoptions_formatted]);
-
-//            return $this->jsonResponse([$shippingoptions_formatted, $pickupoptions_formatted]);
-
-            $this->checkoutSession->setLatestShipping([$oApi['DeliveryOptions'], $oApi['PickupOptions'],  $oApi['CustomerLocation']]);
-
-
-            return $this->jsonResponse([$oApi['DeliveryOptions'], $oApi['PickupOptions'], $oApi['CustomerLocation']]);
-
-
-
+            return $this->jsonResponse([$oApi['DeliveryOptions'], $oApi['PickupOptions'], $oApi['CustomerLocation'], $oApi['StandardShipper']]);
         } catch (Exception $e) {
 
             $context = ['source' => 'Montapacking Checkout'];
