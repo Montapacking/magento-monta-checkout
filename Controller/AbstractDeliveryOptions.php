@@ -7,7 +7,6 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\RequestInterface;
 use Monta\CheckoutApiWrapper\Objects\Settings;
 use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
-//use Monta\CheckoutApiWrapper\Objects\Settings;
 use Monta\CheckoutApiWrapper\MontapackingShipping as MontpackingApi;
 
 abstract class AbstractDeliveryOptions extends Action
@@ -120,7 +119,6 @@ abstract class AbstractDeliveryOptions extends Action
         /**
          * Configs From Admin
          */
-
         $webshop = $this->getCarrierConfig()->getWebshop();
         $username = $this->getCarrierConfig()->getUserName();
         $password = $this->getCarrierConfig()->getPassword();
@@ -132,6 +130,8 @@ abstract class AbstractDeliveryOptions extends Action
 
         $leadingstockmontapacking = $this->getCarrierConfig()->getLeadingStockMontapacking();
         $disabledeliverydays = $this->getCarrierConfig()->getDisableDeliveryDays();
+        $disabledPickupPoints = $this->getCarrierConfig()->getDisablePickupPoints();
+        $defaultShippingCost = $this->getCarrierConfig()->getPrice();
 
         /**
          * Retrieve Order Information
@@ -145,10 +145,11 @@ abstract class AbstractDeliveryOptions extends Action
             $webshop,
             $username,
             $password,
-            true,
+            !$disabledPickupPoints,
             4,
             $googleapikey,
-            200
+            $defaultShippingCost,
+            $language
         );
 
         $oApi = new MontpackingApi($settings, $language);
@@ -171,8 +172,18 @@ abstract class AbstractDeliveryOptions extends Action
 
         $bAllProductsAvailable = true;
 
-
         foreach($items as $item) {
+
+            if(!$leadingstockmontapacking)
+            {
+                $stockItem = $item->getProduct()->getExtensionAttributes()->getStockItem();
+
+                if ($stockItem->getQty() <= 0 || $stockItem->getQty() < $item->getQty()) {
+
+                    $bAllProductsAvailable = false;
+                }
+            }
+
             $oApi->addProduct(
                 $item->getSku(),
                 $item->getQty(),
@@ -182,46 +193,17 @@ abstract class AbstractDeliveryOptions extends Action
             );
         }
 
-//        foreach ($items as $item) {
-//
-//            if ($leadingstockmontapacking) {
-//
-////                $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
-//
-//                if (!$disabledeliverydays) {
-//                    $oApi->addProduct($item->getSku(), $item->getQty(), $item->getData('length'), $item->getData('width'), $item->getData('weight'));
-//
-//                    // we let our api calculate the stock with the added products, so we set the stock on false
-////                    $bAllProductsAvailable = true;
-//
-//                    if (false === $oApi->checkStock($item->getSku())) {
-//                        $bAllProductsAvailable = false;
-//                        break;
-//                    }
-//
-//                }
-//
-//            } else {
-//                $stockItem = $item->getProduct()->getExtensionAttributes()->getStockItem();
-//
-//                //print $stockItem->getQty()."-".$item->getQty();
-//                //exit;
-//                //echo "<pre>";print_r($item->debug());
-//
-//                if ($stockItem->getQty() <= 0 || $stockItem->getQty() < $item->getQty()) {
-//
-//                    $bAllProductsAvailable = false;
-//                    break;
-//                }
-//            }
-//        }
+        if (false === $bAllProductsAvailable || $disabledeliverydays) {
+            $oApi->setOnstock(false);
+        }
 
-//        if (false === $bAllProductsAvailable || $disabledeliverydays) {
-//            $oApi->setOnstock(false);
-//        }
-
-//        $frames = $oApi->getShippingOptions($bAllProductsAvailable, false, false, false, false);
         $frames = $oApi->getShippingOptions();
+
+        if($disabledeliverydays) {
+
+            unset($frames['DeliveryOptions']);
+            $frames['DeliveryOptions'] = [];
+        }
 
         return $frames;
     }
