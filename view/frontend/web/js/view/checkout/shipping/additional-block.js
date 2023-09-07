@@ -356,7 +356,9 @@ define(
                     address.extension_attributes.montapacking_montacheckout_data = checkoutConfig.quoteData.montapacking_montacheckout_data;
 
                     quote.shippingAddress(address);
-                    setShippingInformationAction();
+                    if(quote.shippingMethod() != null && quote.shippingMethod() != undefined) {
+                        setShippingInformationAction();
+                    }
                 },
 
                 getfilterDeliveryServicesByDate: function (date, event) {
