@@ -28,10 +28,10 @@ define(
             allFieldsExists = true,
             valueUpdateNotifier = ko.observable(null);
 
-        if ($("input[name*='postalCode']").length > 0) {
+      
             var fields = [
                 "input[name*='streetNumber']",
-                "input[name*='strNumberAddition",
+                "input[name*='strNumberAddition']",
                 "input[name*='postalCode']",
                 "select[name*='country_id']",
                 "input[name*='street[0]']",
@@ -40,16 +40,6 @@ define(
                 "input[name*='city']",
                 "input[name*='postcode']",
             ];
-        } else {
-            var fields = [
-                "input[name*='street[0]']",
-                "input[name*='street[1]']",
-                "input[name*='street[2]']",
-                "input[name*='city']",
-                "input[name*='postcode']",
-                "select[name*='country_id']",
-            ];
-        }
 
 
         /**
@@ -122,86 +112,26 @@ define(
                  * The street is not always available on the first run.
                  */
                 var shippingAddress = quote.shippingAddress();
-                var quoteStreet = [];
                 if (shippingAddress) {
-                    quoteStreet = (typeof shippingAddress.street === 'undefined') ? [] : shippingAddress.street;
-                }
-
-                if (customer.isLoggedIn() && shippingAddress && quoteStreet.length > 0) {
                     address = {
-                        street: quoteStreet,
                         city: shippingAddress.city,
                         postcode: shippingAddress.postcode,
-                        city: shippingAddress.city,
                         lastname: shippingAddress.lastname,
                         firstname: shippingAddress.firstname,
                         telephone: shippingAddress.telephone,
                         country: shippingAddress.countryId
                     };
-
-                    return address;
                 }
 
-                allFieldsExists = true;
+                address.street = {
+                    0 : $("input[name*='street[0]']").val(),
+                    1 : $("input[name*='street[1]']").val(),
+                    2 : $("input[name*='street[2]']").val()
+                };
 
-                if ($("input[name*='postalCode']").length > 0) {
-               	 allFieldsExists = true;
-               } else {
-	                $.each(
-	                    fields, function () {
-	                        /**
-	                         * Second street may not exist and is therefor not required and should only be observed.
-	                         */
-	                        if (!$(this).length && this !== "input[name*='street[1]']" && this !== "input[name*='street[2]']") {
-	                            allFieldsExists = false;
-	                            return false;
-	                        }
-	                    }
-	                );
-               }
-
-
-                if (!allFieldsExists) {
-                    return null;
-                }
-
-                /**
-                 * Unfortunately Magento does not always fill all fields, so get them ourselves.
-                 */
-
-
-                var countryCheck = "";
-            	if(typeof $("select[name*='country_id']").val() !== "undefined")
-            	{
-            		countryCheck = $("select[name*='country_id']").val();
-            	}
-
-                if ($("input[name*='postalCode']").length > 0 && countryCheck == "NL") {
-                    address.postcode   = $("input[name*='postalCode']").val();
-                    address.housenumber   = $("input[name*='streetNumber']").val();
+                if ($("input[name*='streetNumber']").length > 0 && $("input[name*='strNumberAddition']").length > 0){
+                    address.housenumber = $("input[name*='streetNumber']").val();
                     address.housenumberaddition   = $("input[name*='strNumberAddition']").val();
-                } else {
-                    $("input[name*='postcode']").each((index, input)=> {
-                        if(input.value){
-                            address.postcode = input.value;
-                            return false;
-                        }
-                    })
-
-                    address.street = {
-                        0 : $("input[name*='street[0]']").val(),
-                        1 : $("input[name*='street[1]']").val(),
-                        2 : $("input[name*='street[2]']").val()
-                    };
-                }
-
-                address.city   = $("input[name*='city']").val();
-                address.firstname  = $("input[name*='firstname']").val();
-                address.lastname   = $("input[name*='lastname']").val();
-                address.telephone  = $("input[name*='telephone']").val();
-
-                if (!address.country || address.country !== countryCode) {
-                    address.country = $("select[name*='country_id']").val();
                 }
 
                 if (!address.country || !address.postcode) {
