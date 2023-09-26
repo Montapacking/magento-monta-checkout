@@ -6,6 +6,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Montapacking\MontaCheckout\Model\Config\Provider\Carrier as CarrierConfig;
 use Montapacking\MontaCheckout\Api\MontapackingShipping as MontpackingApi;
 
@@ -16,6 +17,10 @@ abstract class AbstractDeliveryOptions extends Action
 
     public $cart;
 
+    protected $storeManager;
+
+    protected $currency;
+
     /**
      * AbstractDeliveryOptions constructor.
      *
@@ -24,12 +29,15 @@ abstract class AbstractDeliveryOptions extends Action
     public function __construct(
         Context                      $context,
         CarrierConfig                $carrierConfig,
-        \Magento\Checkout\Model\Cart $cart
+        \Magento\Checkout\Model\Cart $cart,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\CurrencyInterface $currencyInterface,
     )
     {
         $this->carrierConfig = $carrierConfig;
-
         $this->cart = $cart;
+        $this->storeManager = $storeManager;
+        $this->currency = $currencyInterface;
 
         parent::__construct(
             $context

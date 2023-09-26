@@ -481,9 +481,10 @@ define(
                     const short_code = image_class;
                     const checked_boxes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-options input[type=checkbox]:checked");
                     const option_codes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-optioncodes input[type=hidden]");
+                    const currency_symbol = $(this).parents(".delivery-option").find(".price_currency_symbol").text();
                     let total_price = parseFloat(price);
 
-                    // set delivery information
+                      // set delivery information
                     $(".delivery-information").find(".montapacking-delivery-information-company").html(name);
                     $(".delivery-information").find(".montapacking-delivery-information-date").html(date_string);
 
@@ -553,8 +554,7 @@ define(
                         }, 250
                     );
 
-
-                    $(".delivery-information").find(".montapacking-container-price").html("&euro; " + total_price);
+                    $(".delivery-information").find(".montapacking-container-price").html(currency_symbol + " " + total_price);
 
                     const additional_info = [];
                     additional_info.push(
@@ -638,8 +638,10 @@ define(
                     $(".pickup-information").find(".montapacking-pickup-information-description-postal-city-country").html(postal + ' ' + city + ' (' + country + ')');
                     $(".pickup-information").find(".table-container .table").html(openingtimes_html);
 
+                    // Set price currency symbol
+                    const price_currency_symbol = $(this).parents(".pickup-option").find(".price_currency_symbol").text();
                     // set price
-                    $(".pickup-information").find(".montapacking-container-price").html("&euro; " + price.replace(".", ","));
+                    $(".pickup-information").find(".montapacking-container-price").html(price_currency_symbol + " " + price.replace(".", ","));
 
                     //set image class
                     $(".pickup-information").find(".montapacking-container-logo").removeClass().addClass("montapacking-container-logo").addClass(image_class);
@@ -861,7 +863,7 @@ define(
                                     'description': $(this).find("span.cropped_description").text(),
                                     'image': site_url + '/images/' + $(this).find("span.cropped_image_class").text() + '.png',
                                     'price': $(this).find("span.cropped_price").text(),
-                                    'priceformatted': $(this).find("span.cropped_price").text().replace(".", ","),
+                                    'priceformatted': $(this).find(".price_currency_symbol").text() + " " + $(this).find("span.cropped_price").text().replace(".", ","),
                                     'openingtimes': openingtimes,
                                     'raw': 1,
                                 }
