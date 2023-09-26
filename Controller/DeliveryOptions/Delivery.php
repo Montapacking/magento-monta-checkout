@@ -6,7 +6,9 @@ use Exception;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Magento\Store\Model\StoreManagerInterface;
 use Montapacking\MontaCheckout\Controller\AbstractDeliveryOptions;
 
 use Montapacking\MontaCheckout\Helper\DeliveryHelper;
@@ -47,12 +49,23 @@ class Delivery extends AbstractDeliveryOptions
      */
     protected $deliveryHelper;
 
+    protected $storeManager;
+
+    protected $currency;
+
     /**
      * Services constructor.
      *
      * @param Context $context
      * @param Session $checkoutSession
+     * @param LocaleResolver $localeResolver
      * @param CarrierConfig $carrierConfig
+     * @param Logger $logger
+     * @param Cart $cart
+     * @param PickupHelper $pickupHelper
+     * @param DeliveryHelper $deliveryHelper
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyInterface $currencyInterface
      */
     public function __construct(
         Context         $context,
@@ -62,7 +75,9 @@ class Delivery extends AbstractDeliveryOptions
         Logger          $logger,
         Cart            $cart,
         PickupHelper    $pickupHelper,
-        DeliveryHelper  $deliveryHelper
+        DeliveryHelper  $deliveryHelper,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\CurrencyInterface $currencyInterface,
     )
     {
         $this->_logger = $logger;
@@ -71,11 +86,15 @@ class Delivery extends AbstractDeliveryOptions
         $this->cart = $cart;
         $this->pickupHelper = $pickupHelper;
         $this->deliveryHelper = $deliveryHelper;
+        $this->storeManager = $storeManager;
+        $this->currency = $currencyInterface;
 
         parent::__construct(
             $context,
             $carrierConfig,
-            $cart
+            $cart,
+            $storeManager,
+            $currencyInterface,
         );
     }
 
@@ -94,10 +113,14 @@ class Delivery extends AbstractDeliveryOptions
         try {
             $oApi = $this->generateApi($request, $language, $this->_logger, true);
 
-            $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
+            $currentStore = $this->storeManager->getStore();
+            $currentCurrencyCode = $currentStore->getCurrentCurrency()->getCode();
+            $currencySymbol = $this->currency->getCurrency($currentCurrencyCode)->getSymbol();
+            $currencyRate = $this->storeManager->getStore()->getCurrentCurrencyRate();
 
-            $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions']);
-            $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions']);
+            $shippingoptions = $oApi->getShippingOptions($oApi->getOnstock());
+            $shippingoptions_formatted = $this->deliveryHelper->formatShippingOptions($shippingoptions['DeliveryOptions'], $currencySymbol, $currencyRate);
+            $pickupoptions_formatted = $this->pickupHelper->formatPickupOptions($shippingoptions['PickupOptions'], $currencySymbol, $currencyRate);
 
             $this->checkoutSession->setLatestShipping([$shippingoptions_formatted, $pickupoptions_formatted]);
 

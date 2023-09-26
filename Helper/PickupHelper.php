@@ -39,7 +39,7 @@ class PickupHelper
      *
      * @return array
      */
-    public function formatPickupOptions($frames)
+    public function formatPickupOptions($frames, $currencySymbol = '€', $currencyRate = 1)
     {
         $items = [];
 
@@ -57,9 +57,6 @@ class PickupHelper
             $hour_string = " Uhr";
         }
 
-        ## Currency symbol
-        $curr = '€';
-
         $marker_id = 0;
         ## Check of er meerdere timeframes zijn, wanneer maar één dan enkel shipper keuze zonder datum/tijd
         if (is_array($frames) || is_object($frames)) {
@@ -74,13 +71,15 @@ class PickupHelper
                     $selected = null;
 
                     ## Lowest price
-                    $lowest = 9999999;
+                    $lowest = 9999999 * $currencyRate;
 
                     ## Shipper opties ophalen
                     $options = null;
                     foreach ($frame->options as $onr => $option) {
                         $from = $option->from;
                         $to = $option->to;
+
+                        $price = $option->price * $currencyRate;
 
                         ## Check of maximale besteltijd voorbij is
                         if (time() < strtotime($option->date) && $selected == null) {
@@ -131,10 +130,10 @@ class PickupHelper
                             'name' => $option->description,
                             'description_string' => $description,
                             'description_string_storelocator' => $description_storelocator,
-                            'price_currency' => $curr,
-                            'price_string' => $curr . ' ' . number_format($option->price, 2, ',', ''),
-                            'price_raw' => number_format($option->price, 2),
-                            'price_formatted' => number_format($option->price, 2, ',', ''),
+                            'price_currency' => $currencySymbol,
+                            'price_string' => $currencySymbol . ' ' . number_format($option->price, 2, ',', ''),
+                            'price_raw' => number_format($price, 2),
+                            'price_formatted' => number_format($price, 2, ',', ''),
                             'from' => date('H:i', strtotime($from)),
                             'to' => date('H:i', strtotime($to)),
                             'date' => date("d-m-Y", strtotime($from)),
@@ -176,8 +175,8 @@ class PickupHelper
                             'date' => date('d-m-Y', strtotime($frame->from)),
                             'time' => date('H:i', strtotime($frame->from)),
                             'description' => $frame->description,
-                            'price_currency' => $curr,
-                            'price_string' => $curr . ' ' . number_format($lowest, 2, ',', ''),
+                            'price_currency' => $currencySymbol,
+                            'price_string' => $currencySymbol . ' ' . number_format($lowest, 2, ',', ''),
                             'price_raw' => number_format($lowest, 2),
                             'price_formatted' => number_format($lowest, 2, ',', ''),
                             'options' => $options
@@ -191,11 +190,13 @@ class PickupHelper
                     $selected = null;
 
                     ## Lowest price
-                    $lowest = 9999999;
+                    $lowest = 9999999 * $currencyRate;
 
                     ## Shipper opties ophalen
                     $options = null;
                     foreach ($frame->options as $onr => $option) {
+
+                        $price = $option->price * $currencyRate;
 
                         ## Check of maximale besteltijd voorbij is
                         if (($option->date == null || time() < strtotime($option->date)) && $selected == null) {
@@ -243,22 +244,21 @@ class PickupHelper
                             'name' => $option->description,
                             'description_string' => $description,
                             'description_string_storelocator' => $description_storelocator,
-                            'price_currency' => $curr,
-                            'price_string' => $curr . ' ' . number_format($option->price, 2, ',', ''),
-                            'price_raw' => number_format($option->price, 2),
-                            'price_formatted' => number_format($option->price, 2, ',', ''),
+                            'price_currency' => $currencySymbol,
+                            'price_string' => $currencySymbol . ' ' . number_format($price, 2, ',', ''),
+                            'price_raw' => number_format($price, 2),
+                            'price_formatted' => number_format($price, 2, ',', ''),
                             'from' => null,
                             'to' => null,
                             'date' => null,
                             'date_string' => null,
                             'date_from_to' => null,
                             'date_from_to_formatted' => null
-
                         ];
 
                         ## Check if we have a lower price
-                        if ($option->price < $lowest) {
-                            $lowest = $option->price;
+                        if ($price < $lowest) {
+                            $lowest = $price;
                         }
 
                     }
@@ -271,8 +271,8 @@ class PickupHelper
                             'date' => null,
                             'time' => null,
                             'description' => $frame->description,
-                            'price_currency' => $curr,
-                            'price_string' => $curr . ' ' . number_format($lowest, 2, ',', ''),
+                            'price_currency' => $currencySymbol,
+                            'price_string' => $currencySymbol . ' ' . number_format($lowest, 2, ',', ''),
                             'price_raw' => number_format($lowest, 2),
                             'price_formatted' => number_format($lowest, 2, ',', ''),
                             'options' => $options

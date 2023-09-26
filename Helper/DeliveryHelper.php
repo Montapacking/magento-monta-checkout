@@ -38,8 +38,12 @@ class DeliveryHelper
      *
      * @return array
      */
-    public function formatShippingOptions($frames)
+    public function formatShippingOptions($frames, $currencySymbol = '€', $currencyRate = 1)
     {
+        if($currencyRate <= 0) {
+            $currencyRate = 1;
+        }
+
         $items = [];
 
         $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
@@ -55,9 +59,6 @@ class DeliveryHelper
         if ($language == 'DE') {
             $hour_string = " Uhr";
         }
-
-        ## Currency symbol
-        $curr = '€';
 
         if (is_array($frames) || is_object($frames)) {
 
@@ -137,11 +138,11 @@ class DeliveryHelper
 
                     $extras = [];
                     if (isset($option->extras) && count($option->extras) > 0) {
-                        $extras = self::calculateExtras($option->extras, $curr);
+                        $extras = self::calculateExtras($option->extras, $currencySymbol, $currencyRate);
                     }
 
                     $options = [];
-                    $created_option = self::calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string); //phpcs:ignore
+                    $created_option = self::calculateOptions($frame, $option, $currencySymbol, $description, $from, $to, $extras, $hour_string, $currencyRate); //phpcs:ignore
 
                     if (null !== $created_option) {
 
@@ -155,7 +156,7 @@ class DeliveryHelper
                             'date' => $from != null && strtotime($from) > 0 ? date('d-m-Y', strtotime($from)) : "",
                             'time' => $time != null ? $time : "", //phpcs:ignore
                             'description' => $frame->description,
-                            'price_currency' => $curr,
+                            'price_currency' => $currencySymbol,
                             'options' => $options
                         ];
                     }
@@ -178,7 +179,7 @@ class DeliveryHelper
         return $items;
     }
 
-    public function calculateExtras($extra_values = [], $curr = '&euro;')
+    public function calculateExtras($extra_values = [], $curr = '€', $currencyRate = 1)
     {
 
         $extras = [];
@@ -188,14 +189,16 @@ class DeliveryHelper
 
                 $language = strtoupper(strstr($this->localeResolver->getLocale(), '_', true));
 
+                $price = $extra->price * $currencyRate;
+
                 ## Extra optie toevoegen
                 $extras[] = (array)[
                     'code' => $extra->code,
                     'name' => __($extra->code),
                     'price_currency' => $curr,
-                    'price_string' => $curr . ' ' . number_format($extra->price, 2, ',', ''),
-                    'price_raw' => number_format($extra->price, 2),
-                    'price_formatted' => number_format($extra->price, 2, ',', ''),
+                    'price_string' => $curr . ' ' . number_format($price, 2, ',', ''),
+                    'price_raw' => number_format($price, 2),
+                    'price_formatted' => number_format($price, 2, ',', ''),
                 ];
 
             }
@@ -204,7 +207,7 @@ class DeliveryHelper
         return $extras;
     }
 
-    public function calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string)
+    public function calculateOptions($frame, $option, $curr, $description, $from, $to, $extras, $hour_string, $currencyRate = 1)
     {
         if ($from != null && (date("Y-m-d", strtotime($from)) == date("Y-m-d") && $frame->code != 'SameDayDelivery')) {
             return null;
@@ -233,6 +236,8 @@ class DeliveryHelper
             $image_code = trim(str_replace(",", "_", implode(",", $option->codes)));
         }
 
+        $price = $option->price * $currencyRate;
+
         $options = (object)[
             'code' => $option->code,
             'codes' => $option->codes,
@@ -243,9 +248,9 @@ class DeliveryHelper
             'name' => $name,
             'description_string' => $description,
             'price_currency' => $curr,
-            'price_string' => $curr . ' ' . number_format($option->price, 2, ',', ''),
-            'price_raw' => number_format($option->price, 2),
-            'price_formatted' => number_format($option->price, 2, ',', ''),
+            'price_string' => $curr . ' ' . number_format($price, 2, ',', ''),
+            'price_raw' => number_format($price, 2),
+            'price_formatted' => number_format($price, 2, ',', ''),
             'from' => $from != null && strtotime($from) > 0 ? date('H:i', strtotime($from)) : "",
             'to' => $to != null && strtotime($to) > 0 ? date('H:i', strtotime($to)) : "",
             'date' => $from != null && strtotime($from) > 0 ? date("d-m-Y", strtotime($from)) : "",
