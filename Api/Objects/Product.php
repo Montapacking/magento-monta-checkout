@@ -43,14 +43,9 @@ class Product
      * @param $weight
      * @param $quantity
      */
-    public function __construct($sku, $length, $width, $height, $weight, $quantity)
+    public function __construct($sku, $quantity)
     {
-
         $this->setSku($sku);
-        $this->setLength($length);
-        $this->setWidth($width);
-        $this->setHeight($height);
-        $this->setWeight($weight);
         $this->setQuantity($quantity);
     }
 
@@ -125,13 +120,8 @@ class Product
      */
     public function toArray()
     {
-
         $product = [
             'SKU' => $this->sku,
-            'LengthMm' => $this->length,
-            'WidthMm' => $this->width,
-            'HeightMm' => $this->height,
-            'WeightGrammes' => $this->weight,
             'Quantity' => $this->quantity,
         ];
 

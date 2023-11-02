@@ -194,10 +194,10 @@ class MontapackingShipping
      * @param int $height
      * @param int $weight
      */
-    public function addProduct($sku, $quantity, $length = 0, $width = 0, $height = 0, $weight = 0)
+    public function addProduct($sku, $quantity)
     {
 
-        $this->_products['products'][] = new MontaCheckout_Product($sku, $length, $width, $height, $weight, $quantity);
+        $this->_products['products'][] = new MontaCheckout_Product($sku, $quantity);
     }
 
     /**
