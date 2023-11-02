@@ -747,6 +747,11 @@ define(
                     document.getElementById('storelocator-postcode-search-button').addEventListener('click', () => {
                         let newZip = document.getElementById('storelocator-postcode-search-input').value;
                         const address = JSON.parse($("#old_address").val());
+
+                        let street = [];
+                        street[0] = "n";
+                        encodeURIComponent(JSON.stringify(street));
+                        
                         if (newZip.length > 0) {
                             $.ajax(
                                 {
@@ -755,7 +760,7 @@ define(
                                     type: 'jsonp',
                                     showLoader: true,
                                     data: {
-                                        street: "n",
+                                        street: street,
                                         postcode: newZip,
                                         country: address.country,
                                         longlat: false
@@ -772,7 +777,7 @@ define(
                                             type: 'jsonp',
                                             showLoader: true,
                                             data: {
-                                                street: "n", postcode: newZip, country: address.country, longlat: true
+                                                street: street, postcode: newZip, country: address.country, longlat: true
                                             }
                                         }
                                     ).done(
