@@ -398,6 +398,11 @@
     background-image: url(../images/Asendia.png) !important;
 }
 
+.montapacking-container-logo.ColisPrive,
+.montapacking-container-logo.ColisPrivePickupPoint {
+    background-image: url(../images/ColisPrive.png) !important;
+}
+
 /* CONTAINER CONTENT */
 
 .montapacking-container-content {
