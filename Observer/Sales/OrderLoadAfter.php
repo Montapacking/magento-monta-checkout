@@ -12,6 +12,7 @@ class OrderLoadAfter implements ObserverInterface
     private $orderExtension;
 
     protected $checkoutSession;
+    protected $messageManager;
 
     /**
      * OrderLoadAfter constructor.
@@ -60,11 +61,14 @@ class OrderLoadAfter implements ObserverInterface
             }
 
             $additional_info = $attr_obj->additional_info[0];
-            if (!in_array($additional_info->name, $shippersOptionst)){
-                die("shipper name not valid");
-            }
-            if($additional_info->date !== $shipperOption->date){
-                die("shipping date not valid");
+            if (count($deliverySession) > 0) 
+            {
+                if (!in_array($additional_info->name, $shippersOptionst)){
+                    die("shipper name not valid");
+                }
+                if($additional_info->date !== $shipperOption->date){
+                    die("shipping date not valid");
+                }
             }
             // end validatie
             
