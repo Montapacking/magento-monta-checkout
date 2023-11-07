@@ -61,10 +61,10 @@ class OrderLoadAfter implements ObserverInterface
 
             $additional_info = $attr_obj->additional_info[0];
             if (!in_array($additional_info->name, $shippersOptionst)){
-                exit;
+                die("shipper name not valid");
             }
-            if($additional_info->date !== $shipperOption->date){
-                exit;
+            if($additional_info->date === $shipperOption->date){
+                die("shipping date not valid");
             }
             // end validatie
             
