@@ -12,7 +12,6 @@ class OrderLoadAfter implements ObserverInterface
     private $orderExtension;
 
     protected $checkoutSession;
-    protected $messageManager;
 
     /**
      * OrderLoadAfter constructor.
