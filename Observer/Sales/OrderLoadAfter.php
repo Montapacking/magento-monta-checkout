@@ -46,6 +46,31 @@ class OrderLoadAfter implements ObserverInterface
         $attr = $order->getData('montapacking_montacheckout_data');
         if($attr != null) {
             $attr_obj = json_decode($attr);
+
+            // user input valideren
+            $shippersOptions = array();
+            $shipperOption = null;
+            foreach($deliverySession as $delivery){
+                foreach($delivery->options as $option){
+                    array_push($shippersOptions, $option->name);
+                    if($option->name === $attr_obj->additional_info[0]->name and $option->code === $attr_obj->additional_info[0]->code){
+                        $shipperOption = $option;
+                    }
+                }
+            }
+
+            $additional_info = $attr_obj->additional_info[0];
+            if (count($deliverySession) > 0)
+            {
+                if (!in_array($additional_info->name, $shippersOptions)){
+                    die("shipper name not valid");
+                }
+                if($additional_info->date !== $shipperOption->date){
+                    die("shipping date not valid");
+                }
+            }
+            // end validatie
+
             foreach($deliverySession as $key => $deliverySessionItem) {
                 foreach($deliverySessionItem->options as $option) {
                     if($key == 0)  {
