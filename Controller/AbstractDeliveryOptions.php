@@ -160,11 +160,6 @@ abstract class AbstractDeliveryOptions extends Action
 
                     // we let our api calculate the stock with the added products, so we set the stock on false
                     $bAllProductsAvailable = false;
-
-                    //if (false === $oApi->checkStock($item->getSku())) {
-                    //    $bAllProductsAvailable = false;
-                    //    break;
-                    //}
                 }
 
             } else {
