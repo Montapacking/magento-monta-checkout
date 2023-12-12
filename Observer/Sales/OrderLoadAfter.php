@@ -50,23 +50,43 @@ class OrderLoadAfter implements ObserverInterface
             // user input valideren
             $shippersOptions = array();
             $shipperOption = null;
-            foreach($deliverySession as $delivery){
-                foreach($delivery->options as $option){
-                    array_push($shippersOptions, $option->name);
-                    if($option->name === $attr_obj->additional_info[0]->name and $option->code === $attr_obj->additional_info[0]->code){
-                        $shipperOption = $option;
+
+            if($attr_obj->type == 'delivery') {
+                foreach($deliverySession as $delivery){
+                    foreach($delivery->options as $option){
+                        array_push($shippersOptions, $option->name);
+                        if($option->name === $attr_obj->additional_info[0]->name and $option->code === $attr_obj->additional_info[0]->code){
+                            $shipperOption = $option;
+                        }
+                    }
+                }
+            } else if($attr_obj->type == 'pickup') {
+                foreach($pickupSession as $pickup){
+                    foreach($pickup->options as $option) {
+                        array_push($shippersOptions, $option->code);
+                        if($option->code === $attr_obj->additional_info[0]->code){
+                            $shipperOption = $option;
+                        }
                     }
                 }
             }
 
+
             $additional_info = $attr_obj->additional_info[0];
-            if (count($deliverySession) > 0)
-            {
-                if (!in_array($additional_info->name, $shippersOptions)){
-                    die("shipper name not valid");
+            if($attr_obj->type == 'delivery') {
+                if (count($deliverySession) > 0) {
+                    if (!in_array($additional_info->name, $shippersOptions)) {
+                        die("shipper name not valid");
+                    }
+                    if ($additional_info->date !== $shipperOption->date) {
+                        die("shipping date not valid");
+                    }
                 }
-                if($additional_info->date !== $shipperOption->date){
-                    die("shipping date not valid");
+            } else if($attr_obj->type == 'pickup') {
+                if (count($pickupSession) > 0) {
+                    if (!in_array($additional_info->code, $shippersOptions)) {
+                        die("Pickup code not valid");
+                    }
                 }
             }
             // end validatie
