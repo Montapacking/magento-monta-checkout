@@ -17,7 +17,7 @@ final class IntegrationTest extends TestCase
     {
         parent::__construct();
 
-        $settings = new Settings($_ENV['SHOP'], $_ENV['USERNAME'], $_ENV['PASSWORD'], true, 10, $_ENV['GOOGLEAPIKEY'], 2);
+        $settings = new Settings($_ENV['SHOP'], $_ENV['USERNAME'], $_ENV['PASSWORD'], _ENV['PICKUP_POINTS_ENABLED'], $_ENV['PICKUP_POINTS_MAX_COUNT'], $_ENV['GOOGLEAPIKEY'], $_ENV["DEFAULT_COSTS"]);
 
         $this->api = new MontapackingShipping($settings, 'nl-NL');
 
