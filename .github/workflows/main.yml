@@ -15,5 +15,4 @@ jobs:
         uses: php-actions/phpunit@master
         with:
           version: 9.6
-          bootstrap: vendor/autoload.php
           configuration: Test/Unit/phpunit.xml
