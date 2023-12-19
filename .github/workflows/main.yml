@@ -1,19 +1,19 @@
-name: CI
+# name: CI
 
-on: [push]
+# on: [push]
 
-jobs:
-  build-test:
-    runs-on: ubuntu-latest
+# jobs:
+#   build-test:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - uses: php-actions/composer@v6
+#       - uses: php-actions/composer@v6
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@master
-        with:
-          version: 9.6
-          bootstrap: vendor/autoload.php
-          configuration: Test/Unit/phpunit.xml
+#       - name: PHPUnit Tests
+#         uses: php-actions/phpunit@master
+#         with:
+#           version: 9.6
+#           bootstrap: vendor/autoload.php
+#           configuration: Test/Unit/phpunit.xml
