@@ -63,6 +63,6 @@ final class IntegrationTest extends TestCase
         $results = $this->api->getShippingOptions();
 
         $this->assertTrue(sizeof($results['DeliveryOptions']) > 0);
-        $this->assertTrue(sizeof($results['PickupOptions']) > 0); 
+        $this->assertTrue(sizeof($results['PickupOptions']) > 0);  
     }
 }
