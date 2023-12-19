@@ -2,8 +2,8 @@ name: CI
 
 on: 
   push:
-    - branches
-        - 'feature/create-test-pipeline' 
+    branches:
+      - 'feature/create-test-pipeline' 
 
 jobs:
   build-test:
