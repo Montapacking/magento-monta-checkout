@@ -185,11 +185,11 @@ abstract class AbstractDeliveryOptions extends Action
             }
 
             $oApi->addProduct(
-                $item->getSku(),
-                $item->getQty(),
-                $item->getData('length') ?: 0,
-                $item->getData('width') ?: 0,
-                $item->getData('weight') ?: 0
+                (string)$item->getSku(),
+                (int)$item->getQty(),
+                (int)$item->getData('length') ?: 0,
+                (int)$item->getData('width') ?: 0,
+                (int)$item->getData('weight') ?: 0
             );
         }
 
