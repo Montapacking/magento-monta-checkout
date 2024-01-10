@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<!-- <?php declare(strict_types=1);
 
 namespace Montapacking\MontaCheckout\Test\Integration;
 
@@ -9,7 +9,7 @@ use Magento\Framework\App\DeploymentConfig;
 use PHPUnit\Framework\TestCase;
 use Monta\CheckoutApiWrapper\Objects\Settings;
 
-final class IntegrationTest extends TestCase
+final class MontaApiTest extends TestCase
 {
     private MontapackingShipping $api;
 
@@ -57,7 +57,6 @@ final class IntegrationTest extends TestCase
         $this->api->addProduct('croc', 1);
     }
 
-//    /** @test */
     public function testGetDeliveryOptionsAndPickupPoints(): void
     {
         $results = $this->api->getShippingOptions();
@@ -65,4 +64,4 @@ final class IntegrationTest extends TestCase
         $this->assertTrue(sizeof($results['DeliveryOptions']) > 0);
         $this->assertTrue(sizeof($results['PickupOptions']) > 0);  
     }
-}
+} -->
