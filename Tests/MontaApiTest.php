@@ -5,7 +5,6 @@ namespace Montapacking\MontaCheckout\Test\Integration;
 use Magento\Framework\Module\Manager;
 use Monta\CheckoutApiWrapper\MontapackingShipping;
 use Magento\Framework\App\DeploymentConfig;
-//
 use PHPUnit\Framework\TestCase;
 use Monta\CheckoutApiWrapper\Objects\Settings;
 
