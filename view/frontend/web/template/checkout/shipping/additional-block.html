@@ -166,13 +166,21 @@
                     <div data-bind="css: $parent.code" class="container montapacking-delivery-service delivery-option">
 
 <!--                        <pre data-bind="text: ko.toJSON($options, null, 2)"></pre>-->
-<!--                        <span data-bind="text: $parent.day"></span>-->
+                        <div data-bind="text: ko.toJSON($data)"></div>
+                        <span data-bind="text: $parent.day"></span>
 
                         <span class="notranslate cropped_name montapacking-hidden" data-bind="text: displayName"></span>
 <!--                        <span class="notranslate cropped_date montapacking-hidden" data-bind="text: date"></span>-->
 <!--                        <span class="notranslate cropped_date_text montapacking-hidden" data-bind="text: date_string"></span>-->
 <!--                        <span class="notranslate cropped_time montapacking-hidden" data-bind="text: date_from_to"></span>-->
 <!--                        <span class="notranslate cropped_time_text montapacking-hidden" data-bind="text: date_from_to_formatted"></span>-->
+                        <!--                        <span class="notranslate cropped_time_text montapacking-hidden" data-bind="text: date_from_to_formatted"></span>-->
+
+                        <span class="notranslate cropped_date montapacking-hidden" data-bind="text: $parent.dateOnlyFormatted"></span>
+                        <span class="notranslate cropped_time_from montapacking-hidden" data-bind="text: from"></span>
+                        <span class="notranslate cropped_time_to montapacking-hidden" data-bind="text: to"></span>
+
+
                         <span class="notranslate cropped_price montapacking-hidden" data-bind="text: price"></span>
 <!--                        <span class="notranslate cropped_code montapacking-hidden" data-bind="text: code"></span>-->
 <!--                        <span class="notranslate cropped_image_class montapacking-hidden" data-bind="text: image"></span>-->

@@ -371,12 +371,12 @@ console.log('LONG LAT js method', street)
                     return this.daysForSelect.some(x=>x.discountPercentage > 0)
                 },
                 setDeliveryOption: function (type, details, additional_info) {
-
                     const deliveryOption = {
                         type: type,
                         details: details,
                         additional_info: additional_info
                     };
+                    console.log('JSON.stringify(deliveryOption)', JSON.stringify(deliveryOption))
 
                     const checkoutConfig = window.checkoutConfig;
                     // Do not refactor this.
@@ -530,7 +530,14 @@ console.log('LONG LAT js method', street)
                         date_text = '';
                     }
 
-                    const time = $(this).parents(".delivery-option").find(".cropped_time").text();
+                    const time_from = $(this).parents(".delivery-option").find(".cropped_time_from").text();
+                    const time_to = $(this).parents(".delivery-option").find(".cropped_time_to").text();
+
+                    // const time = $(this).parents(".delivery-option").find(".cropped_time").text();
+                    const time = `${time_from} - ${time_to}`;
+
+
+
                     const time_text = $(this).parents(".delivery-option").find(".cropped_time_text").text();
                     const price = $(this).parents(".delivery-option").find(".cropped_price").text();
                     const image_class = $(this).parents(".delivery-option").find(".cropped_image_class").text();
@@ -550,6 +557,7 @@ console.log('LONG LAT js method', street)
                         $(".dateblock").css("display", "block");
                     }
 
+                    console.log('time', time)
                     if (time === '00:00-00:00' || time === '') {
                         $(".timeblock").css("display", "none");
                     } else {
