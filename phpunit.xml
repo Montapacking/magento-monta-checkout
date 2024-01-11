@@ -14,7 +14,7 @@
          verbose="true">
     <testsuites>
         <testsuite name="default">
-            <directory>Tests</directory>
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
 
