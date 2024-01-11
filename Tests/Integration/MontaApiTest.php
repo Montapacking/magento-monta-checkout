@@ -1,4 +1,4 @@
-<!-- <?php declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Montapacking\MontaCheckout\Test\Integration;
 
@@ -23,7 +23,7 @@ final class MontaApiTest extends TestCase
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->monta_origin = (string) $_ENV['MONTA_ORIGIN'];
         $this->monta_username = (string) $_ENV['MONTA_USERNAME'];
         $this->monta_password = (string) $_ENV['MONTA_PASSWORD'];
@@ -61,6 +61,6 @@ final class MontaApiTest extends TestCase
         $results = $this->api->getShippingOptions();
 
         $this->assertTrue(sizeof($results['DeliveryOptions']) > 0);
-        $this->assertTrue(sizeof($results['PickupOptions']) > 0);  
+        $this->assertTrue(sizeof($results['PickupOptions']) > 0);
     }
-} -->
+}
