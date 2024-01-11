@@ -56,7 +56,10 @@ final class MontaApiTest extends TestCase
         $this->api->addProduct('croc', 1);
     }
 
-    public function testGetDeliveryOptionsAndPickupPoints(): void
+    /**
+     * @covers MontapackingShipping
+     */   
+    public function testGetDeliveryOptionsAndPickupPoints(): void 
     {
         $results = $this->api->getShippingOptions();
 
