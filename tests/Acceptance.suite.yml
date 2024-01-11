@@ -12,9 +12,9 @@ modules:
             url: https://test-magento2.monta.nl/
             browser: chrome
             capabilities:
-              acceptInsecureCerts: true
+                acceptInsecureCerts: true
             chromeOptions:
-              args: [ "--lang=nl" ]
+                args: [ "--lang=nl" ]
 # add Codeception\Step\Retry trait to AcceptanceTester to enable retries
 step_decorators:
     - Codeception\Step\ConditionalAssertion
