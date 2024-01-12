@@ -143,6 +143,7 @@
 
             <!-- /ko -->
 
+<!--            <pre data-bind="text: JSON.stringify(ko.toJS(filteredDeliveryServices()), null, 2)"></pre>-->
             <!-- ko if: filteredDeliveryServices().length > 0 -->
            <div data-bind="foreach: filteredDeliveryServices" class="clearboth" id="deliveryServices-delivery-services">
                <div data-bind="template: { name: 'deliveryServices-template', afterRender:  $parent.renderedHandler }"></div>
@@ -165,9 +166,8 @@
 
                     <div data-bind="css: $parent.code" class="container montapacking-delivery-service delivery-option">
 
-<!--                        <pre data-bind="text: ko.toJSON($options, null, 2)"></pre>-->
-                        <div data-bind="text: ko.toJSON($data)"></div>
-                        <span data-bind="text: $parent.day"></span>
+<!--                        <div data-bind="text: ko.toJSON($data)"></div>-->
+<!--                        <span data-bind="text: $parent.day"></span>-->
 
                         <span class="notranslate cropped_name montapacking-hidden" data-bind="text: displayName"></span>
 <!--                        <span class="notranslate cropped_date montapacking-hidden" data-bind="text: date"></span>-->

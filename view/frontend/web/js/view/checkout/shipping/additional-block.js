@@ -161,7 +161,6 @@ define(
                  * Retrieve LONG LAT
                  */
                 getLongLat: function (street, postcode, city, country, housenumber, housenumberaddition, longlat) {
-console.log('LONG LAT js method', street)
                     $.ajax(
                         {
                             method: 'GET',
@@ -180,7 +179,6 @@ console.log('LONG LAT js method', street)
                         }
                     ).done(
                         function (services) {
-                            console.log('LONG LAT js method COMPLETED', services)
 
                             $("#montapacking_longitude").val(services.longitude);
                             $("#montapacking_latitude").val(services.latitude);
@@ -376,7 +374,6 @@ console.log('LONG LAT js method', street)
                         details: details,
                         additional_info: additional_info
                     };
-                    console.log('JSON.stringify(deliveryOption)', JSON.stringify(deliveryOption))
 
                     const checkoutConfig = window.checkoutConfig;
                     // Do not refactor this.
@@ -473,9 +470,6 @@ console.log('LONG LAT js method', street)
                             $("input.selectshipment").val("pickup");
                             $(".pickup-option:first").find("input.initialPickupRadio").trigger("click");
 
-                            console.log('pickuppickuppickup', $("input.selectshipment").val("pickup"));
-                            console.log('clickclickclick', $(".pickup-option:first").find("input.initialPickupRadio").trigger("click"))
-
                             $("#date-picker").hide()
                             $("#standard-delivery-services").hide()
                             const address = JSON.parse($("#old_address").val());
@@ -557,7 +551,6 @@ console.log('LONG LAT js method', street)
                         $(".dateblock").css("display", "block");
                     }
 
-                    console.log('time', time)
                     if (time === '00:00-00:00' || time === '') {
                         $(".timeblock").css("display", "none");
                     } else {
@@ -589,7 +582,6 @@ console.log('LONG LAT js method', street)
 
                             const raw_price = $(element).parents(".montapacking-delivery-option").find(".delivery-fee-hidden").text();
                             const option_price = parseFloat(raw_price);
-                            console.log('Oh kom op hey.....')
                             total_price += option_price;
 
                             options.push($(this).val());
@@ -674,7 +666,6 @@ console.log('LONG LAT js method', street)
                     const description = $(this).parents(".pickup-option").find(".cropped_description").text();
                     const country = $(this).parents(".pickup-option").find(".cropped_country").text();
                     const price = $(this).parents(".pickup-option").find(".cropped_price").text();
-                    console.log('price raw JS', price)
                     const image_class = $(this).parents(".pickup-option").find(".cropped_image_class").text();
                     const short_code = image_class;
                     const distance = $(this).parents(".pickup-option").find(".cropped_distance").text();
@@ -696,7 +687,6 @@ console.log('LONG LAT js method', street)
                         $(".open-business-hours").removeClass("displaynone");
                         $(".block-business-hours").removeClass("displaynone");
                     }
-console.log('company', company)
                     // set pickup information
                     $(".pickup-information").find(".montapacking-pickup-information-company").html(company);
                     $(".pickup-information").find(".montapacking-pickup-information-description-distance").html(description);
