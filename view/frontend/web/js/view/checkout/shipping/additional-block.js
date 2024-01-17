@@ -541,7 +541,13 @@ define(
                     const option_codes = $(this).parents(".delivery-option").find(".montapacking-container-delivery-optioncodes input[type=hidden]");
                     let total_price = parseFloat(price);
 
+                    /** ToDo:
+                     * Cleanup unused variables left over from migration from V5 to V6
+                     */
                     // set delivery information
+                    $(".delivery-information").find(".montapacking-delivery-information-full-displayname").html(name);
+
+                    $(".delivery-information").find(".montapacking-delivery-information-company").html(name);
                     $(".delivery-information").find(".montapacking-delivery-information-company").html(name);
                     $(".delivery-information").find(".montapacking-delivery-information-date").html(date_string);
 
