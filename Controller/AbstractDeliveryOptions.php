@@ -132,6 +132,7 @@ abstract class AbstractDeliveryOptions extends Action
         $disabledeliverydays = $this->getCarrierConfig()->getDisableDeliveryDays();
         $disabledPickupPoints = $this->getCarrierConfig()->getDisablePickupPoints();
         $defaultShippingCost = $this->getCarrierConfig()->getPrice();
+        $maxPickupPoints =  $this->getCarrierConfig()->getMaxpickuppoints();
 
         /**
          * Retrieve Order Information
@@ -146,7 +147,7 @@ abstract class AbstractDeliveryOptions extends Action
             $username,
             $password,
             !$disabledPickupPoints,
-            4,
+            $maxPickupPoints,
             $googleapikey,
             $defaultShippingCost,
             $language

@@ -81,13 +81,19 @@
                     <comment><![CDATA[When disabled no delivery days are shown]]></comment>
                 </field>
 
-                <field id="googleapikey" translate="label comment" type="text" sortOrder="14" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                <field id="maxpickuppoints" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="0" showInStore="0"  canRestore="1">
+                    <label>Max pickup points</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Value of pickup points between 1 and 10]]></comment>
+                </field>
+
+                <field id="googleapikey" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
                     <label>Google API key</label>
                     <validate>required-entry</validate>
                     <comment><![CDATA[Google API Key which is needed by our checkout]]></comment>
                 </field>
 
-                <field id="sort_order" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                 </field>
 
