@@ -222,11 +222,12 @@
                         <p class="montapacking-pickup-information-description-street-housenumber"></p>
                         <p class="montapacking-pickup-information-description-postal-city-country"></p>
                         <div id="PCPostNummer" class="displaynone">
-                            <span class="normal" data-bind="i18n: 'Post number'"></span> <input type="text"
-                                                                                                id="DHLPCPostNummer"
-                                                                                                name="DHLPCPostNummer"
-                                                                                                value=""
-                                                                                                style="width:125px; margin-left: 15px;">
+                            <span class="normal" data-bind="i18n: 'Post number'"></span>
+                            <input type="text"
+                            id="DHLPCPostNummer"
+                            name="DHLPCPostNummer"
+                            value=""
+                            style="width:125px; margin-left: 15px;" />
                         </div>
                         <p><a class="open-business-hours"
                               data-bind="click: showBusinessHours.bind($element), i18n: 'Show business hours'"></a></p>
@@ -288,6 +289,7 @@
                     <span class="notranslate cropped_lat montapacking-hidden" data-bind="text: latitude "></span>
                     <span class="notranslate cropped_distance montapacking-hidden"
                           data-bind="text: distanceMeters"></span>
+                    <span class="notranslate cropped_codepickup montapacking-hidden" data-bind="text: shipperOptionsWithValue"></span>
 
                     <div class="montapacking-container-header">
                         <!--- For Images, replace later with code -->
