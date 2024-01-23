@@ -206,6 +206,10 @@ abstract class AbstractDeliveryOptions extends Action
             $frames['DeliveryOptions'] = [];
         }
 
+        foreach($frames['PickupOptions'] as $item) {
+            $item->distanceMeters = round($item->distanceMeters / 1000, 2);
+        }
+
         return $frames;
     }
 }
