@@ -23,7 +23,7 @@ final class MontaApiTest extends TestCase
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->monta_origin = (string) $_ENV['MONTA_ORIGIN'];
         $this->monta_username = (string) $_ENV['MONTA_USERNAME'];
         $this->monta_password = (string) $_ENV['MONTA_PASSWORD'];
@@ -56,11 +56,14 @@ final class MontaApiTest extends TestCase
         $this->api->addProduct('croc', 1);
     }
 
-    public function testGetDeliveryOptionsAndPickupPoints(): void
+    /**
+     * @covers MontapackingShipping
+     */   
+    public function testGetDeliveryOptionsAndPickupPoints(): void 
     {
         $results = $this->api->getShippingOptions();
 
         $this->assertTrue(sizeof($results['DeliveryOptions']) > 0);
-        $this->assertTrue(sizeof($results['PickupOptions']) > 0);  
+        $this->assertTrue(sizeof($results['PickupOptions']) > 0);
     }
 }
