@@ -1,4 +1,4 @@
-<!-- <?php declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Montapacking\MontaCheckout\Test\Integration;
 
@@ -63,4 +63,4 @@ final class MontaApiTest extends TestCase
         $this->assertTrue(sizeof($results['DeliveryOptions']) > 0);
         $this->assertTrue(sizeof($results['PickupOptions']) > 0);  
     }
-} -->
+}
