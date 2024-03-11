@@ -190,7 +190,9 @@ abstract class AbstractDeliveryOptions extends Action
                 (int)$item->getQty(),
                 (int)$item->getData('length') ?: 0,
                 (int)$item->getData('width') ?: 0,
-                (int)$item->getData('weight') ?: 0
+                (int)$item->getData('height') ?: 0,
+                (int)$item->getData('weight') ?: 0,
+                (float)$item->getData('price') ?: 0
             );
         }
 
